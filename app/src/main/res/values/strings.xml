@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Map Viewer</string>
+
+    <string name="general_error">Something went wrong</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="non_stable_connection">Error connecting to the internet</string>
+</resources>

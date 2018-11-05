@@ -71,4 +71,12 @@ dependencies {
     // Anko
     def anko_version = '0.10.5'
     implementation "org.jetbrains.anko:anko:$anko_version"
+
+    // floating action menu
+    implementation "com.leinardi.android:speed-dial:2.0.0"
+
+    // OSMDroid
+    def OSMDroid_version = '6.0.2'
+    implementation "org.osmdroid:osmdroid-android:$OSMDroid_version"
+    implementation "org.osmdroid:osmdroid-wms:$OSMDroid_version"
 }

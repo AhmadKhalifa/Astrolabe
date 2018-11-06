@@ -1,4 +1,4 @@
-package com.khalifa.mapviewer.ui.fragment
+package com.khalifa.mapViewer.ui.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,12 +13,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.khalifa.mapviewer.R
-import com.khalifa.mapviewer.ui.base.BaseFragment
-import com.khalifa.mapviewer.util.PermissionUtil
-import com.khalifa.mapviewer.viewmodel.Error
-import com.khalifa.mapviewer.viewmodel.Event
-import com.khalifa.mapviewer.viewmodel.fragment.map.MapViewModel
+import com.khalifa.mapViewer.MapApplication
+import com.khalifa.mapViewer.R
+import com.khalifa.mapViewer.data.model.tileSource.MapBaseUrl
+import com.khalifa.mapViewer.data.model.tileSource.TileSourceBuilder
+import com.khalifa.mapViewer.ui.base.BaseFragment
+import com.khalifa.mapViewer.util.DimensionsUtil
+import com.khalifa.mapViewer.util.PermissionUtil
+import com.khalifa.mapViewer.viewmodel.Error
+import com.khalifa.mapViewer.viewmodel.Event
+import com.khalifa.mapViewer.viewmodel.fragment.map.MapViewModel
+import kotlinx.android.synthetic.main.fragment_map.*
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.ScaleBarOverlay
+import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
+import org.osmdroid.views.overlay.compass.CompassOverlay
 
 /**
  * @author Ahmad Khalifa
@@ -31,32 +41,82 @@ class MapFragment :
     companion object {
         val TAG: String = MapFragment::class.java.simpleName
 
+        private const val DEFAULT_ZOOM_LEVEL = 14.0
+        private const val TIME_TO_WAIT_IN_MS = 100
+
         fun newInstance() = MapFragment()
     }
 
     interface OnFragmentInteractionListener
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? =
+    private val waitForMapTimeTask = object : Runnable {
+        override fun run() {
+            if (mapView.latitudeSpanDouble == 0.0 || mapView.longitudeSpanDouble == 360000000.0)
+                mapView.postDelayed(this, TIME_TO_WAIT_IN_MS.toLong())
+        }
+    }
+
+    private lateinit var mLocationMarker: Marker
+
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_map, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initializeMap()
     }
 
     override fun onResume() {
         super.onResume()
-        initializeMap()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        mapView.onPause()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        stopUsingGps()
+        super.onDestroy()
     }
 
     private fun initializeMap() {
+        mapView.setTileSource(TileSourceBuilder(MapBaseUrl.OPEN_STREET_MAP).build())
+        mapView.setBuiltInZoomControls(true)
+        mapView.setMultiTouchControls(true)
+        mapView.postDelayed(waitForMapTimeTask, TIME_TO_WAIT_IN_MS.toLong())
+        addMapOverlays()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermissions()
         } else {
             requestLocationUpdates()
         }
+    }
+
+    private fun addMapOverlays() = with(mapView.overlays) {
+        // marker overlay
+        mLocationMarker = Marker(mapView)
+        mLocationMarker.icon = MapApplication.getDrawable(R.drawable.ic_my_location)
+        mapView.overlays.add(mLocationMarker)
+
+        // compass overlay
+        val compassOverlay =
+                CompassOverlay(context, InternalCompassOrientationProvider(context), mapView)
+        compassOverlay.enableCompass()
+        add(compassOverlay)
+
+        // scale bar overlay
+        val scaleBarOverlay = ScaleBarOverlay(mapView)
+        scaleBarOverlay.setCentred(true)
+        scaleBarOverlay.setScaleBarOffset(
+                DimensionsUtil.getScreenWidthInPixels(context) / 2,
+                10
+        )
+        add(scaleBarOverlay)
+        Unit
     }
 
     private fun checkLocationPermissions() {
@@ -103,27 +163,23 @@ class MapFragment :
 
     override fun getViewModelInstance() = MapViewModel.getInstance(this)
 
-    override fun handleEvent(event: Event) {
+    override fun handleEvent(event: Event) {}
 
-    }
+    override fun handleError(error: Error) {}
 
-    override fun handleError(error: Error) {
+    override fun registerLiveDataObservers() {}
 
-    }
-
-    override fun registerLiveDataObservers() {
-
+    private fun updateMarker(locationPoint: GeoPoint) {
+        mapView.overlayManager.remove(mLocationMarker)
+        mLocationMarker.position = locationPoint
+        mapView.overlays.add(mLocationMarker)
     }
 
     private fun updateMapLocation(latitude: Double, longitude: Double) {
-//        val locationPoint = GeoPoint(latitude, longitude)
-//        val marker = Marker(mMapView)
-//        marker.setIcon(getDrawable(R.drawable.ic_my_location))
-//        marker.setPosition(locationPoint)
-//        mMapView.getOverlays().add(marker)
-//        val mapController = mMapView.getController()
-//        mapController.setCenter(GeoPoint(latitude, longitude))
-//        mapController.setZoom(DEFAULT_ZOOM_LEVEL)
+        updateMarker(GeoPoint(latitude, longitude))
+        val mapController = mapView.controller
+        mapController.setCenter(GeoPoint(latitude, longitude))
+        mapController.setZoom(DEFAULT_ZOOM_LEVEL)
         stopUsingGps()
     }
 

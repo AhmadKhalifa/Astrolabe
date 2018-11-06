@@ -1,2 +1,2 @@
-package com.khalifa.mapviewer.data.payload
+package com.khalifa.mapViewer.data.payload
 

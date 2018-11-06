@@ -1,4 +1,4 @@
-package com.khalifa.mapviewer
+package com.khalifa.mapViewer
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

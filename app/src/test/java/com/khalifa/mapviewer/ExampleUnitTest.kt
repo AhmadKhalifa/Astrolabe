@@ -1,4 +1,4 @@
-package com.khalifa.mapviewer
+package com.khalifa.mapViewer
 
 import org.junit.Test
 

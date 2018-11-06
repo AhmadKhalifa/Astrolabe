@@ -1,11 +1,11 @@
-package com.khalifa.mapviewer.ui.base
+package com.khalifa.mapViewer.ui.base
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.View
-import com.khalifa.mapviewer.viewmodel.BaseRxViewModel
-import com.khalifa.mapviewer.viewmodel.BaseViewModelOwner
+import com.khalifa.mapViewer.viewmodel.BaseRxViewModel
+import com.khalifa.mapViewer.viewmodel.BaseViewModelOwner
 
 /**
  * @author Ahmad Khalifa

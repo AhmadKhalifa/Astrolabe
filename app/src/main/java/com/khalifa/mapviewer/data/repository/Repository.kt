@@ -1,7 +1,7 @@
-package com.khalifa.mapviewer.data.repository
+package com.khalifa.mapViewer.data.repository
 
-import com.khalifa.mapviewer.exception.NoInternetConnectionException
-import com.khalifa.mapviewer.util.BaseConnectionChecker
+import com.khalifa.mapViewer.exception.NoInternetConnectionException
+import com.khalifa.mapViewer.util.BaseConnectionChecker
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Response

@@ -1,10 +1,10 @@
-package com.khalifa.mapviewer.viewmodel.activity
+package com.khalifa.mapViewer.viewmodel.activity
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Handler
-import com.khalifa.mapviewer.ui.activity.SplashActivity
-import com.khalifa.mapviewer.viewmodel.BaseRxViewModel
-import com.khalifa.mapviewer.viewmodel.Event
+import com.khalifa.mapViewer.ui.activity.SplashActivity
+import com.khalifa.mapViewer.viewmodel.BaseRxViewModel
+import com.khalifa.mapViewer.viewmodel.Event
 
 /**
  * @author Ahmad Khalifa

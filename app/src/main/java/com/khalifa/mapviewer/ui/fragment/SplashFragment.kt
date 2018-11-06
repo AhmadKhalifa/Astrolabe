@@ -1,15 +1,15 @@
-package com.khalifa.mapviewer.ui.fragment
+package com.khalifa.mapViewer.ui.fragment
 
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.khalifa.mapviewer.R
-import com.khalifa.mapviewer.ui.base.BaseFragment
-import com.khalifa.mapviewer.viewmodel.Error
-import com.khalifa.mapviewer.viewmodel.Event
-import com.khalifa.mapviewer.viewmodel.fragment.splash.SplashViewModel
+import com.khalifa.mapViewer.R
+import com.khalifa.mapViewer.ui.base.BaseFragment
+import com.khalifa.mapViewer.viewmodel.Error
+import com.khalifa.mapViewer.viewmodel.Event
+import com.khalifa.mapViewer.viewmodel.fragment.splash.SplashViewModel
 
 /**
  * @author Ahmad Khalifa

@@ -1,8 +1,8 @@
-package com.khalifa.mapviewer.viewmodel.fragment.splash
+package com.khalifa.mapViewer.viewmodel.fragment.splash
 
 import android.arch.lifecycle.ViewModelProviders
-import com.khalifa.mapviewer.ui.fragment.SplashFragment
-import com.khalifa.mapviewer.viewmodel.BaseRxViewModel
+import com.khalifa.mapViewer.ui.fragment.SplashFragment
+import com.khalifa.mapViewer.viewmodel.BaseRxViewModel
 
 /**
  * @author Ahmad Khalifa

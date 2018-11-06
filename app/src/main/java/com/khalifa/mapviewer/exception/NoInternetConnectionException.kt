@@ -1,4 +1,4 @@
-package com.khalifa.mapviewer.exception
+package com.khalifa.mapViewer.exception
 
 /**
  * @author Ahmad Khalifa

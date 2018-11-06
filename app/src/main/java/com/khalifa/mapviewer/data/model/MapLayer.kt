@@ -1,2 +1,2 @@
-package com.khalifa.mapviewer.data.model
+package com.khalifa.mapViewer.data.model
 

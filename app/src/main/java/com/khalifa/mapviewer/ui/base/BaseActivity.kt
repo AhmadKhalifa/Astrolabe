@@ -1,9 +1,9 @@
-package com.khalifa.mapviewer.ui.base
+package com.khalifa.mapViewer.ui.base
 
 import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
-import com.khalifa.mapviewer.viewmodel.BaseRxViewModel
-import com.khalifa.mapviewer.viewmodel.BaseViewModelOwner
+import com.khalifa.mapViewer.viewmodel.BaseRxViewModel
+import com.khalifa.mapViewer.viewmodel.BaseViewModelOwner
 
 /**
  * @author Ahmad Khalifa

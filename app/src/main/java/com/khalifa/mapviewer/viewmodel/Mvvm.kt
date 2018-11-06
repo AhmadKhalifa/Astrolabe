@@ -1,4 +1,4 @@
-package com.khalifa.mapviewer.viewmodel
+package com.khalifa.mapViewer.viewmodel
 
 
 import android.arch.lifecycle.LifecycleOwner
@@ -6,7 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.StringRes
-import com.khalifa.mapviewer.R
+import com.khalifa.mapViewer.R
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

@@ -1,8 +1,8 @@
-package com.khalifa.mapviewer.viewmodel.fragment.map
+package com.khalifa.mapViewer.viewmodel.fragment.map
 
 import android.arch.lifecycle.ViewModelProviders
-import com.khalifa.mapviewer.ui.fragment.MapFragment
-import com.khalifa.mapviewer.viewmodel.BaseRxViewModel
+import com.khalifa.mapViewer.ui.fragment.MapFragment
+import com.khalifa.mapViewer.viewmodel.BaseRxViewModel
 
 /**
  * @author Ahmad Khalifa

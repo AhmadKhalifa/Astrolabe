@@ -1,4 +1,4 @@
-package com.khalifa.mapviewer.util
+package com.khalifa.mapViewer.util
 
 import android.content.Context
 import android.net.ConnectivityManager

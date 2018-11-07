@@ -33,9 +33,9 @@ class SplashFragment : BaseFragment<SplashViewModel>() {
 
     override fun getViewModelInstance() = SplashViewModel.getInstance(this)
 
-    override fun handleEvent(event: Event) {}
+    override fun onEvent(event: Event) {}
 
-    override fun handleError(error: Error) {}
+    override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {}
 }

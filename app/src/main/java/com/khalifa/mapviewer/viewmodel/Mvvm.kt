@@ -59,7 +59,7 @@ open class BaseRxViewModel : ViewModel() {
 }
 
 enum class Event(@StringRes val stringResId: Int) {
-    EXIT_SPLASH_SCREEN(0)
+    INITIALIZATION_DONE(0)
 }
 
 enum class Error (@StringRes val stringResId: Int) {
@@ -74,19 +74,19 @@ interface BaseViewModelOwner<out VM : BaseRxViewModel> {
                                         viewModel: BaseRxViewModel) {
         viewModel.event.observe(
                 lifecycleOwner,
-                Observer { event -> event?.let { handleEvent(it) } }
+                Observer { event -> event?.let { onEvent(it) } }
         )
         viewModel.error.observe(
                 lifecycleOwner,
-                Observer { error -> error?.let { handleError(it) } }
+                Observer { error -> error?.let { onError(it) } }
         )
     }
 
     fun getViewModelInstance(): VM
 
-    fun handleEvent(event: Event): Unit?
+    fun onEvent(event: Event): Unit?
 
-    fun handleError(error: Error): Unit?
+    fun onError(error: Error): Unit?
 
     fun registerLiveDataObservers()
 }

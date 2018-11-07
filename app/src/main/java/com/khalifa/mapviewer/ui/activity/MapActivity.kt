@@ -58,11 +58,11 @@ class MapActivity :
 
     override fun getViewModelInstance() = MapActivityViewModel.getInstance(this)
 
-    override fun handleEvent(event: Event) {
+    override fun onEvent(event: Event) {
 
     }
 
-    override fun handleError(error: Error) {
+    override fun onError(error: Error) {
 
     }
 

@@ -4,4 +4,7 @@
     <string name="general_error">Something went wrong</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="non_stable_connection">Error connecting to the internet</string>
+    <string name="action1_title">Action 1</string>
+    <string name="action2_title">Action 2</string>
+    <string name="action3_title">Action 3</string>
 </resources>

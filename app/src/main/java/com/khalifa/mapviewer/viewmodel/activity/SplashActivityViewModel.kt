@@ -25,7 +25,7 @@ class SplashActivityViewModel : BaseRxViewModel() {
 
     fun initialize() {
         Handler().postDelayed(
-                { notify(Event.EXIT_SPLASH_SCREEN) },
+                { notify(Event.INITIALIZATION_DONE) },
                 SPLASH_DELAY_IN_MS
         )
     }

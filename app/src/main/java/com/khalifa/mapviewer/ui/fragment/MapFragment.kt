@@ -3,11 +3,13 @@ package com.khalifa.mapViewer.ui.fragment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.DrawableRes
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,10 +27,17 @@ import com.khalifa.mapViewer.viewmodel.Event
 import com.khalifa.mapViewer.viewmodel.fragment.map.MapViewModel
 import kotlinx.android.synthetic.main.fragment_map.*
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.ScaleBarOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import org.osmdroid.views.overlay.compass.CompassOverlay
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
+import org.osmdroid.events.MapEventsReceiver
+import org.osmdroid.views.overlay.*
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
+import org.osmdroid.views.overlay.Marker
+import android.support.v4.content.res.ResourcesCompat
+import com.leinardi.android.speeddial.SpeedDialActionItem
+
+
 
 /**
  * @author Ahmad Khalifa
@@ -36,7 +45,8 @@ import org.osmdroid.views.overlay.compass.CompassOverlay
 
 class MapFragment :
         BaseFragment<MapViewModel>(),
-        LocationListener {
+        LocationListener,
+        MapEventsReceiver {
 
     companion object {
         val TAG: String = MapFragment::class.java.simpleName
@@ -58,6 +68,8 @@ class MapFragment :
 
     private lateinit var mLocationMarker: Marker
 
+    private lateinit var mInfoWindow: MarkerInfoWindow
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
@@ -66,6 +78,40 @@ class MapFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeMap()
+        initializeFloatingActionMenu()
+    }
+
+    private fun initializeFloatingActionMenu() = with(floatingActionMenu) {
+        addActionItem(
+                SpeedDialActionItem.Builder(R.id.action1, R.drawable.ic_edit_black_24dp)
+                        .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorAccent, context.theme))
+                        .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
+                        .setLabel(getString(R.string.action1_title))
+                        .setLabelColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
+                        .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorWhite, context.theme))
+                        .setLabelClickable(false)
+                        .create()
+        )
+        addActionItem(
+                SpeedDialActionItem.Builder(R.id.action2, R.drawable.ic_edit_black_24dp)
+                        .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorAccent, context.theme))
+                        .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
+                        .setLabel(getString(R.string.action2_title))
+                        .setLabelColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
+                        .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorWhite, context.theme))
+                        .setLabelClickable(false)
+                        .create()
+        )
+        addActionItem(
+                SpeedDialActionItem.Builder(R.id.action3, R.drawable.ic_edit_black_24dp)
+                        .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorAccent, context.theme))
+                        .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
+                        .setLabel(getString(R.string.action3_title))
+                        .setLabelColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
+                        .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorWhite, context.theme))
+                        .setLabelClickable(false)
+                        .create()
+        )
     }
 
     override fun onResume() {
@@ -88,6 +134,8 @@ class MapFragment :
         mapView.setBuiltInZoomControls(true)
         mapView.setMultiTouchControls(true)
         mapView.postDelayed(waitForMapTimeTask, TIME_TO_WAIT_IN_MS.toLong())
+        mInfoWindow = MarkerInfoWindow(R.layout.bonuspack_bubble,
+                mapView)
         addMapOverlays()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermissions()
@@ -100,7 +148,7 @@ class MapFragment :
         // marker overlay
         mLocationMarker = Marker(mapView)
         mLocationMarker.icon = MapApplication.getDrawable(R.drawable.ic_my_location)
-        mapView.overlays.add(mLocationMarker)
+        add(mLocationMarker)
 
         // compass overlay
         val compassOverlay =
@@ -116,6 +164,15 @@ class MapFragment :
                 10
         )
         add(scaleBarOverlay)
+
+        // two-finger rotation gesture
+        val rotationGestureOverlay = RotationGestureOverlay(mapView)
+        rotationGestureOverlay.isEnabled = true
+        mapView.setMultiTouchControls(true)
+        add(rotationGestureOverlay)
+
+        // click handler overlay
+        add(MapEventsOverlay(this@MapFragment))
         Unit
     }
 
@@ -161,13 +218,37 @@ class MapFragment :
         }
     }
 
+    override fun singleTapConfirmedHelper(geoPoint: GeoPoint?) = geoPoint?.let {
+        mInfoWindow.close()
+        true
+    } ?: false
+
+    override fun longPressHelper(geoPoint: GeoPoint?) = geoPoint?.let {
+        addMarker(it.latitude, it.longitude, R.drawable.ic_my_location, "marker")
+        true
+    } ?: false
+
     override fun getViewModelInstance() = MapViewModel.getInstance(this)
 
-    override fun handleEvent(event: Event) {}
+    override fun onEvent(event: Event) {}
 
-    override fun handleError(error: Error) {}
+    override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {}
+
+    private fun addMarker(latitude: Double,
+                          longitude: Double,
+                          @DrawableRes drawable: Int,
+                          title: String? = "") {
+        val marker = Marker(mapView)
+        marker.position = GeoPoint(latitude, longitude)
+        marker.icon = MapApplication.getDrawable(drawable)
+        marker.title = title
+        marker.setAnchor(Marker.ANCHOR_CENTER, 1.0f)
+        marker.setInfoWindow(mInfoWindow)
+        mapView.overlays.add(marker)
+        mapView.invalidate()
+    }
 
     private fun updateMarker(locationPoint: GeoPoint) {
         mapView.overlayManager.remove(mLocationMarker)

@@ -44,14 +44,14 @@ class SplashActivity :
 
     override fun getViewModelInstance() = SplashActivityViewModel.getInstance(this)
 
-    override fun handleEvent(event: Event) = when(event) {
-        Event.EXIT_SPLASH_SCREEN -> {
+    override fun onEvent(event: Event) = when(event) {
+        Event.INITIALIZATION_DONE -> {
             MapActivity.startActivity(this)
             finish()
         }
     }
 
-    override fun handleError(error: Error) {}
+    override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {}
 }

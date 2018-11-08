@@ -3,13 +3,14 @@ package com.khalifa.mapViewer.ui.fragment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.DrawableRes
+import android.support.annotation.IdRes
+import android.support.annotation.StringRes
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -36,8 +37,7 @@ import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
 import org.osmdroid.views.overlay.Marker
 import android.support.v4.content.res.ResourcesCompat
 import com.leinardi.android.speeddial.SpeedDialActionItem
-
-
+import com.leinardi.android.speeddial.SpeedDialView
 
 /**
  * @author Ahmad Khalifa
@@ -46,7 +46,8 @@ import com.leinardi.android.speeddial.SpeedDialActionItem
 class MapFragment :
         BaseFragment<MapViewModel>(),
         LocationListener,
-        MapEventsReceiver {
+        MapEventsReceiver,
+        SpeedDialView.OnActionSelectedListener {
 
     companion object {
         val TAG: String = MapFragment::class.java.simpleName
@@ -82,37 +83,46 @@ class MapFragment :
     }
 
     private fun initializeFloatingActionMenu() = with(floatingActionMenu) {
-        addActionItem(
-                SpeedDialActionItem.Builder(R.id.action1, R.drawable.ic_edit_black_24dp)
-                        .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorAccent, context.theme))
-                        .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
-                        .setLabel(getString(R.string.action1_title))
-                        .setLabelColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
-                        .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorWhite, context.theme))
-                        .setLabelClickable(false)
+        fun createActionItem(@IdRes id: Int,
+                             @DrawableRes iconResId: Int,
+                             @StringRes titleResId: Int) =
+                SpeedDialActionItem.Builder(id, iconResId)
+                        .setFabBackgroundColor(MapApplication.getColor(R.color.colorPrimary))
+                        .setFabImageTintColor(MapApplication.getColor(R.color.white))
+                        .setLabelColor(MapApplication.getColor(R.color.white))
+                        .setLabelBackgroundColor(MapApplication.getColor(R.color.colorAccent))
+                        .setLabel(MapApplication.getString(titleResId))
+                        .setLabelClickable(true)
                         .create()
-        )
-        addActionItem(
-                SpeedDialActionItem.Builder(R.id.action2, R.drawable.ic_edit_black_24dp)
-                        .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorAccent, context.theme))
-                        .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
-                        .setLabel(getString(R.string.action2_title))
-                        .setLabelColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
-                        .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorWhite, context.theme))
-                        .setLabelClickable(false)
-                        .create()
-        )
-        addActionItem(
-                SpeedDialActionItem.Builder(R.id.action3, R.drawable.ic_edit_black_24dp)
-                        .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorAccent, context.theme))
-                        .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
-                        .setLabel(getString(R.string.action3_title))
-                        .setLabelColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, context.theme))
-                        .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.colorWhite, context.theme))
-                        .setLabelClickable(false)
-                        .create()
-        )
+        addActionItem(createActionItem(
+                R.id.action1, R.drawable.ic_edit_black_24dp, R.string.action1_title
+        ))
+        addActionItem(createActionItem(
+                R.id.action2, R.drawable.ic_edit_black_24dp, R.string.action2_title
+        ))
+        addActionItem(createActionItem(
+                R.id.action3, R.drawable.ic_edit_black_24dp, R.string.action3_title
+        ))
+        setOnActionSelectedListener(this@MapFragment)
     }
+
+    override fun onActionSelected(actionItem: SpeedDialActionItem?) = actionItem?.let {
+        when (it.id) {
+            R.id.action0 -> {
+                snackbar("Action 0")
+            }
+            R.id.action1 -> {
+                snackbar("Action 1")
+            }
+            R.id.action2 -> {
+                snackbar("Action 2")
+            }
+            R.id.action3 -> {
+                snackbar("Action 3")
+            }
+        }
+        false
+    } ?: true
 
     override fun onResume() {
         super.onResume()
@@ -134,8 +144,7 @@ class MapFragment :
         mapView.setBuiltInZoomControls(true)
         mapView.setMultiTouchControls(true)
         mapView.postDelayed(waitForMapTimeTask, TIME_TO_WAIT_IN_MS.toLong())
-        mInfoWindow = MarkerInfoWindow(R.layout.bonuspack_bubble,
-                mapView)
+        mInfoWindow = MarkerInfoWindow(R.layout.bonuspack_bubble, mapView)
         addMapOverlays()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermissions()

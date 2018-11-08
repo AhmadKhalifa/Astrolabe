@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="action1" type="id">action1</item>
-    <item name="action2" type="id">action2</item>
-    <item name="action3" type="id">action3</item>
+    <item name="action1" type="id" />
+    <item name="action2" type="id" />
+    <item name="action3" type="id" />
 </resources>

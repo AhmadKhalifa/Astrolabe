@@ -43,7 +43,7 @@ abstract class BaseFragment<out VM : BaseRxViewModel> : Fragment(), BaseViewMode
     protected fun snackbar(messageResId: Int) =
             snackbar(context?.resources?.getString(messageResId))
 
-    private fun snackbar(message: String?): Unit = message?.let {
+    protected fun snackbar(message: String?): Unit = message?.let {
         snackBar?.dismiss()
         snackBar = Snackbar.make(rootView, it, Snackbar.LENGTH_SHORT)
         snackBar?.show()

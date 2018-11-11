@@ -35,7 +35,6 @@ import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.views.overlay.*
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
 import org.osmdroid.views.overlay.Marker
-import android.support.v4.content.res.ResourcesCompat
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
 

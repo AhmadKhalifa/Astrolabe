@@ -12,7 +12,7 @@ class MapApplication : Application() {
 
         lateinit var instace: MapApplication
 
-        fun getString(@StringRes resId: Int) = instace.getString(resId)
+        fun getString(@StringRes resId: Int): String = instace.getString(resId)
 
         fun getDrawable(@DrawableRes resId: Int) = ContextCompat.getDrawable(instace, resId)
 

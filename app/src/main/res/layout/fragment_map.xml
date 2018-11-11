@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -31,4 +31,4 @@
         app:sdMainFabOpenedSrc="@drawable/ic_close_black_24dp"
         app:sdOverlayLayout="@id/overlay" />
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

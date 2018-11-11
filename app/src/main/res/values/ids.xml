@@ -3,4 +3,7 @@
     <item name="action1" type="id" />
     <item name="action2" type="id" />
     <item name="action3" type="id" />
+    <item name="action_add_location" type="id" />
+    <item name="action_add_line" type="id" />
+    <item name="action_add_polygon" type="id" />
 </resources>

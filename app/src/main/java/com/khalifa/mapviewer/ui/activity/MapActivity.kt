@@ -56,6 +56,14 @@ class MapActivity :
         }
     }
 
+    override fun onBackPressed() {
+        if (fragment.isInDrawingMode) {
+            fragment.cancelDrawingMode()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun getViewModelInstance() = MapActivityViewModel.getInstance(this)
 
     override fun onEvent(event: Event) {

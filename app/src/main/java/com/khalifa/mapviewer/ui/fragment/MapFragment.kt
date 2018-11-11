@@ -3,6 +3,8 @@ package com.khalifa.mapViewer.ui.fragment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -11,16 +13,20 @@ import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
+import android.support.design.widget.Snackbar
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.khalifa.mapViewer.MapApplication
 import com.khalifa.mapViewer.R
 import com.khalifa.mapViewer.data.model.tileSource.MapBaseUrl
 import com.khalifa.mapViewer.data.model.tileSource.TileSourceBuilder
 import com.khalifa.mapViewer.ui.base.BaseFragment
+import com.khalifa.mapViewer.ui.widget.pinterest.CircleImageView
+import com.khalifa.mapViewer.ui.widget.pinterest.PinterestView
 import com.khalifa.mapViewer.util.DimensionsUtil
 import com.khalifa.mapViewer.util.PermissionUtil
 import com.khalifa.mapViewer.viewmodel.Error
@@ -37,6 +43,9 @@ import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
 import org.osmdroid.views.overlay.Marker
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
+import org.osmdroid.tileprovider.MapTileProviderBasic
+import org.osmdroid.tileprovider.tilesource.ITileSource
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 /**
  * @author Ahmad Khalifa
@@ -46,7 +55,8 @@ class MapFragment :
         BaseFragment<MapViewModel>(),
         LocationListener,
         MapEventsReceiver,
-        SpeedDialView.OnActionSelectedListener {
+        SpeedDialView.OnActionSelectedListener,
+        PinterestView.PinMenuClickListener {
 
     companion object {
         val TAG: String = MapFragment::class.java.simpleName
@@ -67,8 +77,13 @@ class MapFragment :
     }
 
     private lateinit var mLocationMarker: Marker
-
     private lateinit var mInfoWindow: MarkerInfoWindow
+    private var isInDrawingMode = false
+    private var isDrawingLine = false
+    private var drawingSnackBar: Snackbar? = null
+    private var polygonPointsCount = 0
+    private var polygonGeoPoints = ArrayList<GeoPoint>()
+    private var drawingMarkers = ArrayList<Marker>()
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -79,6 +94,7 @@ class MapFragment :
         super.onViewCreated(view, savedInstanceState)
         initializeMap()
         initializeFloatingActionMenu()
+        initializePinterestView()
     }
 
     private fun initializeFloatingActionMenu() = with(floatingActionMenu) {
@@ -105,6 +121,42 @@ class MapFragment :
         setOnActionSelectedListener(this@MapFragment)
     }
 
+    private fun initializePinterestView() {
+        fun createActionItem(@IdRes id: Int,
+                             @DrawableRes iconResId: Int,
+                             @StringRes titleResId: Int) = with(CircleImageView(context)) {
+            setId(id)
+            borderWidth = 0
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            fillColor = MapApplication.getColor(R.color.colorPrimary)
+            tag = MapApplication.getString(titleResId)
+            setImageResource(iconResId)
+            setColorFilter(
+                    MapApplication.getColor(R.color.white),
+                    PorterDuff.Mode.SRC_IN
+            )
+            this
+        }
+        pinterestView.addMenuItem(
+                createActionItem(
+                        R.id.action_add_location,
+                        R.drawable.ic_add_location_black_24dp,
+                        R.string.marker
+                ),
+                createActionItem(R.id.action_add_line,
+                        R.drawable.ic_line_black_24dp,
+                        R.string.line
+                ),
+                createActionItem(
+                        R.id.action_add_polygon,
+                        R.drawable.ic_polygon_black_24dp,
+                        R.string.polygon
+                )
+        )
+        pinterestView.setPinClickListener(this@MapFragment)
+        mapView.contextMenu = pinterestView
+    }
+
     override fun onActionSelected(actionItem: SpeedDialActionItem?) = actionItem?.let {
         when (it.id) {
             R.id.action0 -> {
@@ -123,6 +175,86 @@ class MapFragment :
         false
     } ?: true
 
+    override fun onMenuItemClick(checkedView: View?, clickItemPos: Int) {
+        checkedView?.let { view ->
+            pinterestView.geoPoint?.let {geoPoint ->
+                when(view.id) {
+                    R.id.action_add_location ->
+                        addMarker(
+                                geoPoint.latitude,
+                                geoPoint.longitude,
+                                R.drawable.ic_place_black_24dp
+                        )
+                    R.id.action_add_line ->
+                        startDrawingMode(geoPoint, true)
+                    R.id.action_add_polygon ->
+                        startDrawingMode(geoPoint, false)
+                    else -> {}
+                }
+                Unit
+            }
+        }
+    }
+
+    override fun singleTapConfirmedHelper(geoPoint: GeoPoint?): Boolean {
+        if (isInDrawingMode) {
+            geoPoint?.let { addNumericMarker(it) }
+        } else mInfoWindow.close()
+        return true
+    }
+
+    private fun startDrawingMode(geoPoint: GeoPoint?, isDrawingLine: Boolean) = geoPoint?.let {
+        isInDrawingMode = true
+        this.isDrawingLine = isDrawingLine
+        drawingSnackBar = Snackbar.make(
+                rootView,
+                if (isDrawingLine) R.string.drawing_line else R.string.drawing_polygon,
+                Snackbar.LENGTH_INDEFINITE
+        )
+        drawingSnackBar?.setAction(R.string.cancel) { cancelDrawingMode() }
+        drawingSnackBar?.setActionTextColor(MapApplication.getColor(R.color.red))
+        snackbar(drawingSnackBar)
+        addNumericMarker(geoPoint)
+        floatingActionMenu.mainFab?.setImageDrawable(MapApplication.getDrawable(R.drawable.ic_done_white_24dp))
+        floatingActionMenu.mainFab?.setBackgroundColor(MapApplication.getColor(R.color.green))
+    }
+
+    private fun addNumericMarker(geoPoint: GeoPoint?) = geoPoint?.let {
+        polygonGeoPoints.add(geoPoint)
+        drawingMarkers.add(addNumericMarker(it.latitude, it.longitude, ++polygonPointsCount))
+        if (isDrawingLine && polygonPointsCount == 2 || polygonPointsCount == 5)
+            finishDrawing()
+    }
+
+    fun cancelDrawingMode() {
+        resetNumericMarkers()
+    }
+
+    private fun finishDrawing() {
+        val polygon = Polygon()
+        polygonGeoPoints.add(polygonGeoPoints[0])
+        polygon.points = polygonGeoPoints
+        mapView.overlays.add(polygon)
+        drawingSnackBar?.dismiss()
+        resetNumericMarkers()
+        floatingActionMenu.mainFab?.setImageDrawable(MapApplication.getDrawable(R.drawable.ic_edit_black_24dp))
+        floatingActionMenu.mainFab?.setBackgroundColor(MapApplication.getColor(R.color.colorAccent))
+    }
+
+    private fun resetNumericMarkers() {
+        polygonPointsCount = 0
+        drawingMarkers.forEach { marker -> mapView.overlayManager.remove(marker) }
+        isInDrawingMode = false
+        isDrawingLine = false
+        drawingMarkers.clear()
+        polygonGeoPoints.clear()
+        mapView.invalidate()
+    }
+
+    override fun onAnchorViewClick() {
+
+    }
+
     override fun onResume() {
         super.onResume()
         mapView.onResume()
@@ -139,17 +271,29 @@ class MapFragment :
     }
 
     private fun initializeMap() {
-        mapView.setTileSource(TileSourceBuilder(MapBaseUrl.OPEN_STREET_MAP).build())
+//        mapView.setTileSource(TileSourceBuilder(MapBaseUrl.OPEN_STREET_MAP).build())
+        addTileSource(TileSourceBuilder(MapBaseUrl.OPEN_STREET_MAP).build())
         mapView.setBuiltInZoomControls(true)
         mapView.setMultiTouchControls(true)
         mapView.postDelayed(waitForMapTimeTask, TIME_TO_WAIT_IN_MS.toLong())
         mInfoWindow = MarkerInfoWindow(R.layout.bonuspack_bubble, mapView)
         addMapOverlays()
+        addTileSource(TileSourceFactory.ROADS_OVERLAY_NL)
+        addTileSource(TileSourceFactory.HIKEBIKEMAP)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermissions()
         } else {
             requestLocationUpdates()
         }
+    }
+
+    private fun addTileSource(tileSource: ITileSource) {
+        val tileProvider = MapTileProviderBasic(context)
+        tileProvider.tileSource = tileSource
+        val tilesOverlay = TilesOverlay(tileProvider, context)
+        tilesOverlay.loadingBackgroundColor = Color.TRANSPARENT
+        tilesOverlay.loadingLineColor = Color.TRANSPARENT
+        mapView.overlays.add(tilesOverlay)
     }
 
     private fun addMapOverlays() = with(mapView.overlays) {
@@ -226,13 +370,8 @@ class MapFragment :
         }
     }
 
-    override fun singleTapConfirmedHelper(geoPoint: GeoPoint?) = geoPoint?.let {
-        mInfoWindow.close()
-        true
-    } ?: false
-
     override fun longPressHelper(geoPoint: GeoPoint?) = geoPoint?.let {
-        addMarker(it.latitude, it.longitude, R.drawable.ic_my_location, "marker")
+        pinterestView.geoPoint = geoPoint
         true
     } ?: false
 
@@ -247,7 +386,7 @@ class MapFragment :
     private fun addMarker(latitude: Double,
                           longitude: Double,
                           @DrawableRes drawable: Int,
-                          title: String? = "") {
+                          title: String? = ""): Marker {
         val marker = Marker(mapView)
         marker.position = GeoPoint(latitude, longitude)
         marker.icon = MapApplication.getDrawable(drawable)
@@ -256,6 +395,22 @@ class MapFragment :
         marker.setInfoWindow(mInfoWindow)
         mapView.overlays.add(marker)
         mapView.invalidate()
+        return marker
+    }
+
+    private fun addNumericMarker(latitude: Double,
+                                 longitude: Double,
+                                 number: Int): Marker {
+        Marker.ENABLE_TEXT_LABELS_WHEN_NO_IMAGE = true
+        val marker = Marker(mapView)
+        marker.textLabelBackgroundColor = MapApplication.getColor(R.color.colorPrimary)
+        marker.textLabelForegroundColor = MapApplication.getColor(R.color.white)
+        marker.title = "$number"
+        marker.icon = null
+        marker.position = GeoPoint(latitude, longitude)
+        mapView.overlays.add(marker)
+        mapView.invalidate()
+        return marker
     }
 
     private fun updateMarker(locationPoint: GeoPoint) {

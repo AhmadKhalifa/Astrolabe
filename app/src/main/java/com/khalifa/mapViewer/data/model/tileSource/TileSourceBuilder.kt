@@ -2,13 +2,15 @@ package com.khalifa.mapViewer.data.model.tileSource
 
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 
-class TileSourceBuilder(private val baseUrl: String) {
+class TileSourceBuilder(private val baseUrls: Array<String>) {
 
     private var name = "Mapnik"
     private var minZoomLevel = 0
     private var maxZoomLevel = 15
     private var tileSizePixels = 256
     private var tileExtension = ".png"
+
+    constructor(baseUrl: String) : this(arrayOf(baseUrl))
 
     fun name(name: String) = this.also { this.name = name }
 
@@ -25,6 +27,6 @@ class TileSourceBuilder(private val baseUrl: String) {
             minZoomLevel, maxZoomLevel,
             tileSizePixels,
             ".png",
-            arrayOf(baseUrl)
+            baseUrls
     )
 }

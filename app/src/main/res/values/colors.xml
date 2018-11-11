@@ -6,4 +6,7 @@
 
     <color name="white">#ffffff</color>
     <color name="grey">#aaaaaa</color>
+    <color name="transparent">#50000000</color>
+    <color name="red">#c0392b</color>
+    <color name="green">#2ecc71</color>
 </resources>

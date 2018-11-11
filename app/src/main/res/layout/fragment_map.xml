@@ -6,10 +6,23 @@
     android:orientation="vertical"
     tools:context=".ui.fragment.MapFragment">
 
-    <org.osmdroid.views.MapView
+    <com.khalifa.mapViewer.ui.widget.mapview.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <com.khalifa.mapViewer.ui.widget.pinterest.PinterestView
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/pinterestView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        custom:child_size="@dimen/pinterest_child_size"
+        custom:child_radius="@dimen/pinterest_child_radius"
+        custom:tips_color="@color/white"
+        custom:tips_size="@dimen/pinterest_tips_text_size"
+        custom:tips_background="@drawable/shape_child_item"
+        android:visibility="gone"/>
 
     <com.leinardi.android.speeddial.SpeedDialOverlayLayout
         android:id="@+id/overlay"

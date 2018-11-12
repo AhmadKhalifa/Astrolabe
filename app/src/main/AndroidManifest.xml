@@ -28,6 +28,24 @@
         android:name="com.khalifa.mapViewer.MapApplication"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <!--MapQuest metadata-->
+        <meta-data android:name="MAPQUEST_ACCESS_TOKEN" android:value="8mnKnuQ2Cv20QBsEDsujgFYGXbOPQBRA" />
+
+        <!--HereWeGo metadata-->
+        <meta-data android:name="HEREWEGO_APPID" android:value="NObLN4n6HA2PCIhQn2o8" />
+        <meta-data android:name="HEREWEGO_APPCODE" android:value="gs7fWM3zpfmUTeyClNirQg" />
+
+        <!--CloudMade metadata-->
+        <meta-data android:name="CLOUDMADE_KEY" android:value="ea62a886daae45ae811a3e140376f5b8" />
+
+        <!--MapBox metadata-->
+        <meta-data android:name="MAPBOX_MAPID" android:value="streets-v10" />
+        <meta-data android:name="MAPBOX_ACCESS_TOKEN" android:value="sk.eyJ1IjoiZGV2b3JjIiwiYSI6ImNqb2U0ZXM2aDFrOTAzcW9qbDAzNTVxdTcifQ.hXYhbYFZaIQygWHmu72XkQ" />
+
+        <!--Bing metadata-->
+        <meta-data android:name="BING_KEY" android:value="AtRgTpQChfULNPfAppNlczeIZFzpjqhZ9tsjWtWg0dqUkdQzVmLHe6q2sekEE7Kw" />
+
         <activity
             android:name="com.khalifa.mapViewer.ui.activity.SplashActivity"
             android:screenOrientation="portrait">

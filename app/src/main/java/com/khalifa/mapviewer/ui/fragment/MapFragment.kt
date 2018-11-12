@@ -31,7 +31,7 @@ import com.khalifa.mapViewer.util.DimensionsUtil
 import com.khalifa.mapViewer.util.PermissionUtil
 import com.khalifa.mapViewer.viewmodel.Error
 import com.khalifa.mapViewer.viewmodel.Event
-import com.khalifa.mapViewer.viewmodel.fragment.map.MapViewModel
+import com.khalifa.mapViewer.viewmodel.fragment.implementation.MapViewModel
 import kotlinx.android.synthetic.main.fragment_map.*
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
@@ -78,7 +78,7 @@ class MapFragment :
 
     private lateinit var mLocationMarker: Marker
     private lateinit var mInfoWindow: MarkerInfoWindow
-    private var isInDrawingMode = false
+    var isInDrawingMode = false
     private var isDrawingLine = false
     private var drawingSnackBar: Snackbar? = null
     private var polygonPointsCount = 0
@@ -95,6 +95,14 @@ class MapFragment :
         initializeMap()
         initializeFloatingActionMenu()
         initializePinterestView()
+        floatingActionButton.setOnChangeListener(object : SpeedDialView.OnChangeListener {
+            override fun onMainActionSelected(): Boolean {
+                finishDrawing()
+                return false
+            }
+
+            override fun onToggleChanged(isOpen: Boolean) {}
+        })
     }
 
     private fun initializeFloatingActionMenu() = with(floatingActionMenu) {
@@ -203,9 +211,9 @@ class MapFragment :
         return true
     }
 
-    private fun startDrawingMode(geoPoint: GeoPoint?, isDrawingLine: Boolean) = geoPoint?.let {
+    private fun startDrawingMode(geoPoint: GeoPoint?, isDrawingLine: Boolean) = geoPoint?.apply {
         isInDrawingMode = true
-        this.isDrawingLine = isDrawingLine
+        this@MapFragment.isDrawingLine = isDrawingLine
         drawingSnackBar = Snackbar.make(
                 rootView,
                 if (isDrawingLine) R.string.drawing_line else R.string.drawing_polygon,
@@ -215,14 +223,15 @@ class MapFragment :
         drawingSnackBar?.setActionTextColor(MapApplication.getColor(R.color.red))
         snackbar(drawingSnackBar)
         addNumericMarker(geoPoint)
-        floatingActionMenu.mainFab?.setImageDrawable(MapApplication.getDrawable(R.drawable.ic_done_white_24dp))
-        floatingActionMenu.mainFab?.setBackgroundColor(MapApplication.getColor(R.color.green))
+        if (!isDrawingLine) {
+            floatingActionButton.visibility = View.VISIBLE
+        }
     }
 
-    private fun addNumericMarker(geoPoint: GeoPoint?) = geoPoint?.let {
+    private fun addNumericMarker(geoPoint: GeoPoint?) = geoPoint?.apply {
         polygonGeoPoints.add(geoPoint)
-        drawingMarkers.add(addNumericMarker(it.latitude, it.longitude, ++polygonPointsCount))
-        if (isDrawingLine && polygonPointsCount == 2 || polygonPointsCount == 5)
+        drawingMarkers.add(addNumericMarker(latitude, longitude, ++polygonPointsCount))
+        if (isDrawingLine && polygonPointsCount == 2)
             finishDrawing()
     }
 
@@ -235,10 +244,7 @@ class MapFragment :
         polygonGeoPoints.add(polygonGeoPoints[0])
         polygon.points = polygonGeoPoints
         mapView.overlays.add(polygon)
-        drawingSnackBar?.dismiss()
         resetNumericMarkers()
-        floatingActionMenu.mainFab?.setImageDrawable(MapApplication.getDrawable(R.drawable.ic_edit_black_24dp))
-        floatingActionMenu.mainFab?.setBackgroundColor(MapApplication.getColor(R.color.colorAccent))
     }
 
     private fun resetNumericMarkers() {
@@ -248,6 +254,8 @@ class MapFragment :
         isDrawingLine = false
         drawingMarkers.clear()
         polygonGeoPoints.clear()
+        drawingSnackBar?.dismiss()
+        floatingActionButton.visibility = View.INVISIBLE
         mapView.invalidate()
     }
 
@@ -405,7 +413,7 @@ class MapFragment :
         val marker = Marker(mapView)
         marker.textLabelBackgroundColor = MapApplication.getColor(R.color.colorPrimary)
         marker.textLabelForegroundColor = MapApplication.getColor(R.color.white)
-        marker.title = "$number"
+        marker.title = " $number "
         marker.icon = null
         marker.position = GeoPoint(latitude, longitude)
         mapView.overlays.add(marker)

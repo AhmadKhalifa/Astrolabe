@@ -17,6 +17,6 @@ fun longToast(message: String?) = showToast(message, Toast.LENGTH_LONG)
 
 private fun showToast(message: String?, duration: Int) {
     toast?.cancel()
-    toast = Toast.makeText(MapApplication.instace, "" + message, duration)
+    toast = Toast.makeText(MapApplication.instace, "$message", duration)
     toast?.show()
 }

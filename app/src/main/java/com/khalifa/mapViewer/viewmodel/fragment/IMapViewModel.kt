@@ -1,4 +1,4 @@
-package com.khalifa.mapViewer.viewmodel.fragment.map
+package com.khalifa.mapViewer.viewmodel.fragment
 
 /**
  * @author Ahmad Khalifa

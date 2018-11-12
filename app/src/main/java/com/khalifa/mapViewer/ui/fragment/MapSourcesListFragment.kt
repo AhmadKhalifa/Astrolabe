@@ -1,21 +1,20 @@
 package com.khalifa.mapViewer.ui.fragment
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.khalifa.mapViewer.R
-import com.khalifa.mapViewer.ui.base.BaseFragment
+import com.khalifa.mapViewer.ui.base.BaseFullScreenDialogFragment
 import com.khalifa.mapViewer.viewmodel.Error
 import com.khalifa.mapViewer.viewmodel.Event
-import com.khalifa.mapViewer.viewmodel.fragment.implementation.SplashViewModel
+import com.khalifa.mapViewer.viewmodel.fragment.implementation.MapSourcesListViewModel
 
 /**
  * @author Ahmad Khalifa
  */
 
-class SplashFragment : BaseFragment<SplashViewModel>() {
+class MapSourcesListFragment : BaseFullScreenDialogFragment<MapSourcesListViewModel>() {
 
     companion object {
         val TAG: String = SplashFragment::class.java.simpleName
@@ -31,7 +30,7 @@ class SplashFragment : BaseFragment<SplashViewModel>() {
             savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_splash, container, false)
 
-    override fun getViewModelInstance() = SplashViewModel.getInstance(this)
+    override fun getViewModelInstance() = MapSourcesListViewModel.getInstance(this)
 
     override fun onEvent(event: Event) {}
 

@@ -22,9 +22,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.khalifa.mapViewer.MapApplication
 import com.khalifa.mapViewer.R
-import com.khalifa.mapViewer.data.model.tileSource.MapBaseUrl
 import com.khalifa.mapViewer.data.model.tileSource.OnlineTileSourceFactory
-import com.khalifa.mapViewer.data.model.tileSource.TileSourceBuilder
 import com.khalifa.mapViewer.ui.base.BaseFragment
 import com.khalifa.mapViewer.ui.widget.pinterest.CircleImageView
 import com.khalifa.mapViewer.ui.widget.pinterest.PinterestView
@@ -56,7 +54,8 @@ class MapFragment :
         LocationListener,
         MapEventsReceiver,
         SpeedDialView.OnActionSelectedListener,
-        PinterestView.PinMenuClickListener {
+        PinterestView.PinMenuClickListener,
+        MapSourcesListFragment.OnFragmentInteractionListener {
 
     companion object {
         val TAG: String = MapFragment::class.java.simpleName
@@ -118,14 +117,14 @@ class MapFragment :
                         .setLabelClickable(true)
                         .create()
         addActionItem(createActionItem(
-                R.id.action1, R.drawable.ic_edit_black_24dp, R.string.action1_title
+                R.id.action_show_my_location, R.drawable.ic_my_location_white_24dp, R.string.show_my_location
         ))
         addActionItem(createActionItem(
-                R.id.action2, R.drawable.ic_edit_black_24dp, R.string.action2_title
+                R.id.action_select_map_source, R.drawable.ic_map_white_24dp, R.string.select_map_source
         ))
-        addActionItem(createActionItem(
-                R.id.action3, R.drawable.ic_edit_black_24dp, R.string.action3_title
-        ))
+//        addActionItem(createActionItem(
+//                R.id.action3, R.drawable.ic_edit_black_24dp, R.string.action3_title
+//        ))
         setOnActionSelectedListener(this@MapFragment)
     }
 
@@ -167,18 +166,8 @@ class MapFragment :
 
     override fun onActionSelected(actionItem: SpeedDialActionItem?) = actionItem?.let {
         when (it.id) {
-            R.id.action0 -> {
-                mapView.setTileSource(OnlineTileSourceFactory.Google.HYBRID)
-            }
-            R.id.action1 -> {
-                mapView.setTileSource(OnlineTileSourceFactory.Google.HYBRID)
-            }
-            R.id.action2 -> {
-                mapView.setTileSource(OnlineTileSourceFactory.Google.SATELLITE)
-            }
-            R.id.action3 -> {
-                mapView.setTileSource(OnlineTileSourceFactory.MAP_BOX)
-            }
+            R.id.action_show_my_location -> showCurrentLocation()
+            R.id.action_select_map_source -> MapSourcesListFragment.showFragment(fragmentManager, this@MapFragment)
         }
         false
     } ?: true
@@ -209,6 +198,16 @@ class MapFragment :
             geoPoint?.let { addNumericMarker(it) }
         } else mInfoWindow.close()
         return true
+    }
+
+    override fun onTileSourceSelectedAsBaseMap(tileSource: ITileSource) =
+            mapView.setTileSource(tileSource)
+
+    override fun onTileSourceSelectedAsLayer(tileSource: ITileSource) =
+            addTileSourceLayer(tileSource)
+
+    private fun showCurrentLocation() {
+
     }
 
     private fun startDrawingMode(geoPoint: GeoPoint?, isDrawingLine: Boolean) = geoPoint?.apply {
@@ -279,8 +278,7 @@ class MapFragment :
     }
 
     private fun initializeMap() {
-//        mapView.setTileSource(TileSourceBuilder(MapBaseUrl.OPEN_STREET_MAP).build())
-        addTileSource(TileSourceBuilder(MapBaseUrl.OPEN_STREET_MAP).build())
+        mapView.setTileSource(OnlineTileSourceFactory.Google.HYBRID)
         mapView.setBuiltInZoomControls(true)
         mapView.setMultiTouchControls(true)
         mapView.postDelayed(waitForMapTimeTask, TIME_TO_WAIT_IN_MS.toLong())
@@ -293,7 +291,7 @@ class MapFragment :
         }
     }
 
-    private fun addTileSource(tileSource: ITileSource) {
+    private fun addTileSourceLayer(tileSource: ITileSource) {
         val tileProvider = MapTileProviderBasic(context)
         tileProvider.tileSource = tileSource
         val tilesOverlay = TilesOverlay(tileProvider, context)

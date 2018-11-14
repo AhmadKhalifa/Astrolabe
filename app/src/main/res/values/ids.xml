@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="action1" type="id" />
-    <item name="action2" type="id" />
+    <item name="action_show_my_location" type="id" />
+    <item name="action_select_map_source" type="id" />
     <item name="action3" type="id" />
     <item name="action_add_location" type="id" />
     <item name="action_add_line" type="id" />

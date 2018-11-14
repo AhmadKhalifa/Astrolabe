@@ -20,7 +20,7 @@
             android:layout_width="@dimen/tile_source_icom_dimen"
             android:layout_height="@dimen/tile_source_icom_dimen"
             android:layout_margin="@dimen/spc4"
-            tools:src="@drawable/google_maps" />
+            tools:src="@drawable/googlemaps" />
 
         <LinearLayout
             android:padding="@dimen/spc1"
@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/titleTextView"
+                    android:id="@+id/titleTextView"
                 tools:text="Google maps"
                 android:textSize="@dimen/txt5"
                 android:layout_width="match_parent"
@@ -37,6 +37,7 @@
                 android:ellipsize="end"
                 android:maxLines="1" />
             <TextView
+                android:visibility="gone"
                 android:id="@+id/baseUrlTextView"
                 android:textColor="@color/grey"
                 tools:text="maps.google.com"
@@ -56,17 +57,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <ImageButton
-                android:id="@+id/useAsBaseMapButton"
+                android:id="@+id/addAsLayerButton"
                 android:background="@null"
-                android:layout_margin="@dimen/spc1"
+                android:layout_marginBottom="@dimen/spc2"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_circle_black_24dp"/>
             <ImageButton
-                android:id="@+id/addAsLayerButton"
+                android:id="@+id/useAsBaseMapButton"
                 android:background="@null"
-                android:layout_margin="@dimen/spc1"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

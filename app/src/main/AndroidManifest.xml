@@ -46,6 +46,9 @@
         <!--Bing metadata-->
         <meta-data android:name="BING_KEY" android:value="AtRgTpQChfULNPfAppNlczeIZFzpjqhZ9tsjWtWg0dqUkdQzVmLHe6q2sekEE7Kw" />
 
+        <!--ThunderForest-->
+        <meta-data android:name="THUNDER_FOREST_KEY" android:value="ea62a886daae45ae811a3e140376f5b8"/>
+
         <activity
             android:name="com.khalifa.mapViewer.ui.activity.SplashActivity"
             android:screenOrientation="portrait">

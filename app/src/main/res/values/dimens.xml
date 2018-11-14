@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <dimen name="spc1">3dp</dimen>
+    <dimen name="spc2">6dp</dimen>
+    <dimen name="spc3">7dp</dimen>
+    <dimen name="spc4">8dp</dimen>
+    <dimen name="spc5">12dp</dimen>
+    <dimen name="spc6">16dp</dimen>
+    <dimen name="spc7">24dp</dimen>
+    <dimen name="spc8">36dp</dimen>
+    <dimen name="spc9">48dp</dimen>
+    <dimen name="spc10">60dp</dimen>
+    <dimen name="spc11">72dp</dimen>
+    <dimen name="spc12">96dp</dimen>
+
+    <dimen name="txt1">12sp</dimen>
+    <dimen name="txt2">13sp</dimen>
+    <dimen name="txt3">14sp</dimen>
+    <dimen name="txt4">16sp</dimen>
+    <dimen name="txt5">18sp</dimen>
+    <dimen name="txt6">20sp</dimen>
+    <dimen name="txt7">25sp</dimen>
+    <dimen name="txt8">30sp</dimen>
+
+    <dimen name="tiny_txt1">8sp</dimen>
+    <dimen name="tiny_txt2">10sp</dimen>
+
     <dimen name="pinterest_child_size">44dp</dimen>
     <dimen name="pinterest_child_radius">80dp</dimen>
     <dimen name="pinterest_tips_text_size">15sp</dimen>
+    <dimen name="tile_source_icom_dimen">48dp</dimen>
 </resources>

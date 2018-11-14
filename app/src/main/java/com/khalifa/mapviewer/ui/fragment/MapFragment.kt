@@ -23,6 +23,7 @@ import android.widget.ImageView
 import com.khalifa.mapViewer.MapApplication
 import com.khalifa.mapViewer.R
 import com.khalifa.mapViewer.data.model.tileSource.MapBaseUrl
+import com.khalifa.mapViewer.data.model.tileSource.OnlineTileSourceFactory
 import com.khalifa.mapViewer.data.model.tileSource.TileSourceBuilder
 import com.khalifa.mapViewer.ui.base.BaseFragment
 import com.khalifa.mapViewer.ui.widget.pinterest.CircleImageView
@@ -45,7 +46,6 @@ import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
 import org.osmdroid.tileprovider.MapTileProviderBasic
 import org.osmdroid.tileprovider.tilesource.ITileSource
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 /**
  * @author Ahmad Khalifa
@@ -61,7 +61,7 @@ class MapFragment :
     companion object {
         val TAG: String = MapFragment::class.java.simpleName
 
-        private const val DEFAULT_ZOOM_LEVEL = 14.0
+        private const val DEFAULT_ZOOM_LEVEL = 12.0
         private const val TIME_TO_WAIT_IN_MS = 100
 
         fun newInstance() = MapFragment()
@@ -168,16 +168,16 @@ class MapFragment :
     override fun onActionSelected(actionItem: SpeedDialActionItem?) = actionItem?.let {
         when (it.id) {
             R.id.action0 -> {
-                snackbar("Action 0")
+                mapView.setTileSource(OnlineTileSourceFactory.Google.HYBRID)
             }
             R.id.action1 -> {
-                snackbar("Action 1")
+                mapView.setTileSource(OnlineTileSourceFactory.Google.HYBRID)
             }
             R.id.action2 -> {
-                snackbar("Action 2")
+                mapView.setTileSource(OnlineTileSourceFactory.Google.SATELLITE)
             }
             R.id.action3 -> {
-                snackbar("Action 3")
+                mapView.setTileSource(OnlineTileSourceFactory.MAP_BOX)
             }
         }
         false
@@ -286,8 +286,6 @@ class MapFragment :
         mapView.postDelayed(waitForMapTimeTask, TIME_TO_WAIT_IN_MS.toLong())
         mInfoWindow = MarkerInfoWindow(R.layout.bonuspack_bubble, mapView)
         addMapOverlays()
-        addTileSource(TileSourceFactory.ROADS_OVERLAY_NL)
-        addTileSource(TileSourceFactory.HIKEBIKEMAP)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermissions()
         } else {

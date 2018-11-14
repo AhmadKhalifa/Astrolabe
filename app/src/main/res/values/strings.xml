@@ -11,7 +11,10 @@
     <string name="marker">Marker</string>
     <string name="line">Line</string>
     <string name="polygon">Polygon</string>
-    <string name="drawing_line">Drawing line...</string>
-    <string name="drawing_polygon">Drawing polygon...</string>
+    <string name="drawing_line">Drawing line…</string>
+    <string name="drawing_polygon">Drawing polygon…</string>
     <string name="cancel">Cancel</string>
+    <string name="available_maps">Available Maps</string>
+    <string name="_new">New</string>
+    <string name="map_sources">Map sources</string>
 </resources>

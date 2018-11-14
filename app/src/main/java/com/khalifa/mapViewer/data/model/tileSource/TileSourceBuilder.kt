@@ -4,9 +4,9 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource
 
 class TileSourceBuilder(private val baseUrls: Array<String>) {
 
-    private var name = "Mapnik"
+    private var name = ""
     private var minZoomLevel = 0
-    private var maxZoomLevel = 15
+    private var maxZoomLevel = 18
     private var tileSizePixels = 256
     private var tileExtension = ".png"
 

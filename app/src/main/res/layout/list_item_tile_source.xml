@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/spc3"
+    android:layout_margin="@dimen/spc4"
+    android:layout_height="wrap_content">
+    
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:padding="@dimen/spc3"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:id="@+id/iconImageView"
+            android:layout_width="@dimen/tile_source_icom_dimen"
+            android:layout_height="@dimen/tile_source_icom_dimen"
+            android:layout_margin="@dimen/spc4"
+            tools:src="@drawable/google_maps" />
+
+        <LinearLayout
+            android:padding="@dimen/spc1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/titleTextView"
+                tools:text="Google maps"
+                android:textSize="@dimen/txt5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1" />
+            <TextView
+                android:id="@+id/baseUrlTextView"
+                android:textColor="@color/grey"
+                tools:text="maps.google.com"
+                android:textSize="@dimen/txt2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:padding="@dimen/spc2"
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/useAsBaseMapButton"
+                android:background="@null"
+                android:layout_margin="@dimen/spc1"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_circle_black_24dp"/>
+            <ImageButton
+                android:id="@+id/addAsLayerButton"
+                android:background="@null"
+                android:layout_margin="@dimen/spc1"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_check_circle_black_24dp" />
+        </LinearLayout>
+
+        
+    </LinearLayout>
+    
+</android.support.design.card.MaterialCardView>

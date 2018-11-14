@@ -5,6 +5,7 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
+import com.khalifa.mapViewer.data.model.tileSource.OnlineTileSourceFactory
 
 class MapApplication : Application() {
 
@@ -22,5 +23,6 @@ class MapApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instace = this
+        OnlineTileSourceFactory.initialize(this)
     }
 }

@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#344955</color>
     <color name="colorAccent">#f8aa1a</color>
 
+    <color name="default_background_color">#ececec</color>
+    s
     <color name="white">#ffffff</color>
     <color name="grey">#aaaaaa</color>
     <color name="transparent">#50000000</color>

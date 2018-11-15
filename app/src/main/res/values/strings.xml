@@ -15,4 +15,6 @@
     <string name="available_maps">Available Maps</string>
     <string name="_new">New</string>
     <string name="map_sources">Map sources</string>
+    <string name="set_as_base_map">Set as base map</string>
+    <string name="add_as_map_layer">Add as map layer</string>
 </resources>

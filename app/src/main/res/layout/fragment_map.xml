@@ -35,20 +35,22 @@
         android:id="@+id/floatingActionMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="bottom|center_horizontal"
         android:layout_margin="2dp"
         app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
         app:sdExpansionMode="top"
         app:sdMainFabAnimationRotateAngle="90"
         app:sdMainFabClosedSrc="@drawable/ic_edit_black_24dp"
         app:sdMainFabOpenedSrc="@drawable/ic_close_black_24dp"
-        app:sdOverlayLayout="@id/overlay" />
+        app:sdOverlayLayout="@id/overlay"
+        app:sdMainFabClosedBackgroundColor="@color/colorAccent"
+        app:sdMainFabOpenedBackgroundColor="@color/colorAccent" />
 
     <com.leinardi.android.speeddial.SpeedDialView
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="bottom|center_horizontal"
         android:visibility="invisible"
         android:layout_margin="2dp"
         app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
@@ -56,6 +58,7 @@
         app:sdMainFabAnimationRotateAngle="0"
         app:sdMainFabClosedSrc="@drawable/ic_done_white_24dp"
         app:sdMainFabOpenedSrc="@drawable/ic_done_white_24dp"
-        app:sdMainFabClosedBackgroundColor="@color/green"/>
+        app:sdMainFabClosedBackgroundColor="@color/green"
+        app:sdMainFabOpenedBackgroundColor="@color/green"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -20,6 +20,13 @@ class DimensionsUtil private constructor() {
             displayMetrics.widthPixels
         } ?: throw IllegalArgumentException("Context cannot be null")
 
+        fun getScreenHeightInPixels(context: Context?) = context?.let {
+            val displayMetrics = DisplayMetrics()
+            (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
+                    .defaultDisplay.getMetrics(displayMetrics)
+            displayMetrics.heightPixels
+        } ?: throw IllegalArgumentException("Context cannot be null")
+
         fun getScreenWidthInDp(context: Context?) = context?.let {
             val displayMetrics = DisplayMetrics()
             (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)

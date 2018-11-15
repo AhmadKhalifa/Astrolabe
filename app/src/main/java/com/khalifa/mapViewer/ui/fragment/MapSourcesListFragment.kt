@@ -16,7 +16,7 @@ import com.khalifa.mapViewer.viewmodel.Error
 import com.khalifa.mapViewer.viewmodel.Event
 import com.khalifa.mapViewer.viewmodel.fragment.implementation.MapSourcesListViewModel
 import kotlinx.android.synthetic.main.content_dialog_full_screen.*
-import kotlinx.android.synthetic.main.fragment_map_sources_list.*
+import kotlinx.android.synthetic.main.fragment_map_sources_list.view.*
 import org.osmdroid.tileprovider.tilesource.ITileSource
 
 /**
@@ -60,11 +60,11 @@ class MapSourcesListFragment :
             savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_map_sources_list, container, false)
                     .also {
-//                        with(toolbar) {
-//                            setNavigationIcon(R.drawable.ic_close_white_24dp)
-//                            setNavigationOnClickListener { dismiss() }
-//                            setTitle(R.string.map_sources)
-//                        }
+                        with(it.toolbar) {
+                            setNavigationIcon(R.drawable.ic_close_white_24dp)
+                            setNavigationOnClickListener { dismiss() }
+                            setTitle(R.string.map_sources)
+                        }
                     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -14,7 +14,10 @@ class MapSourceAdapter(private val itemInteractionListener: OnItemInteractionLis
         RecyclerView.Adapter<MapSourceAdapter.MapSourceViewHolder>() {
 
     var tileSources: List<ITileSource>? = null
-        set(_) = notifyDataSetChanged()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MapSourceViewHolder(
             LayoutInflater.from(parent.context)

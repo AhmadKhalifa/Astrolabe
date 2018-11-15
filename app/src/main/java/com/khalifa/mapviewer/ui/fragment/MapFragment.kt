@@ -44,6 +44,8 @@ import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
 import org.osmdroid.tileprovider.MapTileProviderBasic
 import org.osmdroid.tileprovider.tilesource.ITileSource
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 /**
  * @author Ahmad Khalifa
@@ -75,7 +77,6 @@ class MapFragment :
         }
     }
 
-    private lateinit var mLocationMarker: Marker
     private lateinit var mInfoWindow: MarkerInfoWindow
     var isInDrawingMode = false
     private var isDrawingLine = false
@@ -278,7 +279,7 @@ class MapFragment :
     }
 
     private fun initializeMap() {
-        mapView.setTileSource(OnlineTileSourceFactory.Google.HYBRID)
+        mapView.setTileSource(OnlineTileSourceFactory.DEFAULT_MAP_SOURCE)
         mapView.setBuiltInZoomControls(true)
         mapView.setMultiTouchControls(true)
         mapView.postDelayed(waitForMapTimeTask, TIME_TO_WAIT_IN_MS.toLong())
@@ -289,6 +290,7 @@ class MapFragment :
         } else {
             requestLocationUpdates()
         }
+        updateMapLocation(30.0592319, 31.3022223, 12.0)
     }
 
     private fun addTileSourceLayer(tileSource: ITileSource) {
@@ -302,9 +304,9 @@ class MapFragment :
 
     private fun addMapOverlays() = with(mapView.overlays) {
         // marker overlay
-        mLocationMarker = Marker(mapView)
-        mLocationMarker.icon = MapApplication.getDrawable(R.drawable.ic_my_location)
-        add(mLocationMarker)
+        val locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), mapView)
+        locationOverlay.enableMyLocation()
+        mapView.overlays.add(locationOverlay)
 
         // compass overlay
         val compassOverlay =
@@ -326,6 +328,13 @@ class MapFragment :
         rotationGestureOverlay.isEnabled = true
         mapView.setMultiTouchControls(true)
         add(rotationGestureOverlay)
+
+        // Mini map
+        val miniMapOverlay = MinimapOverlay(context, mapView.tileRequestCompleteHandler)
+        miniMapOverlay.width = DimensionsUtil.getScreenWidthInPixels(context) / 5
+        miniMapOverlay.height = DimensionsUtil.getScreenHeightInPixels(context) / 5
+        miniMapOverlay.setTileSource(OnlineTileSourceFactory.Google.SATELLITE)
+        mapView.overlays.add(miniMapOverlay)
 
         // click handler overlay
         add(MapEventsOverlay(this@MapFragment))
@@ -417,23 +426,16 @@ class MapFragment :
         return marker
     }
 
-    private fun updateMarker(locationPoint: GeoPoint) {
-        mapView.overlayManager.remove(mLocationMarker)
-        mLocationMarker.position = locationPoint
-        mapView.overlays.add(mLocationMarker)
-    }
-
-    private fun updateMapLocation(latitude: Double, longitude: Double) {
-        updateMarker(GeoPoint(latitude, longitude))
+    private fun updateMapLocation(latitude: Double, longitude: Double, zoomLevel: Double) {
         val mapController = mapView.controller
         mapController.setCenter(GeoPoint(latitude, longitude))
-        mapController.setZoom(DEFAULT_ZOOM_LEVEL)
+        mapController.setZoom(zoomLevel)
         stopUsingGps()
     }
 
     override fun onLocationChanged(location: Location) {
         Log.d(TAG, "onLocationChanged: " + location.toString())
-        updateMapLocation(location.latitude, location.longitude)
+//        updateMapLocation(location.latitude, location.longitude)
     }
 
     override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {

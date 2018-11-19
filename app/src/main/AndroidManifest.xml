@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.khalifa.mapViewer">
+    package="com.khalifa.astrolabe">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,32 +25,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name="com.khalifa.mapViewer.MapApplication"
+        android:name="com.khalifa.astrolabe.AstrolabeApplication"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!--MapQuest metadata-->
-        <meta-data android:name="MAPQUEST_ACCESS_TOKEN" android:value="8mnKnuQ2Cv20QBsEDsujgFYGXbOPQBRA" />
-
-        <!--HereWeGo metadata-->
-        <meta-data android:name="HEREWEGO_APPID" android:value="NObLN4n6HA2PCIhQn2o8" />
-        <meta-data android:name="HEREWEGO_APPCODE" android:value="gs7fWM3zpfmUTeyClNirQg" />
-
-        <!--CloudMade metadata-->
-        <meta-data android:name="CLOUDMADE_KEY" android:value="ea62a886daae45ae811a3e140376f5b8" />
-
-        <!--MapBox metadata-->
-        <meta-data android:name="MAPBOX_MAPID" android:value="streets-v10" />
-        <meta-data android:name="MAPBOX_ACCESS_TOKEN" android:value="sk.eyJ1IjoiZGV2b3JjIiwiYSI6ImNqb2U0ZXM2aDFrOTAzcW9qbDAzNTVxdTcifQ.hXYhbYFZaIQygWHmu72XkQ" />
-
-        <!--Bing metadata-->
-        <meta-data android:name="BING_KEY" android:value="AtRgTpQChfULNPfAppNlczeIZFzpjqhZ9tsjWtWg0dqUkdQzVmLHe6q2sekEE7Kw" />
-
-        <!--ThunderForest-->
-        <meta-data android:name="THUNDER_FOREST_KEY" android:value="ea62a886daae45ae811a3e140376f5b8"/>
-
         <activity
-            android:name="com.khalifa.mapViewer.ui.activity.SplashActivity"
+            android:name="com.khalifa.astrolabe.ui.activity.SplashActivity"
             android:theme="@style/FullScreenTheme"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -60,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.khalifa.mapViewer.ui.activity.MapActivity"
+            android:name="com.khalifa.astrolabe.ui.activity.MapActivity"
             android:theme="@style/FullScreenTheme"
             android:screenOrientation="portrait"/>
     </application>

@@ -6,12 +6,12 @@
     android:orientation="vertical"
     tools:context=".ui.fragment.MapFragment">
 
-    <com.khalifa.mapViewer.ui.widget.mapview.MapView
+    <com.khalifa.astrolabe.ui.widget.mapview.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.khalifa.mapViewer.ui.widget.pinterest.PinterestView
+    <com.khalifa.astrolabe.ui.widget.pinterest.PinterestView
         xmlns:custom="http://schemas.android.com/apk/res-auto"
         android:id="@+id/pinterestView"
         android:layout_width="match_parent"
@@ -35,22 +35,22 @@
         android:id="@+id/floatingActionMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_gravity="bottom|end"
         android:layout_margin="2dp"
         app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
         app:sdExpansionMode="top"
-        app:sdMainFabAnimationRotateAngle="90"
-        app:sdMainFabClosedSrc="@drawable/ic_edit_black_24dp"
-        app:sdMainFabOpenedSrc="@drawable/ic_close_black_24dp"
+        app:sdMainFabAnimationRotateAngle="0"
+        app:sdMainFabClosedSrc="@mipmap/ic_astrolabe"
+        app:sdMainFabOpenedSrc="@mipmap/ic_astrolabe"
         app:sdOverlayLayout="@id/overlay"
-        app:sdMainFabClosedBackgroundColor="@color/colorAccent"
-        app:sdMainFabOpenedBackgroundColor="@color/colorAccent" />
+        app:sdMainFabClosedBackgroundColor="@color/white"
+        app:sdMainFabOpenedBackgroundColor="@color/white" />
 
     <com.leinardi.android.speeddial.SpeedDialView
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_gravity="bottom|end"
         android:visibility="invisible"
         android:layout_margin="2dp"
         app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Map Viewer</string>
+    <string name="app_name">Astrolabe</string>
 
     <string name="general_error">Something went wrong</string>
     <string name="no_internet_connection">No internet connection</string>
@@ -17,4 +17,35 @@
     <string name="map_sources">Map sources</string>
     <string name="set_as_base_map">Set as base map</string>
     <string name="add_as_map_layer">Add as map layer</string>
+
+    <string name="open_street_map">Open Street Map</string>
+
+    <string name="google_hybrid">Hybrid</string>
+    <string name="google_satellite">Satellite</string>
+    <string name="google_roads">Roads</string>
+
+    <string name="bing_hybrid">Aerial with labels</string>
+    <string name="bing_road">Road</string>
+    <string name="bing_aerial">Aerial</string>
+
+    <string name="mapbox_streets">Streets</string>
+    <string name="mapbox_light">Light</string>
+    <string name="mapbox_dark">Dark</string>
+    <string name="mapbox_satellite">Satellite</string>
+    <string name="mapbox_satellite_streets">Satellite with streets</string>
+    <string name="mapbox_outdoors">Outdoors</string>
+    <string name="mapbox_pencil">Pencil</string>
+
+    <string name="here_we_go_day">Normal (Day)</string>
+    <string name="here_we_go_night">Normal (Night)</string>
+    <string name="here_we_go_traffic_day">Traffic (Day)</string>
+    <string name="here_we_go_traffic_night">Traffic (Night)</string>
+    <string name="here_we_go_satellite">Satellite</string>
+    <string name="here_we_go_hybrid">Hybrid</string>
+
+    <string name="thunderforest_open_cycle_map">Open Cycle Map</string>
+    <string name="thunderforest_transport">Transport</string>
+    <string name="thunderforest_transport_dark">Transport (Dark)</string>
+    <string name="thunderforest_lanscape">Landscape</string>
+    <string name="thunderforest_outdoors">Outdoors</string>
 </resources>

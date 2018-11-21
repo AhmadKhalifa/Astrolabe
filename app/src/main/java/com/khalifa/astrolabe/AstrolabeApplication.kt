@@ -23,6 +23,5 @@ class AstrolabeApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        MapSourceFactory.initialize()
     }
 }

@@ -14,120 +14,43 @@ import java.util.*
 
 object MapSourceFactory {
 
-    lateinit var DEFAULT_MAP_SOURCE: ITileSource
+    val DEFAULT_MAP_SOURCE = OpenStreetMap.MAPNIK
 
-    val onlineMapSources = ArrayList<ITileSource>()
+    val onlineMapSources = ArrayList<ITileSource>().apply {
+        addAll(OpenStreetMap.getAllSources())
+        addAll(Google.getAllSources())
+        addAll(Bing.getAllSources())
+        addAll(MapBox.getAllSources())
+        addAll(HereWeGo.getAllSources())
+        addAll(ThunderForest.getAllSources())
+    }
 
-    private val tileSourceImageMap = HashMap<String, Int>()
+    private val tileSourceImageMap = HashMap<String, Int>().apply {
+        putAll(OpenStreetMap.getSourcesIconMap())
+        putAll(Google.getSourcesIconMap())
+        putAll(Bing.getSourcesIconMap())
+        putAll(MapBox.getSourcesIconMap())
+        putAll(HereWeGo.getSourcesIconMap())
+        putAll(ThunderForest.getSourcesIconMap())
+    }
 
     fun getIconImage(tileSource: ITileSource?) =
             tileSourceImageMap[tileSource?.toString()] ?: R.drawable.defaultmap
 
-    fun initialize() {
-        OpenStreetMap.MAPNIK = OpenStreetMap.getTileSource()
-        DEFAULT_MAP_SOURCE = OpenStreetMap.MAPNIK
+    interface MapSource {
 
-        Google.HYBRID = Google.getTileSource("Hybrid", "m")
-        Google.SATELLITE = Google.getTileSource("Sat", "s")
-        Google.ROADS = Google.getTileSource("Roads", "y")
+        fun getTileSource(vararg arg: String): ITileSource
 
-        Bing.HYBRID = Bing.getTileSource(BingMapTileSource.IMAGERYSET_AERIALWITHLABELS)
-        Bing.ROAD = Bing.getTileSource( BingMapTileSource.IMAGERYSET_ROAD)
-        Bing.AERIAL = Bing.getTileSource(BingMapTileSource.IMAGERYSET_AERIAL)
+        fun getAllSources(): List<ITileSource>
 
-        MapBox.STREETS = MapBox.getTileSource("mapbox.streets")
-        MapBox.LIGHT = MapBox.getTileSource("mapbox.light")
-        MapBox.DARK = MapBox.getTileSource("mapbox.dark")
-        MapBox.SATELLITE = MapBox.getTileSource("mapbox.satellite")
-        MapBox.SATELLITE_STREETS = MapBox.getTileSource("mapbox.streets-satellite")
-        MapBox.OUTDOORS = MapBox.getTileSource("mapbox.outdoors")
-        MapBox.PENCIL = MapBox.getTileSource("mapbox.pencil")
-
-        ThunderForest.OPEN_CYCLE_MAP = ThunderForest.getTileSource("cycle")
-        ThunderForest.TRANSPORT = ThunderForest.getTileSource("transport")
-        ThunderForest.TRANSPORT_DARK = ThunderForest.getTileSource("transport-dark")
-        ThunderForest.LANDSCAPE = ThunderForest.getTileSource("landscape")
-        ThunderForest.OUTDOORS = ThunderForest.getTileSource("outdoors")
-
-        HereWeGo.DAY = HereWeGo.getTileSource("normal.day")
-        HereWeGo.NIGHT = HereWeGo.getTileSource("normal.night")
-        HereWeGo.TRAFFIC_DAY = HereWeGo.getTileSource("normal.traffic.day")
-        HereWeGo.TRAFFIC_NIGHT = HereWeGo.getTileSource("normal.traffic.night")
-        HereWeGo.SATELLITE = HereWeGo.getTileSource("satellite.day")
-        HereWeGo.HYBRID = HereWeGo.getTileSource("hybrid.day")
-
-        onlineMapSources.apply {
-            add(OpenStreetMap.MAPNIK)
-
-            add(Google.HYBRID)
-            add(Google.SATELLITE)
-            add(Google.ROADS)
-
-            add(Bing.HYBRID)
-            add(Bing.ROAD)
-            add(Bing.AERIAL)
-
-            add(MapBox.STREETS)
-            add(MapBox.LIGHT)
-            add(MapBox.DARK)
-            add(MapBox.SATELLITE)
-            add(MapBox.SATELLITE_STREETS)
-            add(MapBox.OUTDOORS)
-            add(MapBox.PENCIL)
-
-            add(HereWeGo.DAY)
-            add(HereWeGo.NIGHT)
-            add(HereWeGo.TRAFFIC_DAY)
-            add(HereWeGo.TRAFFIC_NIGHT)
-            add(HereWeGo.SATELLITE)
-            add(HereWeGo.HYBRID)
-
-            add(ThunderForest.OPEN_CYCLE_MAP)
-            add(ThunderForest.TRANSPORT)
-            add(ThunderForest.TRANSPORT_DARK)
-            add(ThunderForest.LANDSCAPE)
-            add(ThunderForest.OUTDOORS)
-        }
-
-        tileSourceImageMap.apply {
-            put(OpenStreetMap.MAPNIK.toString(), R.drawable.osm)
-
-            put(Google.HYBRID.toString(), R.drawable.googlemaps)
-            put(Google.SATELLITE.toString(), R.drawable.googlemaps)
-            put(Google.ROADS.toString(), R.drawable.googlemaps)
-
-            put(Bing.HYBRID.toString(), R.drawable.bing)
-            put(Bing.ROAD.toString(), R.drawable.bing)
-            put(Bing.AERIAL.toString(), R.drawable.bing)
-
-            put(MapBox.STREETS.toString(), R.drawable.mapbox)
-            put(MapBox.LIGHT.toString(), R.drawable.mapbox)
-            put(MapBox.DARK.toString(), R.drawable.mapbox)
-            put(MapBox.SATELLITE.toString(), R.drawable.mapbox)
-            put(MapBox.SATELLITE_STREETS.toString(), R.drawable.mapbox)
-            put(MapBox.OUTDOORS.toString(), R.drawable.mapbox)
-            put(MapBox.PENCIL.toString(), R.drawable.mapbox)
-
-            put(HereWeGo.DAY.toString(), R.drawable.herewego)
-            put(HereWeGo.NIGHT.toString(), R.drawable.herewego)
-            put(HereWeGo.TRAFFIC_DAY.toString(), R.drawable.herewego)
-            put(HereWeGo.TRAFFIC_NIGHT.toString(), R.drawable.herewego)
-            put(HereWeGo.SATELLITE.toString(), R.drawable.herewego)
-            put(HereWeGo.HYBRID.toString(), R.drawable.herewego)
-
-            put(ThunderForest.OPEN_CYCLE_MAP.toString(), R.drawable.thunderforest)
-            put(ThunderForest.TRANSPORT.toString(), R.drawable.thunderforest)
-            put(ThunderForest.TRANSPORT_DARK.toString(), R.drawable.thunderforest)
-            put(ThunderForest.LANDSCAPE.toString(), R.drawable.thunderforest)
-            put(ThunderForest.OUTDOORS.toString(), R.drawable.thunderforest)
-        }
+        fun getSourcesIconMap(): HashMap<String, Int>
     }
 
-    object OpenStreetMap {
+    object OpenStreetMap : MapSource {
 
-        lateinit var MAPNIK: ITileSource
+        val MAPNIK: ITileSource = getTileSource()
 
-        fun getTileSource() = object: XYTileSource(
+        override fun getTileSource(vararg arg: String) = object: XYTileSource(
                 "Open Street Map",
                 0,
                 19,
@@ -142,18 +65,22 @@ object MapSourceFactory {
 
             override fun toString() = name()
         }
+
+        override fun getAllSources() = listOf(MAPNIK)
+
+        override fun getSourcesIconMap() = hashMapOf(MAPNIK.toString() to R.drawable.osm)
     }
 
-    object Google {
+    object Google : MapSource {
 
-        lateinit var HYBRID: ITileSource
+        private val HYBRID = getTileSource("Hybrid", "m")
 
-        lateinit var SATELLITE: ITileSource
+        val SATELLITE = getTileSource("Sat", "s")
 
-        lateinit var ROADS: ITileSource
+        private val ROADS = getTileSource("Roads", "y")
 
-        fun getTileSource(mapType: String, lyrs: String) = object : XYTileSource(
-                "Google - $mapType",
+        override fun getTileSource(vararg arg: String) = object : XYTileSource(
+                "Google - ${arg[0]}",
                 0,
                 19,
                 256,
@@ -164,15 +91,15 @@ object MapSourceFactory {
                         "http://mt3.google.com"
                 )) {
 
-            override fun name() = when(lyrs) {
+            override fun name() = when(arg[1]) {
                 "m" -> getString(R.string.google_hybrid)
                 "s" -> getString(R.string.google_satellite)
                 "y" -> getString(R.string.google_roads)
                 else -> ""
             }
-            
+
             override fun getTileURLString(pMapTileIndex: Long): String {
-                return "$baseUrl/vt/lyrs=$lyrs&x=${getX(pMapTileIndex)}" +
+                return "$baseUrl/vt/lyrs=${arg[1]}&x=${getX(pMapTileIndex)}" +
                         "&y=${getY(pMapTileIndex)}&z=${getZoom(pMapTileIndex)}"
             }
 
@@ -180,19 +107,27 @@ object MapSourceFactory {
                 return "Google - ${name()}"
             }
         }
+
+        override fun getAllSources() = listOf(HYBRID, SATELLITE, ROADS)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                HYBRID.toString() to R.drawable.googlemaps,
+                SATELLITE.toString() to R.drawable.googlemaps,
+                ROADS.toString() to R.drawable.googlemaps
+        )
     }
 
-    object Bing {
+    object Bing : MapSource {
 
-        lateinit var HYBRID: ITileSource
+        private val HYBRID = getTileSource(BingMapTileSource.IMAGERYSET_AERIALWITHLABELS)
 
-        lateinit var ROAD: ITileSource
+        private val ROAD = getTileSource( BingMapTileSource.IMAGERYSET_ROAD)
 
-        lateinit var AERIAL: ITileSource
+        private val AERIAL = getTileSource(BingMapTileSource.IMAGERYSET_AERIAL)
 
-        fun getTileSource(style: String) =
+        override fun getTileSource(vararg arg: String) =
                 with(object: BingMapTileSource(null){
-                    override fun name() = when(style) {
+                    override fun name() = when(arg[0]) {
                         BingMapTileSource.IMAGERYSET_AERIAL ->
                             getString(R.string.bing_aerial)
                         BingMapTileSource.IMAGERYSET_AERIALWITHLABELS ->
@@ -207,29 +142,37 @@ object MapSourceFactory {
                     }
                 }) {
                     BingMapTileSource.setBingKey(Keys.Bing.API_KEY)
-                    this.style = style
+                    this.style = arg[0]
                     this
                 }
+
+        override fun getAllSources() = listOf(HYBRID, ROAD, AERIAL)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                HYBRID.toString() to R.drawable.bing,
+                ROAD.toString() to R.drawable.bing,
+                AERIAL.toString() to R.drawable.bing
+        )
     }
 
-    object MapBox {
+    object MapBox : MapSource {
 
-        lateinit var STREETS: ITileSource
+        private val STREETS = getTileSource("mapbox.streets")
 
-        lateinit var LIGHT: ITileSource
+        private val LIGHT = getTileSource("mapbox.light")
 
-        lateinit var DARK: ITileSource
+        private val DARK = getTileSource("mapbox.dark")
 
-        lateinit var SATELLITE: ITileSource
+        private val SATELLITE = getTileSource("mapbox.satellite")
 
-        lateinit var SATELLITE_STREETS: ITileSource
+        private val SATELLITE_STREETS = getTileSource("mapbox.streets-satellite")
 
-        lateinit var OUTDOORS: ITileSource
+        private val OUTDOORS = getTileSource("mapbox.outdoors")
 
-        lateinit var PENCIL: ITileSource
+        private val PENCIL = getTileSource("mapbox.pencil")
 
-        fun getTileSource(mapType: String) = object : XYTileSource(
-                "MapBox - $mapType",
+        override fun getTileSource(vararg arg: String) = object : XYTileSource(
+                "MapBox - ${arg[0]}",
                 0,
                 20,
                 256,
@@ -237,7 +180,7 @@ object MapSourceFactory {
                 arrayOf("http://api.tiles.mapbox.com/v4")
         ) {
 
-            override fun name() = when(mapType) {
+            override fun name() = when(arg[0]) {
                 "mapbox.streets" -> getString(R.string.mapbox_streets)
                 "mapbox.light" -> getString(R.string.mapbox_light)
                 "mapbox.dark" -> getString(R.string.mapbox_dark)
@@ -253,29 +196,42 @@ object MapSourceFactory {
             }
             
             override fun getTileURLString(pMapTileIndex: Long): String {
-                return "$baseUrl/$mapType/" +
+                return "$baseUrl/${arg[0]}/" +
                         "${getZoom(pMapTileIndex)}/${getX(pMapTileIndex)}/${getY(pMapTileIndex)}" +
                         ".$mImageFilenameEnding?access_token=${Keys.MapBox.ACCESS_TOKEN}"
             }
         }
+
+        override fun getAllSources() =
+                listOf(STREETS, LIGHT, DARK, SATELLITE, SATELLITE_STREETS, OUTDOORS, PENCIL)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                STREETS.toString() to R.drawable.mapbox,
+                LIGHT.toString() to R.drawable.mapbox,
+                DARK.toString() to R.drawable.mapbox,
+                SATELLITE.toString() to R.drawable.mapbox,
+                SATELLITE_STREETS.toString() to R.drawable.mapbox,
+                OUTDOORS.toString() to R.drawable.mapbox,
+                PENCIL.toString() to R.drawable.mapbox
+        )
     }
 
-    object HereWeGo {
+    object HereWeGo : MapSource {
 
-        lateinit var DAY: ITileSource
+        private val DAY = getTileSource("normal.day")
 
-        lateinit var NIGHT: ITileSource
+        private val NIGHT = getTileSource("normal.night")
 
-        lateinit var TRAFFIC_DAY: ITileSource
+        private val TRAFFIC_DAY = getTileSource("normal.traffic.day")
 
-        lateinit var TRAFFIC_NIGHT: ITileSource
+        private val TRAFFIC_NIGHT = getTileSource("normal.traffic.night")
 
-        lateinit var SATELLITE: ITileSource
+        private val SATELLITE = getTileSource("satellite.day")
 
-        lateinit var HYBRID: ITileSource
+        private val HYBRID = getTileSource("hybrid.day")
 
-        fun getTileSource(mapType: String) = object : XYTileSource(
-                "MapBox - $mapType",
+        override fun getTileSource(vararg arg: String) = object : XYTileSource(
+                "MapBox - ${arg[0]}",
                 0,
                 18,
                 256,
@@ -285,8 +241,8 @@ object MapSourceFactory {
                         "https://3.base.maps.api.here.com/maptile/2.1/maptile/newest",
                         "https://4.base.maps.api.here.com/maptile/2.1/maptile/newest")
         ) {
-            
-            override fun name() = when(mapType) {
+
+            override fun name() = when(arg[0]) {
                 "normal.day" -> getString(R.string.here_we_go_day)
                 "normal.night" -> getString(R.string.here_we_go_night)
                 "normal.traffic.day" -> getString(R.string.here_we_go_traffic_day)
@@ -299,38 +255,50 @@ object MapSourceFactory {
             override fun toString(): String {
                 return "HereWeGo - ${name()}"
             }
-            
+
             override fun getTileURLString(pMapTileIndex: Long): String {
-                return "$baseUrl/$mapType/" +
+                return "$baseUrl/${arg[0]}/" +
                         "${getZoom(pMapTileIndex)}/${getX(pMapTileIndex)}/${getY(pMapTileIndex)}" +
                         "/$tileSizePixels/$mImageFilenameEnding?" +
                         "app_id=${Keys.HereWeGo.APP_ID}&app_code=${Keys.HereWeGo.APP_CODE}"
             }
         }
+
+        override fun getAllSources() =
+                listOf(DAY, NIGHT, TRAFFIC_DAY, TRAFFIC_NIGHT, SATELLITE, HYBRID)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                DAY.toString() to R.drawable.herewego,
+                NIGHT.toString() to R.drawable.herewego,
+                TRAFFIC_DAY.toString() to R.drawable.herewego,
+                TRAFFIC_NIGHT.toString() to R.drawable.herewego,
+                SATELLITE.toString() to R.drawable.herewego,
+                HYBRID.toString() to R.drawable.herewego
+        )
     }
 
-    object ThunderForest {
+    object ThunderForest : MapSource {
 
-        lateinit var OPEN_CYCLE_MAP: ITileSource
+        private val OPEN_CYCLE_MAP = getTileSource("cycle")
 
-        lateinit var TRANSPORT: ITileSource
+        private val TRANSPORT = getTileSource("transport")
 
-        lateinit var TRANSPORT_DARK: ITileSource
+        private val TRANSPORT_DARK = getTileSource("transport-dark")
 
-        lateinit var LANDSCAPE: ITileSource
+        private val LANDSCAPE = getTileSource("landscape")
 
-        lateinit var OUTDOORS: ITileSource
+        private val OUTDOORS = getTileSource("outdoors")
 
-        fun getTileSource(mapType: String) = object : XYTileSource(
-                "ThunderForest - $mapType",
+        override fun getTileSource(vararg arg: String) = object : XYTileSource(
+                "ThunderForest - ${arg[0]}",
                 0,
                 18,
                 256,
                 "png",
-                arrayOf("https://tile.thunderforest.com"
-                )) {
+                arrayOf("https://tile.thunderforest.com")
+        ) {
 
-            override fun name() = when(mapType) {
+            override fun name() = when(arg[0]) {
                 "cycle" -> getString(R.string.thunderforest_open_cycle_map)
                 "transport" -> getString(R.string.thunderforest_transport)
                 "transport-dark" -> getString(R.string.thunderforest_transport_dark)
@@ -344,11 +312,22 @@ object MapSourceFactory {
             }
             
             override fun getTileURLString(pMapTileIndex: Long): String {
-                return "$baseUrl/$mapType/${getZoom(pMapTileIndex)}/" +
+                return "$baseUrl/${arg[0]}/${getZoom(pMapTileIndex)}/" +
                         "${getX(pMapTileIndex)}/${getY(pMapTileIndex)}.$mImageFilenameEnding?" +
                         "apikey=${Keys.ThunderForest.API_KEY}"
             }
         }
+
+        override fun getAllSources() =
+                listOf(OPEN_CYCLE_MAP, TRANSPORT, TRANSPORT_DARK, LANDSCAPE, OUTDOORS)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                OPEN_CYCLE_MAP.toString() to R.drawable.thunderforest,
+                TRANSPORT.toString() to R.drawable.thunderforest,
+                TRANSPORT_DARK.toString() to R.drawable.thunderforest,
+                LANDSCAPE.toString() to R.drawable.thunderforest,
+                OUTDOORS.toString() to R.drawable.thunderforest
+        )
     }
 }
 

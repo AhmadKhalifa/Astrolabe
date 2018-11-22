@@ -25,18 +25,6 @@ object MapSourceFactory {
         addAll(ThunderForest.getAllSources())
     }
 
-    private val tileSourceImageMap = HashMap<String, Int>().apply {
-        putAll(OpenStreetMap.getSourcesIconMap())
-        putAll(Google.getSourcesIconMap())
-        putAll(Bing.getSourcesIconMap())
-        putAll(MapBox.getSourcesIconMap())
-        putAll(HereWeGo.getSourcesIconMap())
-        putAll(ThunderForest.getSourcesIconMap())
-    }
-
-    fun getIconImage(tileSource: ITileSource?) =
-            tileSourceImageMap[tileSource?.toString()] ?: R.drawable.defaultmap
-
     interface MapSource {
 
         val name: String

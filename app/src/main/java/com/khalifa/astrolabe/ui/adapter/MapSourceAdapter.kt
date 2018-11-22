@@ -33,7 +33,7 @@ class MapSourceAdapter(private val itemInteractionListener: OnItemInteractionLis
         fun setContent(adapter: MapSourceAdapter) = with(view) {
             val tileSource = adapter.tileSources?.get(adapterPosition)
             tileSource?.let {
-                iconImageView.setImageResource(MapSourceUtil.getIconImage(tileSource))
+                iconImageView.setImageResource(MapSourceUtil.getImage(tileSource))
                 nameTextView.text = MapSourceUtil.getName(tileSource)
                 typeTextView.text = MapSourceUtil.getType(tileSource)
                 useAsBaseMapButton.setOnClickListener {

@@ -17,7 +17,7 @@ class MapSourceUtil private constructor() {
             putAll(MapSourceFactory.ThunderForest.getSourcesIconMap())
         }
 
-        fun getIconImage(tileSource: ITileSource?) =
+        fun getImage(tileSource: ITileSource?) =
                 tileSourceImageMap[tileSource?.toString()] ?: R.drawable.defaultmap
 
         fun getName(tileSource: ITileSource?) = tileSource?.let {

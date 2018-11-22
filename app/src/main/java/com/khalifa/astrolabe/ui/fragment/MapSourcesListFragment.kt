@@ -61,7 +61,7 @@ class MapSourcesListFragment :
             inflater.inflate(R.layout.fragment_map_sources_list, container, false)
                     .also {
                         with(it.toolbar) {
-                            setNavigationIcon(R.drawable.ic_close_white_24dp)
+                            setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
                             setNavigationOnClickListener { dismiss() }
                             setTitle(R.string.map_sources)
                         }
@@ -72,6 +72,7 @@ class MapSourcesListFragment :
         with(recyclerView) {
             itemAnimator = DefaultItemAnimator()
             layoutManager = LinearLayoutManager(context)
+            isNestedScrollingEnabled = false
             adapter = mapSourceAdapter
         }
         viewModel.loadMapSources()
@@ -81,6 +82,7 @@ class MapSourcesListFragment :
         super.onStart()
         dialog?.window?.apply {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            setWindowAnimations(R.style.DialogAnimation)
         }
     }
 

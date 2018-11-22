@@ -112,7 +112,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/E:/Khalifa/Enviroment/Android%20Studio%203.2/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_my_location_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/E:/Khalifa/Enviroment/Android%20Studio%203.2/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_arrow_back_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -122,8 +122,9 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="autoMirrored" value="true" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_my_location_white_24dp" />
+                            <entry key="outputName" value="ic_arrow_back_black_24dp" />
                             <entry key="sourceFile" value="C:\Users\orc" />
                           </map>
                         </option>

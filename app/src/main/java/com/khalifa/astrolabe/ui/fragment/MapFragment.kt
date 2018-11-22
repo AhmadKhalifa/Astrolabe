@@ -204,8 +204,18 @@ class MapFragment :
     override fun onTileSourceSelectedAsBaseMap(tileSource: ITileSource) =
             mapView.setTileSource(tileSource)
 
-    override fun onTileSourceSelectedAsLayer(tileSource: ITileSource) =
-            addTileSourceLayer(tileSource)
+    override fun onTileSourceSelectedAsLayer(tileSource: ITileSource) {
+        val tileOverlay = addTileSourceLayer(tileSource)
+        TransparencyControllerFragment.showFragment(
+                fragmentManager,
+                tileOverlay,
+                object : TransparencyControllerFragment.OnFragmentInteractionListener {
+                    override fun onTransparencyChanged(transparencyPercentage: Int) {
+                        tileOverlay.transparencyPercentage = transparencyPercentage
+                    }
+                }
+        )
+    }
 
     private fun showCurrentLocation() {
 
@@ -297,13 +307,14 @@ class MapFragment :
         )
     }
 
-    private fun addTileSourceLayer(tileSource: ITileSource) {
+    private fun addTileSourceLayer(tileSource: ITileSource): TilesOverlayWithOpacity {
         val tileProvider = MapTileProviderBasic(context)
         tileProvider.tileSource = tileSource
         val tilesOverlay = TilesOverlayWithOpacity(tileProvider, context, DEFAULT_OPACITY)
         tilesOverlay.loadingBackgroundColor = Color.TRANSPARENT
         tilesOverlay.loadingLineColor = Color.TRANSPARENT
         mapView.overlays.add(tilesOverlay)
+        return tilesOverlay
     }
 
     private fun addMapOverlays() = with(mapView.overlays) {

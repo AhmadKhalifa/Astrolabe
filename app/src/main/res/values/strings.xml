@@ -48,4 +48,6 @@
     <string name="thunderforest_transport_dark">Transport (Dark)</string>
     <string name="thunderforest_lanscape">Landscape</string>
     <string name="thunderforest_outdoors">Outdoors</string>
+    <string name="opacity">Opacity:</string>
+    <string name="done">Done</string>
 </resources>

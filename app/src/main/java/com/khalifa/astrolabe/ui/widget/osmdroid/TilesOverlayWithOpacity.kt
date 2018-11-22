@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.IntRange
 import org.osmdroid.tileprovider.MapTileProviderBase
 import org.osmdroid.views.overlay.TilesOverlay
+import java.io.Serializable
 
 /**
  * @author Ahmad Khalifa
@@ -15,8 +16,9 @@ import org.osmdroid.views.overlay.TilesOverlay
 
 class TilesOverlayWithOpacity(tileProvider: MapTileProviderBase?,
                               aContext: Context?,
-                              @IntRange(from = 10, to = 100) var opacityPercentage: Int = 50) :
-        TilesOverlay(tileProvider, aContext, true, true) {
+                              @IntRange(from = 10, to = 100) var transparencyPercentage: Int = 50) :
+        TilesOverlay(tileProvider, aContext, true, true),
+        Serializable {
 
     private val mIntersectionRect: Rect = Rect()
     private var currentColorFilter: ColorFilter? = null
@@ -25,7 +27,7 @@ class TilesOverlayWithOpacity(tileProvider: MapTileProviderBase?,
         if (c != null && currentMapTile != null && tileRect != null) {
             currentMapTile.colorFilter = currentColorFilter
             currentMapTile.setBounds(tileRect.left, tileRect.top, tileRect.right, tileRect.bottom)
-            currentMapTile.alpha = (255f * (opacityPercentage / 100f)).toInt()
+            currentMapTile.alpha = (255f * (transparencyPercentage / 100f)).toInt()
             val canvasRect = canvasRect
             if (canvasRect == null) {
                 currentMapTile.draw(c)
@@ -44,6 +46,8 @@ class TilesOverlayWithOpacity(tileProvider: MapTileProviderBase?,
             c.restore()
         }
     }
+
+    fun tileProvider() = mTileProvider
 
     override fun setColorFilter(filter: ColorFilter?) {
         super.setColorFilter(filter)

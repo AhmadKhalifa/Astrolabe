@@ -4,9 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.khalifa.astrolabe.AstrolabeApplication
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
+import com.khalifa.astrolabe.util.MapSourceUtil
 import kotlinx.android.synthetic.main.list_item_tile_source.view.*
 import org.osmdroid.tileprovider.tilesource.ITileSource
 
@@ -34,8 +33,9 @@ class MapSourceAdapter(private val itemInteractionListener: OnItemInteractionLis
         fun setContent(adapter: MapSourceAdapter) = with(view) {
             val tileSource = adapter.tileSources?.get(adapterPosition)
             tileSource?.let {
-                iconImageView.setImageResource(MapSourceFactory.getIconImage(tileSource))
-                titleTextView.text = tileSource.name() ?: AstrolabeApplication.getString(R.string.unknown)
+                iconImageView.setImageResource(MapSourceUtil.getIconImage(tileSource))
+                nameTextView.text = MapSourceUtil.getName(tileSource)
+                typeTextView.text = MapSourceUtil.getType(tileSource)
                 useAsBaseMapButton.setOnClickListener {
                     adapter.itemInteractionListener?.onTileSourceSelectedAsBaseMap(tileSource)
                 }

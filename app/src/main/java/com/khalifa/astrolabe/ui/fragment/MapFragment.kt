@@ -24,7 +24,8 @@ import com.khalifa.astrolabe.AstrolabeApplication
 import com.khalifa.astrolabe.R
 import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
 import com.khalifa.astrolabe.ui.base.BaseFragment
-import com.khalifa.astrolabe.ui.widget.MiniMapOverlay
+import com.khalifa.astrolabe.ui.widget.osmdroid.MiniMapOverlay
+import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.ui.widget.pinterest.CircleImageView
 import com.khalifa.astrolabe.ui.widget.pinterest.PinterestView
 import com.khalifa.astrolabe.util.DimensionsUtil
@@ -63,6 +64,7 @@ class MapFragment :
         val TAG: String = MapFragment::class.java.simpleName
 
         private val DEFAULT_START_POSITION = GeoPoint(30.0592319, 31.3022223)
+        private const val DEFAULT_OPACITY = 50
         private const val DEFAULT_ZOOM_LEVEL = 12.0
         private const val TIME_TO_WAIT_IN_MS = 100
 
@@ -298,7 +300,7 @@ class MapFragment :
     private fun addTileSourceLayer(tileSource: ITileSource) {
         val tileProvider = MapTileProviderBasic(context)
         tileProvider.tileSource = tileSource
-        val tilesOverlay = TilesOverlay(tileProvider, context)
+        val tilesOverlay = TilesOverlayWithOpacity(tileProvider, context, DEFAULT_OPACITY)
         tilesOverlay.loadingBackgroundColor = Color.TRANSPARENT
         tilesOverlay.loadingLineColor = Color.TRANSPARENT
         mapView.overlays.add(tilesOverlay)

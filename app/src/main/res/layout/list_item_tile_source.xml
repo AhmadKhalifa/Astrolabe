@@ -24,16 +24,33 @@
             android:layout_margin="@dimen/spc4"
             tools:src="@drawable/googlemaps" />
 
-        <TextView
-            android:id="@+id/titleTextView"
-            tools:text="Google maps"
-            android:textSize="@dimen/txt6"
+        <LinearLayout
+            android:gravity="center_vertical"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:textColor="@color/colorPrimary"
-            android:maxLines="1" />
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/nameTextView"
+                tools:text="Google"
+                android:textSize="@dimen/txt3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textColor="@color/colorAccent"
+                android:maxLines="1" />
+            <TextView
+                android:id="@+id/typeTextView"
+                tools:text="Satellite"
+                android:textSize="@dimen/txt6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textColor="@color/colorPrimary"
+                android:maxLines="1" />
+        </LinearLayout>
+
+
 
         <ImageButton
             android:id="@+id/addAsLayerButton"

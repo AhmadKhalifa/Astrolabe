@@ -39,7 +39,11 @@ object MapSourceFactory {
 
     interface MapSource {
 
-        fun getTileSource(vararg arg: String): ITileSource
+        val name: String
+
+        val icon: Int
+
+        fun getMapSource(vararg arg: String): ITileSource
 
         fun getAllSources(): List<ITileSource>
 
@@ -48,10 +52,16 @@ object MapSourceFactory {
 
     object OpenStreetMap : MapSource {
 
-        val MAPNIK: ITileSource = getTileSource()
+        override val name: String
+            get() = "Open Street Map"
 
-        override fun getTileSource(vararg arg: String) = object: XYTileSource(
-                "Open Street Map",
+        override val icon: Int
+            get() = R.drawable.osm
+
+        val MAPNIK: ITileSource = getMapSource()
+
+        override fun getMapSource(vararg arg: String) = object: XYTileSource(
+                name,
                 0,
                 19,
                 256,
@@ -61,26 +71,40 @@ object MapSourceFactory {
                         "https://c.tile.openstreetmap.org/"),
                 "© OpenStreetMap contributors"
         ) {
-            override fun name() = "Open Street Map"
+            override fun name() = name
 
             override fun toString() = name()
         }
 
         override fun getAllSources() = listOf(MAPNIK)
 
-        override fun getSourcesIconMap() = hashMapOf(MAPNIK.toString() to R.drawable.osm)
+        override fun getSourcesIconMap() = hashMapOf(MAPNIK.toString() to icon)
     }
 
     object Google : MapSource {
 
-        private val HYBRID = getTileSource("Hybrid", "m")
+        override val name: String
+            get() = "Google"
 
-        val SATELLITE = getTileSource("Sat", "s")
+        override val icon: Int
+            get() = R.drawable.googlemaps
 
-        private val ROADS = getTileSource("Roads", "y")
+        private const val MAP_KEY_HYBRID = "Hybrid"
+        private const val MAP_KEY_SATELLITE = "Sat"
+        private const val MAP_KEY_ROADS = "Roads"
 
-        override fun getTileSource(vararg arg: String) = object : XYTileSource(
-                "Google - ${arg[0]}",
+        private const val TYPE_HYBRID = "m"
+        private const val TYPE_SATELLITE = "s"
+        private const val TYPE_ROADS = "y"
+
+        private val HYBRID = getMapSource(MAP_KEY_HYBRID, TYPE_HYBRID)
+
+        val SATELLITE = getMapSource(MAP_KEY_SATELLITE, TYPE_SATELLITE)
+
+        private val ROADS = getMapSource(MAP_KEY_ROADS, TYPE_ROADS)
+
+        override fun getMapSource(vararg arg: String) = object : XYTileSource(
+                "$name - ${arg[0]}",
                 0,
                 19,
                 256,
@@ -92,9 +116,9 @@ object MapSourceFactory {
                 )) {
 
             override fun name() = when(arg[1]) {
-                "m" -> getString(R.string.google_hybrid)
-                "s" -> getString(R.string.google_satellite)
-                "y" -> getString(R.string.google_roads)
+                TYPE_HYBRID -> getString(R.string.google_hybrid)
+                TYPE_SATELLITE -> getString(R.string.google_satellite)
+                TYPE_ROADS -> getString(R.string.google_roads)
                 else -> ""
             }
 
@@ -104,41 +128,51 @@ object MapSourceFactory {
             }
 
             override fun toString(): String {
-                return "Google - ${name()}"
+                return "$name - ${name()}"
             }
         }
 
         override fun getAllSources() = listOf(HYBRID, SATELLITE, ROADS)
 
         override fun getSourcesIconMap() = hashMapOf(
-                HYBRID.toString() to R.drawable.googlemaps,
-                SATELLITE.toString() to R.drawable.googlemaps,
-                ROADS.toString() to R.drawable.googlemaps
+                HYBRID.toString() to icon,
+                SATELLITE.toString() to icon,
+                ROADS.toString() to icon
         )
     }
 
     object Bing : MapSource {
 
-        private val HYBRID = getTileSource(BingMapTileSource.IMAGERYSET_AERIALWITHLABELS)
+        override val name: String
+            get() = "Bing"
 
-        private val ROAD = getTileSource( BingMapTileSource.IMAGERYSET_ROAD)
+        override val icon: Int
+            get() = R.drawable.bing
 
-        private val AERIAL = getTileSource(BingMapTileSource.IMAGERYSET_AERIAL)
+        private const val MAP_KEY_AERIAL_WITH_LABELS = BingMapTileSource.IMAGERYSET_AERIALWITHLABELS
+        private const val MAP_KEY_ROAD = BingMapTileSource.IMAGERYSET_ROAD
+        private const val MAP_KEY_AERIAL = BingMapTileSource.IMAGERYSET_AERIAL
 
-        override fun getTileSource(vararg arg: String) =
+        private val HYBRID = getMapSource(MAP_KEY_AERIAL_WITH_LABELS)
+
+        private val ROAD = getMapSource(MAP_KEY_ROAD)
+
+        private val AERIAL = getMapSource(MAP_KEY_AERIAL)
+
+        override fun getMapSource(vararg arg: String) =
                 with(object: BingMapTileSource(null){
                     override fun name() = when(arg[0]) {
-                        BingMapTileSource.IMAGERYSET_AERIAL ->
+                        MAP_KEY_AERIAL ->
                             getString(R.string.bing_aerial)
-                        BingMapTileSource.IMAGERYSET_AERIALWITHLABELS ->
+                        MAP_KEY_AERIAL_WITH_LABELS ->
                             getString(R.string.bing_hybrid)
-                        BingMapTileSource.IMAGERYSET_ROAD ->
+                        MAP_KEY_ROAD ->
                             getString(R.string.bing_road)
                         else -> ""
                     }
 
                     override fun toString(): String {
-                        return "Bing - ${name()}"
+                        return "$name - ${name()}"
                     }
                 }) {
                     BingMapTileSource.setBingKey(Keys.Bing.API_KEY)
@@ -149,30 +183,44 @@ object MapSourceFactory {
         override fun getAllSources() = listOf(HYBRID, ROAD, AERIAL)
 
         override fun getSourcesIconMap() = hashMapOf(
-                HYBRID.toString() to R.drawable.bing,
-                ROAD.toString() to R.drawable.bing,
-                AERIAL.toString() to R.drawable.bing
+                HYBRID.toString() to icon,
+                ROAD.toString() to icon,
+                AERIAL.toString() to icon
         )
     }
 
     object MapBox : MapSource {
 
-        private val STREETS = getTileSource("mapbox.streets")
+        override val name: String
+            get() = "MapBox"
 
-        private val LIGHT = getTileSource("mapbox.light")
+        override val icon: Int
+            get() = R.drawable.mapbox
 
-        private val DARK = getTileSource("mapbox.dark")
+        private const val MAP_KEY_STREETS = "mapbox.streets"
+        private const val MAP_KEY_LIGHT = "mapbox.light"
+        private const val MAP_KEY_DARK = "mapbox.dark"
+        private const val MAP_KEY_SATELLITE = "mapbox.satellite"
+        private const val MAP_KEY_SATELLITE_STREETS = "mapbox.streets-satellite"
+        private const val MAP_KEY_OUTDOORS = "mapbox.outdoors"
+        private const val MAP_KEY_PENCIL = "mapbox.pencil"
 
-        private val SATELLITE = getTileSource("mapbox.satellite")
+        private val STREETS = getMapSource(MAP_KEY_STREETS)
 
-        private val SATELLITE_STREETS = getTileSource("mapbox.streets-satellite")
+        private val LIGHT = getMapSource(MAP_KEY_LIGHT)
 
-        private val OUTDOORS = getTileSource("mapbox.outdoors")
+        private val DARK = getMapSource(MAP_KEY_DARK)
 
-        private val PENCIL = getTileSource("mapbox.pencil")
+        private val SATELLITE = getMapSource(MAP_KEY_SATELLITE)
 
-        override fun getTileSource(vararg arg: String) = object : XYTileSource(
-                "MapBox - ${arg[0]}",
+        private val SATELLITE_STREETS = getMapSource(MAP_KEY_SATELLITE_STREETS)
+
+        private val OUTDOORS = getMapSource(MAP_KEY_OUTDOORS)
+
+        private val PENCIL = getMapSource(MAP_KEY_PENCIL)
+
+        override fun getMapSource(vararg arg: String) = object : XYTileSource(
+                "$name - ${arg[0]}",
                 0,
                 20,
                 256,
@@ -181,18 +229,18 @@ object MapSourceFactory {
         ) {
 
             override fun name() = when(arg[0]) {
-                "mapbox.streets" -> getString(R.string.mapbox_streets)
-                "mapbox.light" -> getString(R.string.mapbox_light)
-                "mapbox.dark" -> getString(R.string.mapbox_dark)
-                "mapbox.satellite" -> getString(R.string.mapbox_satellite)
-                "mapbox.streets-satellite" -> getString(R.string.mapbox_satellite_streets)
-                "mapbox.outdoors" -> getString(R.string.mapbox_outdoors)
-                "mapbox.pencil" -> getString(R.string.mapbox_pencil)
+                MAP_KEY_STREETS -> getString(R.string.mapbox_streets)
+                MAP_KEY_LIGHT -> getString(R.string.mapbox_light)
+                MAP_KEY_DARK -> getString(R.string.mapbox_dark)
+                MAP_KEY_SATELLITE -> getString(R.string.mapbox_satellite)
+                MAP_KEY_SATELLITE_STREETS -> getString(R.string.mapbox_satellite_streets)
+                MAP_KEY_OUTDOORS -> getString(R.string.mapbox_outdoors)
+                MAP_KEY_PENCIL -> getString(R.string.mapbox_pencil)
                 else -> ""
             }
 
             override fun toString(): String {
-                return "MapBox - ${name()}"
+                return "$name - ${name()}"
             }
             
             override fun getTileURLString(pMapTileIndex: Long): String {
@@ -206,32 +254,45 @@ object MapSourceFactory {
                 listOf(STREETS, LIGHT, DARK, SATELLITE, SATELLITE_STREETS, OUTDOORS, PENCIL)
 
         override fun getSourcesIconMap() = hashMapOf(
-                STREETS.toString() to R.drawable.mapbox,
-                LIGHT.toString() to R.drawable.mapbox,
-                DARK.toString() to R.drawable.mapbox,
-                SATELLITE.toString() to R.drawable.mapbox,
-                SATELLITE_STREETS.toString() to R.drawable.mapbox,
-                OUTDOORS.toString() to R.drawable.mapbox,
-                PENCIL.toString() to R.drawable.mapbox
+                STREETS.toString() to icon,
+                LIGHT.toString() to icon,
+                DARK.toString() to icon,
+                SATELLITE.toString() to icon,
+                SATELLITE_STREETS.toString() to icon,
+                OUTDOORS.toString() to icon,
+                PENCIL.toString() to icon
         )
     }
 
     object HereWeGo : MapSource {
 
-        private val DAY = getTileSource("normal.day")
+        override val name: String
+            get() = "HereWeGo"
 
-        private val NIGHT = getTileSource("normal.night")
+        override val icon: Int
+            get() = R.drawable.herewego
 
-        private val TRAFFIC_DAY = getTileSource("normal.traffic.day")
+        private const val MAP_KEY_DAY = "normal.day"
+        private const val MAP_KEY_NIGHT = "normal.night"
+        private const val MAP_KEY_TRAFFIC_DAY = "normal.traffic.day"
+        private const val MAP_KEY_TRAFFIC_NIGHT = "normal.traffic.night"
+        private const val MAP_KEY_SATELLITE = "satellite.day"
+        private const val MAP_KEY_HYBRID = "hybrid.day"
 
-        private val TRAFFIC_NIGHT = getTileSource("normal.traffic.night")
+        private val DAY = getMapSource(MAP_KEY_DAY)
 
-        private val SATELLITE = getTileSource("satellite.day")
+        private val NIGHT = getMapSource(MAP_KEY_NIGHT)
 
-        private val HYBRID = getTileSource("hybrid.day")
+        private val TRAFFIC_DAY = getMapSource(MAP_KEY_TRAFFIC_DAY)
 
-        override fun getTileSource(vararg arg: String) = object : XYTileSource(
-                "MapBox - ${arg[0]}",
+        private val TRAFFIC_NIGHT = getMapSource(MAP_KEY_TRAFFIC_NIGHT)
+
+        private val SATELLITE = getMapSource(MAP_KEY_SATELLITE)
+
+        private val HYBRID = getMapSource(MAP_KEY_HYBRID)
+
+        override fun getMapSource(vararg arg: String) = object : XYTileSource(
+                "$name - ${arg[0]}",
                 0,
                 18,
                 256,
@@ -243,17 +304,17 @@ object MapSourceFactory {
         ) {
 
             override fun name() = when(arg[0]) {
-                "normal.day" -> getString(R.string.here_we_go_day)
-                "normal.night" -> getString(R.string.here_we_go_night)
-                "normal.traffic.day" -> getString(R.string.here_we_go_traffic_day)
-                "normal.traffic.night" -> getString(R.string.here_we_go_traffic_night)
-                "satellite.day" -> getString(R.string.here_we_go_satellite)
-                "hybrid.day" -> getString(R.string.here_we_go_hybrid)
+                MAP_KEY_DAY -> getString(R.string.here_we_go_day)
+                MAP_KEY_NIGHT -> getString(R.string.here_we_go_night)
+                MAP_KEY_TRAFFIC_DAY -> getString(R.string.here_we_go_traffic_day)
+                MAP_KEY_TRAFFIC_NIGHT -> getString(R.string.here_we_go_traffic_night)
+                MAP_KEY_SATELLITE -> getString(R.string.here_we_go_satellite)
+                MAP_KEY_HYBRID -> getString(R.string.here_we_go_hybrid)
                 else -> ""
             }
 
             override fun toString(): String {
-                return "HereWeGo - ${name()}"
+                return "$name - ${name()}"
             }
 
             override fun getTileURLString(pMapTileIndex: Long): String {
@@ -268,29 +329,41 @@ object MapSourceFactory {
                 listOf(DAY, NIGHT, TRAFFIC_DAY, TRAFFIC_NIGHT, SATELLITE, HYBRID)
 
         override fun getSourcesIconMap() = hashMapOf(
-                DAY.toString() to R.drawable.herewego,
-                NIGHT.toString() to R.drawable.herewego,
-                TRAFFIC_DAY.toString() to R.drawable.herewego,
-                TRAFFIC_NIGHT.toString() to R.drawable.herewego,
-                SATELLITE.toString() to R.drawable.herewego,
-                HYBRID.toString() to R.drawable.herewego
+                DAY.toString() to icon,
+                NIGHT.toString() to icon,
+                TRAFFIC_DAY.toString() to icon,
+                TRAFFIC_NIGHT.toString() to icon,
+                SATELLITE.toString() to icon,
+                HYBRID.toString() to icon
         )
     }
 
     object ThunderForest : MapSource {
 
-        private val OPEN_CYCLE_MAP = getTileSource("cycle")
+        override val name: String
+            get() = "ThunderForest"
 
-        private val TRANSPORT = getTileSource("transport")
+        override val icon: Int
+            get() = R.drawable.thunderforest
 
-        private val TRANSPORT_DARK = getTileSource("transport-dark")
+        private const val MAP_KEY_OPEN_CYCLE_MAP = "cycle"
+        private const val MAP_KEY_TRANSPORT = "transport"
+        private const val MAP_KEY_TRANSPORT_DARK = "transport-dark"
+        private const val MAP_KEY_LANDSCAPE = "landscape"
+        private const val MAP_KEY_OUTDOORS = "outdoors"
 
-        private val LANDSCAPE = getTileSource("landscape")
+        private val OPEN_CYCLE_MAP = getMapSource(MAP_KEY_OPEN_CYCLE_MAP)
 
-        private val OUTDOORS = getTileSource("outdoors")
+        private val TRANSPORT = getMapSource(MAP_KEY_TRANSPORT)
 
-        override fun getTileSource(vararg arg: String) = object : XYTileSource(
-                "ThunderForest - ${arg[0]}",
+        private val TRANSPORT_DARK = getMapSource(MAP_KEY_TRANSPORT_DARK)
+
+        private val LANDSCAPE = getMapSource(MAP_KEY_LANDSCAPE)
+
+        private val OUTDOORS = getMapSource(MAP_KEY_OUTDOORS)
+
+        override fun getMapSource(vararg arg: String) = object : XYTileSource(
+                "$name - ${arg[0]}",
                 0,
                 18,
                 256,
@@ -299,16 +372,16 @@ object MapSourceFactory {
         ) {
 
             override fun name() = when(arg[0]) {
-                "cycle" -> getString(R.string.thunderforest_open_cycle_map)
-                "transport" -> getString(R.string.thunderforest_transport)
-                "transport-dark" -> getString(R.string.thunderforest_transport_dark)
-                "landscape" -> getString(R.string.thunderforest_lanscape)
-                "outdoors" -> getString(R.string.thunderforest_outdoors)
+                MAP_KEY_OPEN_CYCLE_MAP -> getString(R.string.thunderforest_open_cycle_map)
+                MAP_KEY_TRANSPORT -> getString(R.string.thunderforest_transport)
+                MAP_KEY_TRANSPORT_DARK -> getString(R.string.thunderforest_transport_dark)
+                MAP_KEY_LANDSCAPE -> getString(R.string.thunderforest_lanscape)
+                MAP_KEY_OUTDOORS -> getString(R.string.thunderforest_outdoors)
                 else -> ""
             }
 
             override fun toString(): String {
-                return "ThunderForest - ${name()}"
+                return "$name - ${name()}"
             }
             
             override fun getTileURLString(pMapTileIndex: Long): String {
@@ -322,11 +395,11 @@ object MapSourceFactory {
                 listOf(OPEN_CYCLE_MAP, TRANSPORT, TRANSPORT_DARK, LANDSCAPE, OUTDOORS)
 
         override fun getSourcesIconMap() = hashMapOf(
-                OPEN_CYCLE_MAP.toString() to R.drawable.thunderforest,
-                TRANSPORT.toString() to R.drawable.thunderforest,
-                TRANSPORT_DARK.toString() to R.drawable.thunderforest,
-                LANDSCAPE.toString() to R.drawable.thunderforest,
-                OUTDOORS.toString() to R.drawable.thunderforest
+                OPEN_CYCLE_MAP.toString() to icon,
+                TRANSPORT.toString() to icon,
+                TRANSPORT_DARK.toString() to icon,
+                LANDSCAPE.toString() to icon,
+                OUTDOORS.toString() to icon
         )
     }
 }

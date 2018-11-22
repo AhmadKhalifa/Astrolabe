@@ -1,4 +1,4 @@
-package com.khalifa.astrolabe.ui.widget.mapview
+package com.khalifa.astrolabe.ui.widget.osmdroid
 
 import android.content.Context
 import android.util.AttributeSet

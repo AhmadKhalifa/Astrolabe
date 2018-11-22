@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".ui.fragment.MapFragment">
 
-    <com.khalifa.astrolabe.ui.widget.mapview.MapView
+    <com.khalifa.astrolabe.ui.widget.osmdroid.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

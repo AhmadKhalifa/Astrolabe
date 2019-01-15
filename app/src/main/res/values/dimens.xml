@@ -32,4 +32,5 @@
     <dimen name="tile_source_icom_dimen">48dp</dimen>
     <dimen name="tile_source_group_item_width">270dp</dimen>
     <dimen name="tile_source_group_item_height">200dp</dimen>
+    <dimen name="layer_tile_item_height">100dp</dimen>
 </resources>

@@ -58,7 +58,8 @@ class MapFragment :
         MapEventsReceiver,
         SpeedDialView.OnActionSelectedListener,
         PinterestView.PinMenuClickListener,
-        MapSourcesListFragment.OnFragmentInteractionListener {
+        MapSourcesListFragment.OnFragmentInteractionListener,
+        LayersManagerFragment.OnFragmentInteractionListener {
 
     companion object {
         val TAG: String = MapFragment::class.java.simpleName
@@ -126,6 +127,9 @@ class MapFragment :
         addActionItem(createActionItem(
                 R.id.action_select_map_source, R.drawable.ic_map_white_24dp, R.string.select_map_source
         ))
+        addActionItem(createActionItem(
+                R.id.action_layers_manager, R.drawable.ic_layers_white_24dp, R.string.layers_manager
+        ))
         setOnActionSelectedListener(this@MapFragment)
     }
 
@@ -167,8 +171,12 @@ class MapFragment :
 
     override fun onActionSelected(actionItem: SpeedDialActionItem?) = actionItem?.let {
         when (it.id) {
-            R.id.action_show_my_location -> showCurrentLocation()
-            R.id.action_select_map_source -> MapSourcesListFragment.showFragment(fragmentManager, this@MapFragment)
+            R.id.action_show_my_location ->
+                showCurrentLocation()
+            R.id.action_select_map_source ->
+                MapSourcesListFragment.showFragment(fragmentManager, this@MapFragment)
+            R.id.action_layers_manager ->
+                LayersManagerFragment.showFragment(fragmentManager, this@MapFragment)
         }
         false
     } ?: true

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    app:contentPadding="-2dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="@dimen/spc1"
+    android:orientation="horizontal"
+    android:layout_margin="@dimen/spc5"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    android:background="@drawable/selector_list_item"
+    android:id="@+id/trailerCardView">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:background="go"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_gravity="bottom"
+                android:background="@color/white_transparent"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/spc3"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iconImageView"
+                        android:layout_width="@dimen/tile_source_icom_dimen"
+                        android:layout_height="@dimen/tile_source_icom_dimen"
+                        android:layout_margin="@dimen/spc4"
+                        tools:src="@drawable/googlemaps" />
+
+                    <LinearLayout
+                        android:gravity="center_vertical"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/sourceNameTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/txt3"
+                            tools:text="Google" />
+                        <TextView
+                            android:id="@+id/sourceTypeTextView"
+                            tools:text="Hybrid"
+                            android:textSize="@dimen/txt6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:textColor="@color/colorPrimary"
+                            android:maxLines="1" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/dragImageButton"
+                        android:layout_margin="@dimen/spc3"
+                        android:src="@drawable/ic_reorder_black_36dp"
+                        android:background="@null"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_margin="@dimen/spc3"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/showHideButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorAccent"
+                        android:drawablePadding="@dimen/spc1"
+                        android:layout_marginEnd="@dimen/spc3"
+                        android:layout_marginBottom="@dimen/spc3"
+                        android:drawableStart="@drawable/ic_visibility_off_white_18dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:padding="@dimen/spc4"
+                        android:text="@string/hide"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/txt2"/>
+
+                    <Button
+                        android:id="@+id/opacityButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/green"
+                        android:drawablePadding="@dimen/spc1"
+                        android:layout_marginEnd="@dimen/spc3"
+                        android:layout_marginBottom="@dimen/spc3"
+                        android:drawableStart="@drawable/ic_opacity_white_18dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:padding="@dimen/spc4"
+                        android:text="@string/opacity"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/txt2"/>
+
+                    <Button
+                        android:id="@+id/removeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/red"
+                        android:drawablePadding="@dimen/spc1"
+                        android:layout_marginEnd="@dimen/spc3"
+                        android:layout_marginBottom="@dimen/spc3"
+                        android:drawableStart="@drawable/ic_close_white_18dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:padding="@dimen/spc4"
+                        android:text="@string/remove"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/txt2"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+
+
+
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

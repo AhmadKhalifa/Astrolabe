@@ -10,8 +10,8 @@ import kotlinx.android.synthetic.main.list_group_item_tile_source.view.*
 import kotlinx.android.synthetic.main.list_item_tile_source.view.*
 import org.osmdroid.tileprovider.tilesource.ITileSource
 
-class SelectedMapSourceAdapter(private val itemInteractionListener: OnItemInteractionListener?) :
-        RecyclerView.Adapter<SelectedMapSourceAdapter.SelectedMapSourceViewHolder>() {
+class MapLayersAdapter(private val itemInteractionListener: OnItemInteractionListener?) :
+        RecyclerView.Adapter<MapLayersAdapter.MapLayersViewHolder>() {
 
     var tileSources: List<ITileSource>? = null
         set(value) {
@@ -19,30 +19,30 @@ class SelectedMapSourceAdapter(private val itemInteractionListener: OnItemIntera
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SelectedMapSourceViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MapLayersViewHolder(
             LayoutInflater.from(parent.context)
                     .inflate(R.layout.list_item_tile_source, parent, false)
     )
 
     override fun getItemCount() = tileSources?.size ?: 0
 
-    override fun onBindViewHolder(mapSourceViewHolder: SelectedMapSourceViewHolder, position: Int) =
-            mapSourceViewHolder.setContent(this)
+    override fun onBindViewHolder(mapLayersViewHolder: MapLayersViewHolder, position: Int) =
+            mapLayersViewHolder.setContent(this)
 
-    class SelectedMapSourceViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    class MapLayersViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-        fun setContent(adapter: SelectedMapSourceAdapter) = with(view) {
+        fun setContent(adapter: MapLayersAdapter) = with(view) {
             val tileSource = adapter.tileSources?.get(adapterPosition)
             tileSource?.let {
                 iconImageView.setImageResource(MapSourceUtil.getThumbnail(tileSource))
                 nameTextView.text = MapSourceUtil.getName(tileSource)
                 typeTextView.text = MapSourceUtil.getType(tileSource)
-                useAsBaseMapButton.setOnClickListener {
-                    adapter.itemInteractionListener?.onTileSourceSelectedAsBaseMap(tileSource)
-                }
-                addAsLayerButton.setOnClickListener {
-                    adapter.itemInteractionListener?.onTileSourceSelectedAsLayer(tileSource)
-                }
+//                useAsBaseMapButton.setOnClickListener {
+//                    adapter.itemInteractionListener?.onTileSourceSelectedAsBaseMap(tileSource)
+//                }
+//                addAsLayerButton.setOnClickListener {
+//                    adapter.itemInteractionListener?.onTileSourceSelectedAsLayer(tileSource)
+//                }
             }
             Unit
         }
@@ -50,8 +50,5 @@ class SelectedMapSourceAdapter(private val itemInteractionListener: OnItemIntera
 
     interface OnItemInteractionListener {
 
-        fun onTileSourceSelectedAsBaseMap(tileSource: ITileSource)
-
-        fun onTileSourceSelectedAsLayer(tileSource: ITileSource)
     }
 }

@@ -29,11 +29,11 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="height" value="18" />
-                            <entry key="outputName" value="ic_layers_white_18dp" />
+                            <entry key="height" value="36" />
+                            <entry key="outputName" value="ic_layers_white_36dp" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\Chall1" />
-                            <entry key="width" value="18" />
+                            <entry key="width" value="36" />
                           </map>
                         </option>
                       </PersistentState>

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import com.khalifa.astrolabe.R
 import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
 import com.khalifa.astrolabe.ui.adapter.AllMapSourcesAdapter
+import com.khalifa.astrolabe.ui.adapter.MapLayersAdapter
 import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragment
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
@@ -24,31 +25,26 @@ import org.osmdroid.tileprovider.tilesource.ITileSource
  * @author Ahmad Khalifa
  */
 
-class MapSourcesListFragment :
-        BaseFullScreenDialogFragment<MapSourcesListViewModel>(),
-        AllMapSourcesAdapter.OnItemInteractionListener {
+class LayersManagerFragment :
+        BaseFullScreenDialogFragment<LayersManagerViewModel>(),
+        MapLayersAdapter.OnItemInteractionListener {
 
     companion object {
-        private val TAG: String = MapSourcesListFragment::class.java.simpleName
+        private val TAG: String = LayersManagerFragment::class.java.simpleName
 
         fun showFragment(fragmentManager: FragmentManager?,
                          onFragmentInteractionListener: OnFragmentInteractionListener) =
                 fragmentManager?.let { manager ->
-                    MapSourcesListFragment().also {
+                    LayersManagerFragment().also {
                         it.fragmentInteractionListener = onFragmentInteractionListener
                     }.show(manager, TAG)
                 }
     }
 
-    interface OnFragmentInteractionListener {
-
-        fun onTileSourceSelectedAsBaseMap(tileSource: ITileSource)
-
-        fun onTileSourceSelectedAsLayer(tileSource: ITileSource)
-    }
+    interface OnFragmentInteractionListener
 
     private var fragmentInteractionListener: OnFragmentInteractionListener? = null
-    private val mapSourceAdapter = AllMapSourcesAdapter(this)
+    private val mapLayersAdapter = MapLayersAdapter(this)
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -69,13 +65,13 @@ class MapSourcesListFragment :
             itemAnimator = DefaultItemAnimator()
             layoutManager = LinearLayoutManager(context)
             isNestedScrollingEnabled = false
-            adapter = mapSourceAdapter
+            adapter = mapLayersAdapter
         }
         viewModel.loadMapSources()
     }
 
     private fun updateMapSources(mapSources: ArrayList<MapSourceFactory.MapSource>) {
-        mapSourceAdapter.mapSources = mapSources
+        mapLayersAdapter.mapSources = mapSources
     }
 
     override fun getViewModelInstance() = MapSourcesListViewModel.getInstance(this)

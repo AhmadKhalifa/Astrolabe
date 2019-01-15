@@ -54,7 +54,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="@string/opacity"
+            android:text="@string/opacity_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

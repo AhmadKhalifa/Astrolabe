@@ -16,13 +16,13 @@ object MapSourceFactory {
 
     val DEFAULT_MAP_SOURCE = OpenStreetMap.MAPNIK
 
-    val onlineMapSources = ArrayList<ITileSource>().apply {
-        addAll(OpenStreetMap.getAllSources())
-        addAll(Google.getAllSources())
-        addAll(Bing.getAllSources())
-        addAll(MapBox.getAllSources())
-        addAll(HereWeGo.getAllSources())
-        addAll(ThunderForest.getAllSources())
+    val onlineMapSources = ArrayList<MapSource>().apply {
+        add(Google)
+        add(Bing)
+        add(MapBox)
+        add(HereWeGo)
+        add(ThunderForest)
+        add(OpenStreetMap)
     }
 
     interface MapSource {
@@ -35,7 +35,7 @@ object MapSourceFactory {
 
         fun getAllSources(): List<ITileSource>
 
-        fun getSourcesIconMap(): HashMap<String, Int>
+        fun getSourcesThumbnailMap(): HashMap<String, Int>
     }
 
     object OpenStreetMap : MapSource {
@@ -66,7 +66,9 @@ object MapSourceFactory {
 
         override fun getAllSources() = listOf(MAPNIK)
 
-        override fun getSourcesIconMap() = hashMapOf(MAPNIK.toString() to icon)
+        override fun getSourcesThumbnailMap() = hashMapOf(
+                MAPNIK.toString() to R.drawable.thumbnail_google_hybrid
+        )
     }
 
     object Google : MapSource {
@@ -122,10 +124,10 @@ object MapSourceFactory {
 
         override fun getAllSources() = listOf(HYBRID, SATELLITE, ROADS)
 
-        override fun getSourcesIconMap() = hashMapOf(
-                HYBRID.toString() to icon,
-                SATELLITE.toString() to icon,
-                ROADS.toString() to icon
+        override fun getSourcesThumbnailMap() = hashMapOf(
+                HYBRID.toString() to R.drawable.thumbnail_google_hybrid,
+                SATELLITE.toString() to R.drawable.thumbnail_google_hybrid,
+                ROADS.toString() to R.drawable.thumbnail_google_hybrid
         )
     }
 
@@ -170,10 +172,10 @@ object MapSourceFactory {
 
         override fun getAllSources() = listOf(HYBRID, ROAD, AERIAL)
 
-        override fun getSourcesIconMap() = hashMapOf(
-                HYBRID.toString() to icon,
-                ROAD.toString() to icon,
-                AERIAL.toString() to icon
+        override fun getSourcesThumbnailMap() = hashMapOf(
+                HYBRID.toString() to R.drawable.thumbnail_google_hybrid,
+                ROAD.toString() to R.drawable.thumbnail_google_hybrid,
+                AERIAL.toString() to R.drawable.thumbnail_google_hybrid
         )
     }
 
@@ -241,14 +243,14 @@ object MapSourceFactory {
         override fun getAllSources() =
                 listOf(STREETS, LIGHT, DARK, SATELLITE, SATELLITE_STREETS, OUTDOORS, PENCIL)
 
-        override fun getSourcesIconMap() = hashMapOf(
-                STREETS.toString() to icon,
-                LIGHT.toString() to icon,
-                DARK.toString() to icon,
-                SATELLITE.toString() to icon,
-                SATELLITE_STREETS.toString() to icon,
-                OUTDOORS.toString() to icon,
-                PENCIL.toString() to icon
+        override fun getSourcesThumbnailMap() = hashMapOf(
+                STREETS.toString() to R.drawable.thumbnail_google_hybrid,
+                LIGHT.toString() to R.drawable.thumbnail_google_hybrid,
+                DARK.toString() to R.drawable.thumbnail_google_hybrid,
+                SATELLITE.toString() to R.drawable.thumbnail_google_hybrid,
+                SATELLITE_STREETS.toString() to R.drawable.thumbnail_google_hybrid,
+                OUTDOORS.toString() to R.drawable.thumbnail_google_hybrid,
+                PENCIL.toString() to R.drawable.thumbnail_google_hybrid
         )
     }
 
@@ -316,13 +318,13 @@ object MapSourceFactory {
         override fun getAllSources() =
                 listOf(DAY, NIGHT, TRAFFIC_DAY, TRAFFIC_NIGHT, SATELLITE, HYBRID)
 
-        override fun getSourcesIconMap() = hashMapOf(
-                DAY.toString() to icon,
-                NIGHT.toString() to icon,
-                TRAFFIC_DAY.toString() to icon,
-                TRAFFIC_NIGHT.toString() to icon,
-                SATELLITE.toString() to icon,
-                HYBRID.toString() to icon
+        override fun getSourcesThumbnailMap() = hashMapOf(
+                DAY.toString() to R.drawable.thumbnail_google_hybrid,
+                NIGHT.toString() to R.drawable.thumbnail_google_hybrid,
+                TRAFFIC_DAY.toString() to R.drawable.thumbnail_google_hybrid,
+                TRAFFIC_NIGHT.toString() to R.drawable.thumbnail_google_hybrid,
+                SATELLITE.toString() to R.drawable.thumbnail_google_hybrid,
+                HYBRID.toString() to R.drawable.thumbnail_google_hybrid
         )
     }
 
@@ -382,12 +384,12 @@ object MapSourceFactory {
         override fun getAllSources() =
                 listOf(OPEN_CYCLE_MAP, TRANSPORT, TRANSPORT_DARK, LANDSCAPE, OUTDOORS)
 
-        override fun getSourcesIconMap() = hashMapOf(
-                OPEN_CYCLE_MAP.toString() to icon,
-                TRANSPORT.toString() to icon,
-                TRANSPORT_DARK.toString() to icon,
-                LANDSCAPE.toString() to icon,
-                OUTDOORS.toString() to icon
+        override fun getSourcesThumbnailMap() = hashMapOf(
+                OPEN_CYCLE_MAP.toString() to R.drawable.thumbnail_google_hybrid,
+                TRANSPORT.toString() to R.drawable.thumbnail_google_hybrid,
+                TRANSPORT_DARK.toString() to R.drawable.thumbnail_google_hybrid,
+                LANDSCAPE.toString() to R.drawable.thumbnail_google_hybrid,
+                OUTDOORS.toString() to R.drawable.thumbnail_google_hybrid
         )
     }
 }

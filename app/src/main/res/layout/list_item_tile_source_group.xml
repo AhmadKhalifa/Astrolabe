@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/groupIconImageView"
+            android:layout_width="@dimen/tile_source_icom_dimen"
+            android:layout_height="@dimen/tile_source_icom_dimen"
+            android:layout_margin="@dimen/spc4"
+            tools:src="@drawable/googlemaps" />
+
+        <TextView
+            android:id="@+id/groupTitleTextView"
+            android:layout_toEndOf="@id/groupIconImageView"
+            android:layout_margin="@dimen/spc3"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/txt7"
+            android:gravity="center_vertical"
+            android:height="@dimen/tile_source_icom_dimen"
+            tools:text="Google"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@id/groupIconImageView"
+            android:layout_marginStart="@dimen/spc3"
+            android:id="@+id/groupRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tile_source_group_item_height"/>
+
+</RelativeLayout>

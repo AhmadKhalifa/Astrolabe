@@ -50,4 +50,6 @@
     <string name="thunderforest_outdoors">Outdoors</string>
     <string name="opacity">Opacity:</string>
     <string name="done">Done</string>
+    <string name="add">Add layer</string>
+    <string name="use">Use Map</string>
 </resources>

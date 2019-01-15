@@ -10,7 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.ui.adapter.MapSourceAdapter
+import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
+import com.khalifa.astrolabe.ui.adapter.AllMapSourcesAdapter
 import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragment
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
@@ -25,7 +26,7 @@ import org.osmdroid.tileprovider.tilesource.ITileSource
 
 class MapSourcesListFragment :
         BaseFullScreenDialogFragment<MapSourcesListViewModel>(),
-        MapSourceAdapter.OnItemInteractionListener {
+        AllMapSourcesAdapter.OnItemInteractionListener {
 
     companion object {
         private val TAG: String = MapSourcesListFragment::class.java.simpleName
@@ -47,7 +48,7 @@ class MapSourcesListFragment :
     }
 
     private var fragmentInteractionListener: OnFragmentInteractionListener? = null
-    private val mapSourceAdapter = MapSourceAdapter(this)
+    private val mapSourceAdapter = AllMapSourcesAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,8 +87,8 @@ class MapSourcesListFragment :
         }
     }
 
-    private fun updateMapSources(mapSources: List<ITileSource>) {
-        mapSourceAdapter.tileSources = mapSources
+    private fun updateMapSources(mapSources: ArrayList<MapSourceFactory.MapSource>) {
+        mapSourceAdapter.mapSources = mapSources
     }
 
     override fun getViewModelInstance() = MapSourcesListViewModel.getInstance(this)

@@ -82,7 +82,7 @@ class TransparencyControllerFragment :
     }
 
     private fun setTileOverlay(tilesOverlay: TilesOverlayWithOpacity) {
-        iconImageView.setImageResource(MapSourceUtil.getImage(tilesOverlay.tileProvider().tileSource))
+        iconImageView.setImageResource(MapSourceUtil.getThumbnail(tilesOverlay.tileProvider().tileSource))
         nameTextView.text = MapSourceUtil.getName(tilesOverlay.tileProvider().tileSource)
         typeTextView.text = MapSourceUtil.getType(tilesOverlay.tileProvider().tileSource)
         transparencySeekBar.setProgress(tilesOverlay.transparencyPercentage.toFloat())

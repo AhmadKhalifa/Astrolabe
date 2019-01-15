@@ -8,17 +8,17 @@ import java.util.HashMap
 class MapSourceUtil private constructor() {
 
     companion object {
-        private val tileSourceImageMap = HashMap<String, Int>().apply {
-            putAll(MapSourceFactory.OpenStreetMap.getSourcesIconMap())
-            putAll(MapSourceFactory.Google.getSourcesIconMap())
-            putAll(MapSourceFactory.Bing.getSourcesIconMap())
-            putAll(MapSourceFactory.MapBox.getSourcesIconMap())
-            putAll(MapSourceFactory.HereWeGo.getSourcesIconMap())
-            putAll(MapSourceFactory.ThunderForest.getSourcesIconMap())
+        private val tileSourceThumbnailMap = HashMap<String, Int>().apply {
+            putAll(MapSourceFactory.OpenStreetMap.getSourcesThumbnailMap())
+            putAll(MapSourceFactory.Google.getSourcesThumbnailMap())
+            putAll(MapSourceFactory.Bing.getSourcesThumbnailMap())
+            putAll(MapSourceFactory.MapBox.getSourcesThumbnailMap())
+            putAll(MapSourceFactory.HereWeGo.getSourcesThumbnailMap())
+            putAll(MapSourceFactory.ThunderForest.getSourcesThumbnailMap())
         }
 
-        fun getImage(tileSource: ITileSource?) =
-                tileSourceImageMap[tileSource?.toString()] ?: R.drawable.defaultmap
+        fun getThumbnail(tileSource: ITileSource?) =
+                tileSourceThumbnailMap[tileSource?.toString()] ?: R.drawable.defaultmap
 
         fun getName(tileSource: ITileSource?) = tileSource?.let {
             val tileSourceStr = tileSource.toString()

@@ -22,7 +22,7 @@ class MapSourcesListViewModel : BaseRxViewModel(), IMapSourcesListViewModel {
                         .get(MapSourcesListViewModel::class.java)
     }
 
-    val mapSources = MutableLiveData<List<ITileSource>>()
+    val mapSources = MutableLiveData<ArrayList<MapSourceFactory.MapSource>>()
 
     fun loadMapSources() {
         mapSources.value = MapSourceFactory.onlineMapSources

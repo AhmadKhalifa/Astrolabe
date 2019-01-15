@@ -9,14 +9,14 @@
     android:layout_marginLeft="@dimen/spc4"
     android:layout_marginRight="@dimen/spc4"
     android:layout_height="wrap_content">
-    
+
     <LinearLayout
         android:gravity="center_vertical"
         android:padding="@dimen/spc3"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        
+
         <ImageView
             android:id="@+id/iconImageView"
             android:layout_width="@dimen/tile_source_icom_dimen"
@@ -31,7 +31,7 @@
             android:orientation="vertical"
             android:layout_height="match_parent">
             <TextView
-                android:id="@+id/nameTextView"
+                android:id="@+id/sourceNameTextView"
                 tools:text="Google"
                 android:textSize="@dimen/txt3"
                 android:layout_width="match_parent"
@@ -40,7 +40,7 @@
                 android:textColor="@color/colorAccent"
                 android:maxLines="1" />
             <TextView
-                android:id="@+id/typeTextView"
+                android:id="@+id/sourceTypeTextView"
                 tools:text="Satellite"
                 android:textSize="@dimen/txt6"
                 android:layout_width="match_parent"
@@ -71,7 +71,7 @@
             android:src="@drawable/ic_check_circle_black_24dp"
             android:contentDescription="@string/set_as_base_map" />
 
-        
+
     </LinearLayout>
-    
+
 </android.support.design.card.MaterialCardView>

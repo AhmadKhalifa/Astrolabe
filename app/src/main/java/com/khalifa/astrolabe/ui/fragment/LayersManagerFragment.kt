@@ -1,8 +1,6 @@
 package com.khalifa.astrolabe.ui.fragment
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -10,23 +8,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
-import com.khalifa.astrolabe.ui.adapter.AllMapSourcesAdapter
 import com.khalifa.astrolabe.ui.adapter.MapLayersAdapter
 import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragment
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
-import com.khalifa.astrolabe.viewmodel.fragment.implementation.MapSourcesListViewModel
+import com.khalifa.astrolabe.viewmodel.fragment.implementation.LayerManagerViewModel
 import kotlinx.android.synthetic.main.content_dialog_full_screen.*
 import kotlinx.android.synthetic.main.fragment_map_sources_list.view.*
-import org.osmdroid.tileprovider.tilesource.ITileSource
 
 /**
  * @author Ahmad Khalifa
  */
 
 class LayersManagerFragment :
-        BaseFullScreenDialogFragment<LayersManagerViewModel>(),
+        BaseFullScreenDialogFragment<LayerManagerViewModel>(),
         MapLayersAdapter.OnItemInteractionListener {
 
     companion object {
@@ -41,7 +36,20 @@ class LayersManagerFragment :
                 }
     }
 
-    interface OnFragmentInteractionListener
+    interface OnFragmentInteractionListener {
+
+        fun loadBaseMap()
+
+        fun loadMapLayers()
+
+        fun deleteLayer()
+
+        fun showLayer()
+
+        fun hideLayer()
+
+        fun openMapSourcesScreen()
+    }
 
     private var fragmentInteractionListener: OnFragmentInteractionListener? = null
     private val mapLayersAdapter = MapLayersAdapter(this)
@@ -50,7 +58,7 @@ class LayersManagerFragment :
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_map_sources_list, container, false)
+            inflater.inflate(R.layout.fragment_layers_manager, container, false)
                     .also {
                         with(it.toolbar) {
                             setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
@@ -67,32 +75,15 @@ class LayersManagerFragment :
             isNestedScrollingEnabled = false
             adapter = mapLayersAdapter
         }
-        viewModel.loadMapSources()
+        fragmentInteractionListener?.loadBaseMap()
+        fragmentInteractionListener?.loadMapLayers()
     }
 
-    private fun updateMapSources(mapSources: ArrayList<MapSourceFactory.MapSource>) {
-        mapLayersAdapter.mapSources = mapSources
-    }
-
-    override fun getViewModelInstance() = MapSourcesListViewModel.getInstance(this)
+    override fun getViewModelInstance() = LayerManagerViewModel.getInstance(this)
 
     override fun onEvent(event: Event) {}
 
     override fun onError(error: Error) {}
 
-    override fun registerLiveDataObservers() {
-        viewModel.mapSources.observe(this, Observer { mapSources ->
-            mapSources?.let { updateMapSources(it) }
-        })
-    }
-
-    override fun onTileSourceSelectedAsBaseMap(tileSource: ITileSource) {
-        dismiss()
-        fragmentInteractionListener?.onTileSourceSelectedAsBaseMap(tileSource)
-    }
-
-    override fun onTileSourceSelectedAsLayer(tileSource: ITileSource) {
-        dismiss()
-        fragmentInteractionListener?.onTileSourceSelectedAsLayer(tileSource)
-    }
+    override fun registerLiveDataObservers() {}
 }

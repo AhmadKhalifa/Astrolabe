@@ -20,6 +20,7 @@ class TilesOverlayWithOpacity(tileProvider: MapTileProviderBase?,
         TilesOverlay(tileProvider, aContext, true, true),
         Serializable {
 
+    var isVisible = true
     private val mIntersectionRect: Rect = Rect()
     private var currentColorFilter: ColorFilter? = null
 
@@ -27,7 +28,9 @@ class TilesOverlayWithOpacity(tileProvider: MapTileProviderBase?,
         if (c != null && currentMapTile != null && tileRect != null) {
             currentMapTile.colorFilter = currentColorFilter
             currentMapTile.setBounds(tileRect.left, tileRect.top, tileRect.right, tileRect.bottom)
-            currentMapTile.alpha = (255f * (transparencyPercentage / 100f)).toInt()
+            currentMapTile.alpha =
+                    if (isVisible) (255f * (transparencyPercentage / 100f)).toInt()
+                    else 0
             val canvasRect = canvasRect
             if (canvasRect == null) {
                 currentMapTile.draw(c)
@@ -47,7 +50,11 @@ class TilesOverlayWithOpacity(tileProvider: MapTileProviderBase?,
         }
     }
 
-    fun tileProvider() = mTileProvider
+    fun tileProvider(): MapTileProviderBase = mTileProvider
+
+    fun reverseVisibility() {
+        isVisible = !isVisible
+    }
 
     override fun setColorFilter(filter: ColorFilter?) {
         super.setColorFilter(filter)

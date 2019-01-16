@@ -115,7 +115,7 @@
                             </LinearLayout>
 
                             <Button
-                                android:id="@+id/useMapButton"
+                                android:id="@+id/changeBaseMapButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@color/colorAccent"
@@ -177,6 +177,8 @@
             android:layout_weight="1">
 
             <TextView
+                android:textSize="@dimen/txt5"
+                android:textColor="@color/colorPrimaryDark"
                 android:text="@string/no_layers_yet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

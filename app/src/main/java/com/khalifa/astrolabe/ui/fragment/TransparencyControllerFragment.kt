@@ -1,6 +1,7 @@
 package com.khalifa.astrolabe.ui.fragment
 
 import android.arch.lifecycle.Observer
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
@@ -31,12 +32,13 @@ class TransparencyControllerFragment :
                          tilesOverlay: TilesOverlayWithOpacity,
                          onFragmentInteractionListener: OnFragmentInteractionListener) =
                 fragmentManager?.let { manager ->
-                    TransparencyControllerFragment().apply {
-                        fragmentInteractionListener = onFragmentInteractionListener
-                        arguments = Bundle().apply {
+                    TransparencyControllerFragment().also {
+                        it.fragmentInteractionListener = onFragmentInteractionListener
+                        it.arguments = Bundle().apply {
                             putSerializable(KEY_TILE_OVERLAY, tilesOverlay)
                         }
-                    }.show(manager, TAG)
+                        it.show(manager, TAG)
+                    }
                 }
     }
 
@@ -59,7 +61,11 @@ class TransparencyControllerFragment :
             it as TilesOverlayWithOpacity
         } ?: throw IllegalStateException("Unable to extract tile overlay from fragment arguments.")
         viewModel.tileOverlay.value = tilesOverlay
-        doneButton.setOnClickListener { dismiss() }
+        viewModel.initialValue = tilesOverlay.transparencyPercentage.toFloat()
+        doneButton.setOnClickListener {
+            viewModel.isFinalValue = true
+            dismiss()
+        }
         transparencySeekBar.onProgressChangedListener = object : BubbleSeekBar.OnProgressChangedListener {
 
             override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?,
@@ -75,17 +81,25 @@ class TransparencyControllerFragment :
             }
 
             override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?,
-                                              progress: Int, progressFloat: Float) {
+                                              progress: Int,
+                                              progressFloat: Float) {
 
             }
         }
     }
 
     private fun setTileOverlay(tilesOverlay: TilesOverlayWithOpacity) {
-        iconImageView.setImageResource(MapSourceUtil.getThumbnail(tilesOverlay.tileProvider().tileSource))
+        iconImageView.setImageResource(MapSourceUtil.getIcon(tilesOverlay.tileProvider().tileSource))
         nameTextView.text = MapSourceUtil.getName(tilesOverlay.tileProvider().tileSource)
         typeTextView.text = MapSourceUtil.getType(tilesOverlay.tileProvider().tileSource)
         transparencySeekBar.setProgress(tilesOverlay.transparencyPercentage.toFloat())
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        if (!viewModel.isFinalValue) {
+            viewModel.tileOverlay.value?.transparencyPercentage = viewModel.initialValue.toInt()
+        }
     }
 
     override fun getViewModelInstance() = TransparencyControllerViewModel.getInstance(this)

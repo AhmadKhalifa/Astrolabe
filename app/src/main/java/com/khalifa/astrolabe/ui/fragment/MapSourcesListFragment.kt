@@ -2,7 +2,6 @@ package com.khalifa.astrolabe.ui.fragment
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -36,7 +35,8 @@ class MapSourcesListFragment :
                 fragmentManager?.let { manager ->
                     MapSourcesListFragment().also {
                         it.fragmentInteractionListener = onFragmentInteractionListener
-                    }.show(manager, TAG)
+                        it.show(manager, TAG)
+                    }
                 }
     }
 

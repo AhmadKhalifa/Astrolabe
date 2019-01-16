@@ -1,10 +1,7 @@
 package com.khalifa.astrolabe.viewmodel
 
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.*
 import android.support.annotation.StringRes
 import com.khalifa.astrolabe.R
 import io.reactivex.Flowable

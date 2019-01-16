@@ -35,6 +35,8 @@ object MapSourceFactory {
 
         fun getAllSources(): List<ITileSource>
 
+        fun getSourcesIconMap(): HashMap<String, Int>
+
         fun getSourcesThumbnailMap(): HashMap<String, Int>
     }
 
@@ -48,7 +50,7 @@ object MapSourceFactory {
 
         val MAPNIK: ITileSource = getMapSource()
 
-        override fun getMapSource(vararg arg: String) = object: XYTileSource(
+        override fun getMapSource(vararg arg: String) = object : XYTileSource(
                 name,
                 0,
                 19,
@@ -65,6 +67,10 @@ object MapSourceFactory {
         }
 
         override fun getAllSources() = listOf(MAPNIK)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                MAPNIK.toString() to icon
+        )
 
         override fun getSourcesThumbnailMap() = hashMapOf(
                 MAPNIK.toString() to R.drawable.thumbnail_google_hybrid
@@ -105,7 +111,7 @@ object MapSourceFactory {
                         "http://mt3.google.com"
                 )) {
 
-            override fun name() = when(arg[1]) {
+            override fun name() = when (arg[1]) {
                 TYPE_HYBRID -> getString(R.string.google_hybrid)
                 TYPE_SATELLITE -> getString(R.string.google_satellite)
                 TYPE_ROADS -> getString(R.string.google_roads)
@@ -123,6 +129,12 @@ object MapSourceFactory {
         }
 
         override fun getAllSources() = listOf(HYBRID, SATELLITE, ROADS)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                HYBRID.toString() to icon,
+                SATELLITE.toString() to icon,
+                ROADS.toString() to icon
+        )
 
         override fun getSourcesThumbnailMap() = hashMapOf(
                 HYBRID.toString() to R.drawable.thumbnail_google_hybrid,
@@ -150,8 +162,8 @@ object MapSourceFactory {
         private val AERIAL = getMapSource(MAP_KEY_AERIAL)
 
         override fun getMapSource(vararg arg: String) =
-                with(object: BingMapTileSource(null){
-                    override fun name() = when(arg[0]) {
+                with(object : BingMapTileSource(null) {
+                    override fun name() = when (arg[0]) {
                         MAP_KEY_AERIAL ->
                             getString(R.string.bing_aerial)
                         MAP_KEY_AERIAL_WITH_LABELS ->
@@ -171,6 +183,12 @@ object MapSourceFactory {
                 }
 
         override fun getAllSources() = listOf(HYBRID, ROAD, AERIAL)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                HYBRID.toString() to icon,
+                ROAD.toString() to icon,
+                AERIAL.toString() to icon
+        )
 
         override fun getSourcesThumbnailMap() = hashMapOf(
                 HYBRID.toString() to R.drawable.thumbnail_google_hybrid,
@@ -218,7 +236,7 @@ object MapSourceFactory {
                 arrayOf("http://api.tiles.mapbox.com/v4")
         ) {
 
-            override fun name() = when(arg[0]) {
+            override fun name() = when (arg[0]) {
                 MAP_KEY_STREETS -> getString(R.string.mapbox_streets)
                 MAP_KEY_LIGHT -> getString(R.string.mapbox_light)
                 MAP_KEY_DARK -> getString(R.string.mapbox_dark)
@@ -232,7 +250,7 @@ object MapSourceFactory {
             override fun toString(): String {
                 return "$name - ${name()}"
             }
-            
+
             override fun getTileURLString(pMapTileIndex: Long): String {
                 return "$baseUrl/${arg[0]}/" +
                         "${getZoom(pMapTileIndex)}/${getX(pMapTileIndex)}/${getY(pMapTileIndex)}" +
@@ -242,6 +260,16 @@ object MapSourceFactory {
 
         override fun getAllSources() =
                 listOf(STREETS, LIGHT, DARK, SATELLITE, SATELLITE_STREETS, OUTDOORS, PENCIL)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                STREETS.toString() to icon,
+                LIGHT.toString() to icon,
+                DARK.toString() to icon,
+                SATELLITE.toString() to icon,
+                SATELLITE_STREETS.toString() to icon,
+                OUTDOORS.toString() to icon,
+                PENCIL.toString() to icon
+        )
 
         override fun getSourcesThumbnailMap() = hashMapOf(
                 STREETS.toString() to R.drawable.thumbnail_google_hybrid,
@@ -293,7 +321,7 @@ object MapSourceFactory {
                         "https://4.base.maps.api.here.com/maptile/2.1/maptile/newest")
         ) {
 
-            override fun name() = when(arg[0]) {
+            override fun name() = when (arg[0]) {
                 MAP_KEY_DAY -> getString(R.string.here_we_go_day)
                 MAP_KEY_NIGHT -> getString(R.string.here_we_go_night)
                 MAP_KEY_TRAFFIC_DAY -> getString(R.string.here_we_go_traffic_day)
@@ -317,6 +345,15 @@ object MapSourceFactory {
 
         override fun getAllSources() =
                 listOf(DAY, NIGHT, TRAFFIC_DAY, TRAFFIC_NIGHT, SATELLITE, HYBRID)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                DAY.toString() to icon,
+                NIGHT.toString() to icon,
+                TRAFFIC_DAY.toString() to icon,
+                TRAFFIC_NIGHT.toString() to icon,
+                SATELLITE.toString() to icon,
+                HYBRID.toString() to icon
+        )
 
         override fun getSourcesThumbnailMap() = hashMapOf(
                 DAY.toString() to R.drawable.thumbnail_google_hybrid,
@@ -361,7 +398,7 @@ object MapSourceFactory {
                 arrayOf("https://tile.thunderforest.com")
         ) {
 
-            override fun name() = when(arg[0]) {
+            override fun name() = when (arg[0]) {
                 MAP_KEY_OPEN_CYCLE_MAP -> getString(R.string.thunderforest_open_cycle_map)
                 MAP_KEY_TRANSPORT -> getString(R.string.thunderforest_transport)
                 MAP_KEY_TRANSPORT_DARK -> getString(R.string.thunderforest_transport_dark)
@@ -373,7 +410,7 @@ object MapSourceFactory {
             override fun toString(): String {
                 return "$name - ${name()}"
             }
-            
+
             override fun getTileURLString(pMapTileIndex: Long): String {
                 return "$baseUrl/${arg[0]}/${getZoom(pMapTileIndex)}/" +
                         "${getX(pMapTileIndex)}/${getY(pMapTileIndex)}.$mImageFilenameEnding?" +
@@ -383,6 +420,14 @@ object MapSourceFactory {
 
         override fun getAllSources() =
                 listOf(OPEN_CYCLE_MAP, TRANSPORT, TRANSPORT_DARK, LANDSCAPE, OUTDOORS)
+
+        override fun getSourcesIconMap() = hashMapOf(
+                OPEN_CYCLE_MAP.toString() to icon,
+                TRANSPORT.toString() to icon,
+                TRANSPORT_DARK.toString() to icon,
+                LANDSCAPE.toString() to icon,
+                OUTDOORS.toString() to icon
+        )
 
         override fun getSourcesThumbnailMap() = hashMapOf(
                 OPEN_CYCLE_MAP.toString() to R.drawable.thumbnail_google_hybrid,

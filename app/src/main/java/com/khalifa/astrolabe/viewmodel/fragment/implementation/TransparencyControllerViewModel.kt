@@ -21,6 +21,9 @@ class TransparencyControllerViewModel : BaseRxViewModel(), ITransparencyControll
                         .get(TransparencyControllerViewModel::class.java)
     }
 
-    val tileOverlay: MutableLiveData<TilesOverlayWithOpacity> = MutableLiveData()
+    var initialValue = 50f
 
+    var isFinalValue = false
+
+    val tileOverlay = MutableLiveData<TilesOverlayWithOpacity>()
 }

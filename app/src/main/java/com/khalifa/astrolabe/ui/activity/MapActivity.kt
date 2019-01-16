@@ -57,7 +57,7 @@ class MapActivity :
     }
 
     override fun onBackPressed() {
-        if (fragment.isInDrawingMode) {
+        if (fragment.isInDrawingMode()) {
             fragment.cancelDrawingMode()
         } else {
             super.onBackPressed()

@@ -17,6 +17,18 @@ class MapSourceUtil private constructor() {
             putAll(MapSourceFactory.ThunderForest.getSourcesThumbnailMap())
         }
 
+        private val tileSourceIconMap = HashMap<String, Int>().apply {
+            putAll(MapSourceFactory.OpenStreetMap.getSourcesIconMap())
+            putAll(MapSourceFactory.Google.getSourcesIconMap())
+            putAll(MapSourceFactory.Bing.getSourcesIconMap())
+            putAll(MapSourceFactory.MapBox.getSourcesIconMap())
+            putAll(MapSourceFactory.HereWeGo.getSourcesIconMap())
+            putAll(MapSourceFactory.ThunderForest.getSourcesIconMap())
+        }
+
+        fun getIcon(tileSource: ITileSource?) =
+                tileSourceIconMap[tileSource?.toString()] ?: R.drawable.defaultmap
+
         fun getThumbnail(tileSource: ITileSource?) =
                 tileSourceThumbnailMap[tileSource?.toString()] ?: R.drawable.defaultmap
 

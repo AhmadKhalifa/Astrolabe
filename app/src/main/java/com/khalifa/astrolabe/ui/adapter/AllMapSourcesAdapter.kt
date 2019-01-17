@@ -6,16 +6,34 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.khalifa.astrolabe.AstrolabeApplication
 import com.khalifa.astrolabe.R
 import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
+import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.util.MapSourceUtil
 import kotlinx.android.synthetic.main.list_group_item_tile_source.view.*
 import kotlinx.android.synthetic.main.list_item_tile_source_group.view.*
 import org.osmdroid.tileprovider.tilesource.ITileSource
 import java.util.ArrayList
 
+/**
+ * @author Ahmad Khalifa
+ */
+
 class AllMapSourcesAdapter(private val itemInteractionListener: OnItemInteractionListener?) :
         RecyclerView.Adapter<AllMapSourcesAdapter.AllMapSourcesViewHolder>() {
+
+    var baseMapSource: ITileSource? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    var mapLayers: ArrayList<TilesOverlayWithOpacity>? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     var mapSources: ArrayList<MapSourceFactory.MapSource>? = null
         set(value) {
@@ -48,8 +66,12 @@ class AllMapSourcesAdapter(private val itemInteractionListener: OnItemInteractio
                             false
                     )
                     isNestedScrollingEnabled = false
-                    this.adapter = TileSourceAdapter(adapter.itemInteractionListener).also {
-                        adapter -> adapter.tileSources = mapSource.getAllSources()
+                    this.adapter = TileSourceAdapter(
+                            adapter.itemInteractionListener,
+                            adapter.baseMapSource,
+                            adapter.mapLayers
+                    ).also { adapter ->
+                        adapter.tileSources = mapSource.getAllSources()
                     }
                 }
             }
@@ -63,44 +85,67 @@ class AllMapSourcesAdapter(private val itemInteractionListener: OnItemInteractio
 
         fun onTileSourceSelectedAsLayer(tileSource: ITileSource)
     }
-}
 
-private class TileSourceAdapter(
-        private val itemInteractionListener: AllMapSourcesAdapter.OnItemInteractionListener?
-) : RecyclerView.Adapter<TileSourceAdapter.MapSourceViewHolder>() {
+    private class TileSourceAdapter(
+            private val itemInteractionListener: AllMapSourcesAdapter.OnItemInteractionListener?,
+            private var baseMapSource: ITileSource?,
+            private var mapLayers: ArrayList<TilesOverlayWithOpacity>?
+    ) : RecyclerView.Adapter<TileSourceAdapter.MapSourceViewHolder>() {
 
-    var tileSources: List<ITileSource>? = null
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MapSourceViewHolder(
-            LayoutInflater.from(parent.context)
-                    .inflate(R.layout.list_group_item_tile_source, parent, false)
-    )
-
-    override fun getItemCount() = tileSources?.size ?: 0
-
-    override fun onBindViewHolder(mapSourceViewHolder: MapSourceViewHolder, position: Int) =
-            mapSourceViewHolder.setContent(this)
-
-    class MapSourceViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-
-        fun setContent(adapter: TileSourceAdapter) = with(view) {
-            val tileSource = adapter.tileSources?.get(adapterPosition)
-            tileSource?.let {
-                thumbnailImageView.setImageResource(MapSourceUtil.getThumbnail(tileSource))
-                nameTextView.text = MapSourceUtil.getName(tileSource)
-                typeTextView.text = MapSourceUtil.getType(tileSource)
-                useMapButton.setOnClickListener {
-                    adapter.itemInteractionListener?.onTileSourceSelectedAsBaseMap(tileSource)
-                }
-                addLayerButton.setOnClickListener {
-                    adapter.itemInteractionListener?.onTileSourceSelectedAsLayer(tileSource)
-                }
+        var tileSources: List<ITileSource>? = null
+            set(value) {
+                field = value
+                notifyDataSetChanged()
             }
-            Unit
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MapSourceViewHolder(
+                LayoutInflater.from(parent.context)
+                        .inflate(R.layout.list_group_item_tile_source, parent, false)
+        )
+
+        override fun getItemCount() = tileSources?.size ?: 0
+
+        override fun onBindViewHolder(mapSourceViewHolder: MapSourceViewHolder, position: Int) =
+                mapSourceViewHolder.setContent(this)
+
+        class MapSourceViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+
+            private fun isBaseSource(adapter: TileSourceAdapter,
+                                     tileSource: ITileSource) = tileSource == adapter.baseMapSource
+
+            private fun isLayer(adapter: TileSourceAdapter,
+                                tileSource: ITileSource) = adapter.mapLayers?.let { layers ->
+                for (layer in layers) if (layer.tileProvider().tileSource == tileSource) return true
+                false
+            } ?: false
+
+            fun setContent(adapter: TileSourceAdapter) = with(view) {
+                val tileSource = adapter.tileSources?.get(adapterPosition)
+                tileSource?.let {
+                    thumbnailImageView.setImageResource(MapSourceUtil.getThumbnail(tileSource))
+                    nameTextView.text = MapSourceUtil.getName(tileSource)
+                    typeTextView.text = MapSourceUtil.getType(tileSource)
+                    val isBaseSource = isBaseSource(adapter, tileSource)
+                    useMapButton.isEnabled = !isBaseSource
+                    useMapButton.setBackgroundColor(AstrolabeApplication.getColor(
+                            if (!isBaseSource) R.color.green
+                            else R.color.grey
+                    ))
+                    useMapButton.setOnClickListener {
+                        adapter.itemInteractionListener?.onTileSourceSelectedAsBaseMap(tileSource)
+                    }
+                    val isLayer = isLayer(adapter, tileSource)
+                    addLayerButton.isEnabled = !isLayer
+                    addLayerButton.setBackgroundColor(AstrolabeApplication.getColor(
+                            if (!isLayer) R.color.colorAccent
+                            else R.color.grey
+                    ))
+                    addLayerButton.setOnClickListener {
+                        adapter.itemInteractionListener?.onTileSourceSelectedAsLayer(tileSource)
+                    }
+                }
+                Unit
+            }
         }
     }
 }

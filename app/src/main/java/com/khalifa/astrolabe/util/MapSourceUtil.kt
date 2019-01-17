@@ -5,6 +5,10 @@ import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
 import org.osmdroid.tileprovider.tilesource.ITileSource
 import java.util.HashMap
 
+/**
+ * @author Ahmad Khalifa
+ */
+
 class MapSourceUtil private constructor() {
 
     companion object {

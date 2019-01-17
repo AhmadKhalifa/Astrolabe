@@ -130,7 +130,7 @@ class MapFragment :
                 R.id.action_show_my_location, R.drawable.ic_my_location_white_24dp, R.string.show_my_location
         ))
         addActionItem(createActionItem(
-                R.id.action_select_map_source, R.drawable.ic_map_white_24dp, R.string.select_map_source
+                R.id.action_select_map_source, R.drawable.ic_map_white_24dp, R.string.all_maps
         ))
         addActionItem(createActionItem(
                 R.id.action_layers_manager, R.drawable.ic_layers_white_24dp, R.string.layers_manager

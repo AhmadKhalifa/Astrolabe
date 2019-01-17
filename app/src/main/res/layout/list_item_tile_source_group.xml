@@ -1,36 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spc3"
+    android:background="@color/default_background_color"
+    android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/groupIconImageView"
-            android:layout_width="@dimen/tile_source_icom_dimen"
-            android:layout_height="@dimen/tile_source_icom_dimen"
-            android:layout_margin="@dimen/spc4"
-            tools:src="@drawable/googlemaps" />
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spc2"
+        app:cardBackgroundColor="@color/white">
 
-        <TextView
-            android:id="@+id/groupTitleTextView"
-            android:layout_toEndOf="@id/groupIconImageView"
-            android:layout_margin="@dimen/spc3"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/txt7"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:height="@dimen/tile_source_icom_dimen"
-            tools:text="Google"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:orientation="horizontal"
+            android:padding="@dimen/spc1">
+
+            <ImageView
+                android:id="@+id/groupIconImageView"
+                android:layout_width="@dimen/tile_source_icon_dimen"
+                android:layout_height="@dimen/tile_source_icon_dimen"
+                android:layout_margin="@dimen/spc4"
+                tools:src="@drawable/googlemaps" />
 
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_below="@id/groupIconImageView"
-            android:layout_marginStart="@dimen/spc3"
-            android:id="@+id/groupRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tile_source_group_item_height"/>
+            <TextView
+                android:id="@+id/groupTitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spc3"
+                android:height="@dimen/tile_source_icon_dimen"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/txt7"
+                tools:text="Google" />
+        </LinearLayout>
 
-</RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/groupRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tile_source_group_item_height"
+        android:layout_marginStart="@dimen/spc3" />
+
+</LinearLayout>

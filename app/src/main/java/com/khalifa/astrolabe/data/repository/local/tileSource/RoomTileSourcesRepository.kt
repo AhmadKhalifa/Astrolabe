@@ -5,6 +5,10 @@ import com.khalifa.astrolabe.data.repository.local.BaseLocalTileSourcesRepositor
 import com.khalifa.astrolabe.data.storage.room.TileSourcesDao
 import com.khalifa.astrolabe.data.storage.room.TileSourcesDatabase
 
+/**
+ * @author Ahmad Khalifa
+ */
+
 class RoomTileSourcesRepository : BaseLocalTileSourcesRepository() {
 
     private var _tileSourcesDao: TileSourcesDao? = null

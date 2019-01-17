@@ -18,6 +18,10 @@ import com.xw.repo.BubbleSeekBar
 import kotlinx.android.synthetic.main.fragment_transparency_controller.*
 import java.lang.IllegalStateException
 
+/**
+ * @author Ahmad Khalifa
+ */
+
 class TransparencyControllerFragment :
         BaseBottomSheetDialogFragment<TransparencyControllerViewModel>() {
 

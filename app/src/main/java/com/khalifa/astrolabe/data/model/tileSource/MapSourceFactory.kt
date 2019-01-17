@@ -14,7 +14,7 @@ import java.util.*
 
 object MapSourceFactory {
 
-    val DEFAULT_MAP_SOURCE = OpenStreetMap.MAPNIK
+    val DEFAULT_MAP_SOURCE = HereWeGo.NIGHT
 
     val onlineMapSources = ArrayList<MapSource>().apply {
         add(Google)
@@ -48,7 +48,7 @@ object MapSourceFactory {
         override val icon: Int
             get() = R.drawable.osm
 
-        val MAPNIK: ITileSource = getMapSource()
+        private val MAPNIK: ITileSource = getMapSource()
 
         override fun getMapSource(vararg arg: String) = object : XYTileSource(
                 name,
@@ -299,7 +299,7 @@ object MapSourceFactory {
 
         private val DAY = getMapSource(MAP_KEY_DAY)
 
-        private val NIGHT = getMapSource(MAP_KEY_NIGHT)
+        val NIGHT = getMapSource(MAP_KEY_NIGHT)
 
         private val TRAFFIC_DAY = getMapSource(MAP_KEY_TRAFFIC_DAY)
 

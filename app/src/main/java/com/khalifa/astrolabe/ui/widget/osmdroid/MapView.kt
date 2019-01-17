@@ -5,6 +5,10 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 
+/**
+ * @author Ahmad Khalifa
+ */
+
 class MapView : org.osmdroid.views.MapView {
 
     var contextMenu: View? = null

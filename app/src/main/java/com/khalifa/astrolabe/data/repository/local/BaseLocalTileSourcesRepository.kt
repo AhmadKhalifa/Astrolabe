@@ -4,6 +4,10 @@ import android.arch.lifecycle.LiveData
 import com.khalifa.astrolabe.data.model.tileSource.TileSource
 import com.khalifa.astrolabe.data.repository.BaseLocalRepository
 
+/**
+ * @author Ahmad Khalifa
+ */
+
 abstract class BaseLocalTileSourcesRepository : BaseLocalRepository() {
 
     abstract fun addTileSource(vararg tileSource: TileSource)

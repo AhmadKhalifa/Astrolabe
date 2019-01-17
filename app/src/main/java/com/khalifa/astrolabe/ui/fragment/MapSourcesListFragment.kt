@@ -10,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.R
 import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
+import com.khalifa.astrolabe.ui.activity.MapActivity
 import com.khalifa.astrolabe.ui.adapter.AllMapSourcesAdapter
 import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragment
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
+import com.khalifa.astrolabe.viewmodel.activity.MapActivityViewModel
 import com.khalifa.astrolabe.viewmodel.fragment.implementation.MapSourcesListViewModel
 import kotlinx.android.synthetic.main.content_dialog_full_screen.*
 import kotlinx.android.synthetic.main.fragment_map_sources_list.view.*
@@ -47,13 +49,13 @@ class MapSourcesListFragment :
         fun onTileSourceSelectedAsLayer(tileSource: ITileSource)
     }
 
+    private lateinit var activityViewModel: MapActivityViewModel
     private var fragmentInteractionListener: OnFragmentInteractionListener? = null
     private val mapSourceAdapter = AllMapSourcesAdapter(this)
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View =
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_map_sources_list, container, false)
                     .also {
                         with(it.toolbar) {
@@ -72,6 +74,8 @@ class MapSourcesListFragment :
             adapter = mapSourceAdapter
         }
         viewModel.loadMapSources()
+        mapSourceAdapter.baseMapSource = activityViewModel.baseMapSource.value
+        mapSourceAdapter.mapLayers = activityViewModel.mapLayers.value
     }
 
     private fun updateMapSources(mapSources: ArrayList<MapSourceFactory.MapSource>) {
@@ -87,6 +91,13 @@ class MapSourcesListFragment :
     override fun registerLiveDataObservers() {
         viewModel.mapSources.observe(this, Observer { mapSources ->
             mapSources?.let { updateMapSources(it) }
+        })
+        activityViewModel = MapActivityViewModel.getInstance(context as MapActivity)
+        activityViewModel.baseMapSource.observe(this, Observer {
+            mapSourceAdapter.baseMapSource = it
+        })
+        activityViewModel.mapLayers.observe(this, Observer {
+            mapSourceAdapter.mapLayers = it
         })
     }
 

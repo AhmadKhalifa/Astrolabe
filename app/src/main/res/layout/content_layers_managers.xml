@@ -1,42 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    android:orientation="vertical"
+<android.support.v4.widget.NestedScrollView android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="@dimen/spc5"
-    android:paddingEnd="@dimen/spc5"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+        <android.support.v7.widget.CardView
+            app:cardBackgroundColor="@color/white"
+            android:layout_marginBottom="@dimen/spc5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:tint="@color/colorAccent"
-                android:src="@drawable/ic_map_white_36dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-
-            <TextView
-                android:layout_marginTop="@dimen/spc5"
-                android:layout_marginBottom="@dimen/spc5"
-                android:text="@string/base_map"
-                android:textSize="@dimen/txt6"
+            <LinearLayout
+                android:paddingStart="@dimen/spc5"
+                android:paddingEnd="@dimen/spc5"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:textColor="@color/colorAccent"
-                android:maxLines="1" />
-        </LinearLayout>
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/ic_map_white_36dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <TextView
+                    android:paddingStart="@dimen/spc5"
+                    android:paddingEnd="@dimen/spc5"
+                    android:layout_marginTop="@dimen/spc5"
+                    android:layout_marginBottom="@dimen/spc5"
+                    android:text="@string/base_map"
+                    android:textSize="@dimen/txt6"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="@color/colorPrimary"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/changeBaseMapButton"
+                    android:background="@color/colorAccent"
+                    android:drawableStart="@drawable/ic_map_white_18dp"
+                    android:text="@string/change"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/spc1"
+                    android:layout_marginTop="@dimen/spc5"
+                    android:layout_marginBottom="@dimen/spc5"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:padding="@dimen/spc4"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/txt2"/>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
 
         <android.support.v7.widget.CardView
             app:contentPadding="-2dp"
@@ -47,6 +78,8 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spc5"
+            android:layout_marginEnd="@dimen/spc5"
             app:cardBackgroundColor="@color/white"
             android:background="@drawable/selector_list_item"
             android:id="@+id/trailerCardView">
@@ -83,8 +116,8 @@
 
                             <ImageView
                                 android:id="@+id/iconImageView"
-                                android:layout_width="@dimen/tile_source_icom_dimen"
-                                android:layout_height="@dimen/tile_source_icom_dimen"
+                                android:layout_width="@dimen/tile_source_icon_dimen"
+                                android:layout_height="@dimen/tile_source_icon_dimen"
                                 android:layout_margin="@dimen/spc4"
                                 tools:src="@drawable/googlemaps" />
 
@@ -114,23 +147,6 @@
                                     android:maxLines="1" />
                             </LinearLayout>
 
-                            <Button
-                                android:id="@+id/changeBaseMapButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@color/colorAccent"
-                                android:drawablePadding="@dimen/spc1"
-                                android:layout_marginEnd="@dimen/spc3"
-                                android:drawableStart="@drawable/ic_map_white_18dp"
-                                android:minHeight="0dp"
-                                android:minWidth="0dp"
-                                android:padding="@dimen/spc4"
-                                android:text="@string/change"
-                                android:textAlignment="center"
-                                android:textAllCaps="false"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/txt2"/>
-
                         </LinearLayout>
 
                     </LinearLayout>
@@ -142,67 +158,86 @@
         </android.support.v7.widget.CardView>
 
 
-        <LinearLayout
+
+
+        <android.support.v7.widget.CardView
+            app:cardBackgroundColor="@color/white"
             android:layout_marginTop="@dimen/spc5"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/spc3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:tint="@color/colorAccent"
-                android:src="@drawable/ic_layers_white_36dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_marginTop="@dimen/spc5"
-                android:layout_marginBottom="@dimen/spc5"
-                android:text="@string/layers"
-                android:textSize="@dimen/txt6"
+            <LinearLayout
+                android:paddingStart="@dimen/spc5"
+                android:paddingEnd="@dimen/spc5"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:textColor="@color/colorAccent"
-                android:maxLines="1" />
-        </LinearLayout>
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_layers_white_36dp"
+                    android:tint="@color/colorPrimary" />
+
+
+                <TextView
+                    android:paddingStart="@dimen/spc5"
+                    android:paddingEnd="@dimen/spc5"
+                    android:layout_marginTop="@dimen/spc5"
+                    android:layout_marginBottom="@dimen/spc5"
+                    android:text="@string/layers"
+                    android:textSize="@dimen/txt6"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="@color/colorPrimary"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/addLayerButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/green"
+                    android:drawablePadding="@dimen/spc1"
+                    android:layout_marginTop="@dimen/spc5"
+                    android:layout_marginBottom="@dimen/spc5"
+                    android:drawableStart="@drawable/ic_layers_white_18dp"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:padding="@dimen/spc4"
+                    android:text="@string/add"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/txt2"/>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
         <LinearLayout
             android:id="@+id/noLayersLayout"
             android:orientation="vertical"
-            android:layout_marginTop="@dimen/spc7"
+            android:layout_marginTop="@dimen/spc10"
             android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:textSize="@dimen/txt5"
-                android:textColor="@color/colorPrimaryDark"
-                android:text="@string/no_layers_yet"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/addLayerButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/green"
-                android:drawablePadding="@dimen/spc1"
-                android:layout_margin="@dimen/spc5"
-                android:drawableStart="@drawable/ic_layers_white_18dp"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:padding="@dimen/spc4"
-                android:text="@string/add"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="@dimen/txt2"/>
+                android:layout_height="match_parent"
+                android:text="@string/no_layers"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/txt3" />
 
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
+            android:paddingStart="@dimen/spc5"
+            android:paddingEnd="@dimen/spc5"
+            android:focusableInTouchMode="false"
             android:visibility="gone"
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"

@@ -39,7 +39,6 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:textAllCaps="true"
                     android:id="@+id/nameTextView"
                     android:layout_marginTop="@dimen/spc4"
                     android:layout_marginStart="@dimen/spc4"
@@ -84,7 +83,7 @@
                         android:layout_marginEnd="@dimen/spc3"
                         android:minWidth="0dp"
                         android:padding="@dimen/spc4"
-                        android:text="@string/add"
+                        android:text="@string/add_layer"
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/white"

@@ -4,10 +4,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import com.khalifa.astrolabe.AstrolabeApplication
 import com.khalifa.astrolabe.R
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.util.MapSourceUtil
+import com.khalifa.astrolabe.util.toast
 import kotlinx.android.synthetic.main.list_item_map_layer.view.*
+
+/**
+ * @author Ahmad Khalifa
+ */
 
 class MapLayersAdapter(private val itemInteractionListener: OnItemInteractionListener?) :
         RecyclerView.Adapter<MapLayersAdapter.MapLayersViewHolder>() {
@@ -33,6 +40,9 @@ class MapLayersAdapter(private val itemInteractionListener: OnItemInteractionLis
         fun setContent(adapter: MapLayersAdapter) = with(view) {
             val mapLayer = adapter.mapLayers?.get(adapterPosition)
             mapLayer?.let { layer ->
+                backgroundThumbnailLayout.setBackgroundResource(MapSourceUtil.getThumbnail(
+                        layer.tileProvider().tileSource
+                ))
                 iconImageView.setImageResource(MapSourceUtil.getIcon(
                         layer.tileProvider().tileSource
                 ))
@@ -43,6 +53,11 @@ class MapLayersAdapter(private val itemInteractionListener: OnItemInteractionLis
                         layer.tileProvider().tileSource
                 )
                 showHideButton.setText(if (layer.isVisible) R.string.hide else R.string.show)
+                opacityButton.isEnabled = layer.isVisible
+                opacityButton.setBackgroundColor(AstrolabeApplication.getColor(
+                        if (layer.isVisible) R.color.green
+                        else R.color.grey
+                ))
                 adapter.itemInteractionListener ?.let { listener ->
                     showHideButton.setOnClickListener {
                         listener.onShowOrHideLayerClicked(layer, adapterPosition)

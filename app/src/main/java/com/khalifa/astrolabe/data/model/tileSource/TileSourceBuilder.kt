@@ -2,6 +2,10 @@ package com.khalifa.astrolabe.data.model.tileSource
 
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 
+/**
+ * @author Ahmad Khalifa
+ */
+
 class TileSourceBuilder(private val baseUrls: Array<String>) {
 
     private var name = ""

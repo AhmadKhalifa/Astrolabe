@@ -5,7 +5,7 @@
     <color name="colorAccent">#f8aa1a</color>
 
     <color name="default_background_color">#ececec</color>
-    s
+
     <color name="white">#ffffff</color>
     <color name="grey">#aaaaaa</color>
     <color name="transparent">#50000000</color>
@@ -15,5 +15,5 @@
 
     <color name="item_image_gradient_bottom">#334c4c4c</color>
     <color name="item_image_gradient_top">#00000000</color>
-    <color name="white_transparent">#bbffffff</color>
+    <color name="white_transparent">#aaffffff</color>
 </resources>

@@ -45,12 +45,14 @@ class MapViewModel : BaseRxViewModel(), IMapViewModel {
                         .of(mapFragment)
                         .get(MapViewModel::class.java)
 
-        val DEFAULT_START_POSITION = GeoPoint(30.0592319, 31.3022223)
+        val DEFAULT_START_POSITION = GeoPoint(30.0592319, 31.2322223)
         const val DEFAULT_OPACITY = 50
         const val DEFAULT_ZOOM_LEVEL = 12.0
         const val TIME_TO_WAIT_IN_MS = 100
     }
 
+    private var miniMapOverlay: MiniMapOverlay? = null
+    private var compassOverlay: CompassOverlay? = null
     lateinit var mInfoWindow: MarkerInfoWindow
     var isInDrawingMode = false
     var isDrawingLine = false
@@ -82,15 +84,6 @@ class MapViewModel : BaseRxViewModel(), IMapViewModel {
         locationOverlay.enableMyLocation()
         mapView.overlays.add(locationOverlay)
 
-        // compass overlay
-        val compassOverlay = CompassOverlay(
-                context,
-                InternalCompassOrientationProvider(context),
-                mapView
-        )
-        compassOverlay.enableCompass()
-        add(compassOverlay)
-
         // scale bar overlay
         val scaleBarOverlay = ScaleBarOverlay(mapView)
         scaleBarOverlay.setCentred(true)
@@ -106,16 +99,47 @@ class MapViewModel : BaseRxViewModel(), IMapViewModel {
         mapView.setMultiTouchControls(true)
         add(rotationGestureOverlay)
 
-        // Mini map
-        val miniMapOverlay = MiniMapOverlay(context, mapView.tileRequestCompleteHandler)
-        miniMapOverlay.width = DimensionsUtil.getScreenWidthInPixels(context) / 5
-        miniMapOverlay.height = DimensionsUtil.getScreenHeightInPixels(context) / 5
-        miniMapOverlay.setTileSource(MapSourceFactory.Google.SATELLITE)
-        mapView.overlays.add(miniMapOverlay)
+        addCompass(mapView)
+        addMiniMap(mapView)
 
         // click handler overlay
         add(MapEventsOverlay(eventsReceiver))
         Unit
+    }
+
+    private fun addMiniMap(mapView: MapView) {
+        val context = AstrolabeApplication.instance
+        miniMapOverlay = MiniMapOverlay(context, mapView.tileRequestCompleteHandler).also {
+            it.width = DimensionsUtil.getScreenWidthInPixels(context) / 5
+            it.height = DimensionsUtil.getScreenHeightInPixels(context) / 5
+            it.setTileSource(MapSourceFactory.Google.SATELLITE)
+        }
+        mapView.overlays.add(miniMapOverlay)
+    }
+
+    private fun addCompass(mapView: MapView) {
+        val context = AstrolabeApplication.instance
+        compassOverlay = CompassOverlay(
+                context,
+                InternalCompassOrientationProvider(context),
+                mapView
+        ).also { it.enableCompass() }
+        mapView.overlays.add(compassOverlay)
+    }
+
+    private fun validateMiniMap(mapView: MapView) {
+        mapView.overlays.remove(miniMapOverlay)
+        addMiniMap(mapView)
+    }
+
+    private fun validateCompass(mapView: MapView) {
+        mapView.overlays.remove(compassOverlay)
+        addCompass(mapView)
+    }
+
+    private fun validateOverlays(mapView: MapView) {
+        validateMiniMap(mapView)
+        validateCompass(mapView)
     }
 
     fun handleSingleTap(mapView: MapView, geoPoint: GeoPoint?): Boolean {
@@ -142,6 +166,7 @@ class MapViewModel : BaseRxViewModel(), IMapViewModel {
         tilesOverlay.loadingBackgroundColor = Color.TRANSPARENT
         tilesOverlay.loadingLineColor = Color.TRANSPARENT
         mapView.overlays.add(tilesOverlay)
+        validateOverlays(mapView)
         val mapLayers = MapActivityViewModel.getInstance(context as MapActivity).mapLayers
         val layers = mapLayers.value
         layers?.add(tilesOverlay)

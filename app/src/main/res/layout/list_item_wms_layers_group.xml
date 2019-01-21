@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spc3"
+    android:layout_marginStart="@dimen/spc3"
+    android:layout_marginEnd="@dimen/spc3"
+    android:background="@color/default_background_color"
+    app:cardBackgroundColor="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:padding="@dimen/spc5"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spc2">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/serviceTitleTextView"
+                tools:text="OpenStreetMap WMS"
+                android:textSize="@dimen/txt6"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textColor="@color/colorPrimary"
+                android:maxLines="1" />
+
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/red"
+                android:drawablePadding="@dimen/spc1"
+                android:layout_marginBottom="@dimen/spc2"
+                android:drawableStart="@drawable/ic_delete_white_18dp"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:padding="@dimen/spc4"
+                android:text="@string/delete"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt2"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/serviceAbstractTextView"
+            tools:text="OpenStreetMap WMS, bereitgestellt durch terrestris GmbH und Co. KG. Beschleunigt mit MapProxy (http://mapproxy.org/)"
+            android:textSize="@dimen/txt3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:textColor="@color/grey" />
+
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/layersRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tile_source_group_item_height"
+            android:layout_marginTop="@dimen/spc5"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

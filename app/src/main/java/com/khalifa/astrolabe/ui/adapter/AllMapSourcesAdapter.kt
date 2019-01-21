@@ -81,9 +81,9 @@ class AllMapSourcesAdapter(private val itemInteractionListener: OnItemInteractio
 
     interface OnItemInteractionListener {
 
-        fun onTileSourceSelectedAsBaseMap(tileSource: ITileSource)
+        fun onUseAsBaseMapClicked(tileSource: ITileSource)
 
-        fun onTileSourceSelectedAsLayer(tileSource: ITileSource)
+        fun onAddAsMapLayerClicked(tileSource: ITileSource)
     }
 
     private class TileSourceAdapter(
@@ -110,14 +110,16 @@ class AllMapSourcesAdapter(private val itemInteractionListener: OnItemInteractio
 
         class MapSourceViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-            private fun isBaseSource(adapter: TileSourceAdapter,
-                                     tileSource: ITileSource) = tileSource == adapter.baseMapSource
+            private fun isUsedAsBaseMap(adapter: TileSourceAdapter, tileSource: ITileSource) =
+                    tileSource == adapter.baseMapSource
 
-            private fun isLayer(adapter: TileSourceAdapter,
-                                tileSource: ITileSource) = adapter.mapLayers?.let { layers ->
-                for (layer in layers) if (layer.tileProvider().tileSource == tileSource) return true
-                false
-            } ?: false
+            private fun isLayerAlreadyUsed(adapter: TileSourceAdapter,
+                                           tileSource: ITileSource) =
+                    adapter.mapLayers?.let { layers ->
+                        for (layer in layers)
+                            if (layer.tileProvider().tileSource == tileSource) return true
+                        false
+                    } ?: false
 
             fun setContent(adapter: TileSourceAdapter) = with(view) {
                 val tileSource = adapter.tileSources?.get(adapterPosition)
@@ -125,23 +127,23 @@ class AllMapSourcesAdapter(private val itemInteractionListener: OnItemInteractio
                     thumbnailImageView.setImageResource(MapSourceUtil.getThumbnail(tileSource))
                     nameTextView.text = MapSourceUtil.getName(tileSource)
                     typeTextView.text = MapSourceUtil.getType(tileSource)
-                    val isBaseSource = isBaseSource(adapter, tileSource)
-                    useMapButton.isEnabled = !isBaseSource
+                    val isUsedAsBaseMap = isUsedAsBaseMap(adapter, tileSource)
+                    useMapButton.isEnabled = !isUsedAsBaseMap
                     useMapButton.setBackgroundColor(AstrolabeApplication.getColor(
-                            if (!isBaseSource) R.color.green
+                            if (!isUsedAsBaseMap) R.color.green
                             else R.color.grey
                     ))
                     useMapButton.setOnClickListener {
-                        adapter.itemInteractionListener?.onTileSourceSelectedAsBaseMap(tileSource)
+                        adapter.itemInteractionListener?.onUseAsBaseMapClicked(tileSource)
                     }
-                    val isLayer = isLayer(adapter, tileSource)
-                    addLayerButton.isEnabled = !isLayer
+                    val isLayerAlreadyUsed = isLayerAlreadyUsed(adapter, tileSource)
+                    addLayerButton.isEnabled = !isLayerAlreadyUsed
                     addLayerButton.setBackgroundColor(AstrolabeApplication.getColor(
-                            if (!isLayer) R.color.colorAccent
+                            if (!isLayerAlreadyUsed) R.color.colorAccent
                             else R.color.grey
                     ))
                     addLayerButton.setOnClickListener {
-                        adapter.itemInteractionListener?.onTileSourceSelectedAsLayer(tileSource)
+                        adapter.itemInteractionListener?.onAddAsMapLayerClicked(tileSource)
                     }
                 }
                 Unit

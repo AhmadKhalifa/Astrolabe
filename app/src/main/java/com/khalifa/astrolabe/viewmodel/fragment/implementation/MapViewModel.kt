@@ -15,6 +15,7 @@ import com.khalifa.astrolabe.ui.widget.osmdroid.MiniMapOverlay
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.util.DimensionsUtil
 import com.khalifa.astrolabe.viewmodel.BaseRxViewModel
+import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.activity.MapActivityViewModel
 import com.khalifa.astrolabe.viewmodel.fragment.IMapViewModel
 import org.osmdroid.events.MapEventsReceiver
@@ -31,6 +32,11 @@ import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import org.osmdroid.wms.WMSEndpoint
+import org.osmdroid.wms.WMSParser
+import org.osmdroid.wms.WMSTileSource
+import java.net.HttpURLConnection
+import java.net.URL
 
 /**
  * @author Ahmad Khalifa
@@ -232,5 +238,28 @@ class MapViewModel : BaseRxViewModel(), IMapViewModel {
         isDrawingLine = false
         drawingMarkers.clear()
         polygonGeoPoints.clear()
+    }
+
+    fun loadWMSTiles(context: Context?, mapView: MapView, capabilitiesUrl: String) {
+        performAsync(
+                action = {
+                    val connection = URL(capabilitiesUrl).openConnection() as HttpURLConnection?
+                    val inputStream = connection?.inputStream
+                    val wmsEndpoint = WMSParser.parse(inputStream)
+                    inputStream?.close()
+                    connection?.disconnect()
+                    wmsEndpoint as WMSEndpoint
+                },
+                onSuccess = { wmsEndPoint ->
+                    if (wmsEndPoint == null) return@performAsync
+                    val source = WMSTileSource.createFrom(wmsEndPoint, wmsEndPoint.layers[0])
+                    val layer = wmsEndPoint.layers?.get(0)
+                    if (layer?.bbox != null) {
+                        mapView.zoomToBoundingBox(layer.bbox, true)
+                    }
+                    addTileSourceLayer(context, mapView, source)
+                },
+                onFailure = { notify(Error.ERROR_LOADING_WMS_CAPABILITIES) }
+        )
     }
 }

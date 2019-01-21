@@ -62,7 +62,8 @@ enum class Event(@StringRes val stringResId: Int) {
 enum class Error (@StringRes val stringResId: Int) {
     GENERAL_ERROR(R.string.general_error),
     NO_INTERNET_CONNECTION(R.string.no_internet_connection),
-    NON_STABLE_CONNECTION(R.string.non_stable_connection);
+    NON_STABLE_CONNECTION(R.string.non_stable_connection),
+    ERROR_LOADING_WMS_CAPABILITIES(R.string.error_loading_wms_capabilities)
 }
 
 interface BaseViewModelOwner<out VM : BaseRxViewModel> {
@@ -71,11 +72,11 @@ interface BaseViewModelOwner<out VM : BaseRxViewModel> {
                                         viewModel: BaseRxViewModel) {
         viewModel.event.observe(
                 lifecycleOwner,
-                Observer { event -> event?.let { onEvent(it) } }
+                Observer { event -> event?.let(this::onEvent) }
         )
         viewModel.error.observe(
                 lifecycleOwner,
-                Observer { error -> error?.let { onError(it) } }
+                Observer { error -> error?.let(this::onError) }
         )
     }
 

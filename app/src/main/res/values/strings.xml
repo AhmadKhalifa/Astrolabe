@@ -63,4 +63,6 @@
     <string name="base_map">Base map</string>
     <string name="no_layers">No layers</string>
     <string name="map_layers">Map layers</string>
+    <string name="error_loading_wms_capabilities">Error loading WMS capabilities</string>
+    <string name="delete">Delete</string>
 </resources>

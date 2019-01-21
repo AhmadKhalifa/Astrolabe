@@ -347,10 +347,8 @@ class MapFragment :
     override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {
-        MapActivityViewModel.getInstance(context as MapActivity)
-                .baseMapSource.observe(this, Observer {
-            tileSource -> mapView.setTileSource(tileSource)
-        })
+        val activityViewModel = MapActivityViewModel.getInstance(context as MapActivity)
+        activityViewModel.baseMapSource.observe(this, Observer(mapView::setTileSource))
         viewModel.polygonPointsCount.observe(this, Observer {
             count -> if (viewModel.isDrawingLine && count == 2) onDrawingFinished()
         })

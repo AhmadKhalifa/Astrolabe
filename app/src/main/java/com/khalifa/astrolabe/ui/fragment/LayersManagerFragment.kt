@@ -97,8 +97,8 @@ class LayersManagerFragment :
 
     override fun registerLiveDataObservers() {
         activityViewModel = MapActivityViewModel.getInstance(context as MapActivity)
-        activityViewModel.baseMapSource.observe(this, Observer { setBaseMapLayout(it) })
-        activityViewModel.mapLayers.observe(this, Observer { setMapLayers(it) })
+        activityViewModel.baseMapSource.observe(this, Observer(this::setBaseMapLayout))
+        activityViewModel.mapLayers.observe(this, Observer(this::setMapLayers))
     }
 
     override fun onDeleteLayerClicked(mapLayer: TilesOverlayWithOpacity) {
@@ -124,11 +124,13 @@ class LayersManagerFragment :
 
     }
 
-    private fun setBaseMapLayout(baseTileSource: ITileSource?) = baseTileSource?.let {
-        thumbnailImageView.setImageResource(MapSourceUtil.getThumbnail(baseTileSource))
-        iconImageView.setImageResource(MapSourceUtil.getIcon(baseTileSource))
-        sourceNameTextView.text = MapSourceUtil.getName(baseTileSource)
-        sourceTypeTextView.text = MapSourceUtil.getType(baseTileSource)
+    private fun setBaseMapLayout(baseTileSource: ITileSource?) {
+        baseTileSource?.run {
+            thumbnailImageView.setImageResource(MapSourceUtil.getThumbnail(this))
+            iconImageView.setImageResource(MapSourceUtil.getIcon(this))
+            sourceNameTextView.text = MapSourceUtil.getName(this)
+            sourceTypeTextView.text = MapSourceUtil.getType(this)
+        }
     }
 
     private fun setMapLayers(mapLayers: ArrayList<TilesOverlayWithOpacity>?) {

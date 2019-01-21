@@ -1,0 +1,3 @@
+package com.khalifa.astrolabe.viewmodel.fragment
+
+interface IWMSServicesListViewModel

@@ -92,11 +92,13 @@ class TransparencyControllerFragment :
         }
     }
 
-    private fun setTileOverlay(tilesOverlay: TilesOverlayWithOpacity) {
-        iconImageView.setImageResource(MapSourceUtil.getIcon(tilesOverlay.tileProvider().tileSource))
-        nameTextView.text = MapSourceUtil.getName(tilesOverlay.tileProvider().tileSource)
-        typeTextView.text = MapSourceUtil.getType(tilesOverlay.tileProvider().tileSource)
-        transparencySeekBar.setProgress(tilesOverlay.transparencyPercentage.toFloat())
+    private fun setTileOverlay(tilesOverlay: TilesOverlayWithOpacity?) {
+        tilesOverlay?.run {
+            iconImageView.setImageResource(MapSourceUtil.getIcon(tileProvider().tileSource))
+            nameTextView.text = MapSourceUtil.getName(tileProvider().tileSource)
+            typeTextView.text = MapSourceUtil.getType(tileProvider().tileSource)
+            transparencySeekBar.setProgress(transparencyPercentage.toFloat())
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
@@ -113,6 +115,6 @@ class TransparencyControllerFragment :
     override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {
-        viewModel.tileOverlay.observe(this, Observer { it?.let(this::setTileOverlay)})
+        viewModel.tileOverlay.observe(this, Observer(this::setTileOverlay))
     }
 }

@@ -3,6 +3,11 @@
   <component name="WizardSettings">
     <option name="children">
       <map>
+        <entry key="imageWizard">
+          <value>
+            <PersistentState />
+          </value>
+        </entry>
         <entry key="vectorWizard">
           <value>
             <PersistentState>
@@ -18,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/E:/Khalifa/Enviroment/Android%20Studio%203.2/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_layers_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/E:/Khalifa/Enviroment/Android%20Studio%203.2/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_delete_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -29,11 +34,11 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="height" value="36" />
-                            <entry key="outputName" value="ic_layers_white_36dp" />
+                            <entry key="height" value="18" />
+                            <entry key="outputName" value="ic_delete_delete_18dp" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\Chall1" />
-                            <entry key="width" value="36" />
+                            <entry key="width" value="18" />
                           </map>
                         </option>
                       </PersistentState>

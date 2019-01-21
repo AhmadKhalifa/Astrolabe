@@ -13,12 +13,13 @@ import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
 import com.khalifa.astrolabe.ui.activity.MapActivity
 import com.khalifa.astrolabe.ui.adapter.AllMapSourcesAdapter
 import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragment
+import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
 import com.khalifa.astrolabe.viewmodel.activity.MapActivityViewModel
 import com.khalifa.astrolabe.viewmodel.fragment.implementation.MapSourcesListViewModel
-import kotlinx.android.synthetic.main.content_dialog_full_screen.*
 import kotlinx.android.synthetic.main.fragment_map_sources_list.view.*
+import kotlinx.android.synthetic.main.fragment_recycler_view.*
 import org.osmdroid.tileprovider.tilesource.ITileSource
 
 /**
@@ -78,8 +79,16 @@ class MapSourcesListFragment :
         mapSourceAdapter.mapLayers = activityViewModel.mapLayers.value
     }
 
-    private fun updateMapSources(mapSources: ArrayList<MapSourceFactory.MapSource>) {
+    private fun updateMapSources(mapSources: ArrayList<MapSourceFactory.MapSource>?) {
         mapSourceAdapter.mapSources = mapSources
+    }
+
+    private fun onBaseMapSourceChanged(baseMapSource: ITileSource?) {
+        mapSourceAdapter.baseMapSource = baseMapSource
+    }
+
+    private fun onMapLayersChanged(mapLayers: ArrayList<TilesOverlayWithOpacity>?) {
+        mapSourceAdapter.mapLayers = mapLayers
     }
 
     override fun getViewModelInstance() = MapSourcesListViewModel.getInstance(this)
@@ -89,24 +98,18 @@ class MapSourcesListFragment :
     override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {
-        viewModel.mapSources.observe(this, Observer { mapSources ->
-            mapSources?.let { updateMapSources(it) }
-        })
+        viewModel.mapSources.observe(this, Observer(this::updateMapSources))
         activityViewModel = MapActivityViewModel.getInstance(context as MapActivity)
-        activityViewModel.baseMapSource.observe(this, Observer {
-            mapSourceAdapter.baseMapSource = it
-        })
-        activityViewModel.mapLayers.observe(this, Observer {
-            mapSourceAdapter.mapLayers = it
-        })
+        activityViewModel.baseMapSource.observe(this, Observer(this::onBaseMapSourceChanged))
+        activityViewModel.mapLayers.observe(this, Observer(this::onMapLayersChanged))
     }
 
-    override fun onTileSourceSelectedAsBaseMap(tileSource: ITileSource) {
+    override fun onUseAsBaseMapClicked(tileSource: ITileSource) {
         dismiss()
         fragmentInteractionListener?.onTileSourceSelectedAsBaseMap(tileSource)
     }
 
-    override fun onTileSourceSelectedAsLayer(tileSource: ITileSource) {
+    override fun onAddAsMapLayerClicked(tileSource: ITileSource) {
         dismiss()
         fragmentInteractionListener?.onTileSourceSelectedAsLayer(tileSource)
     }

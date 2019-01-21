@@ -19,7 +19,7 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <include layout="@layout/content_dialog_full_screen" />
+        <include layout="@layout/fragment_recycler_view" />
     </LinearLayout>
 
 

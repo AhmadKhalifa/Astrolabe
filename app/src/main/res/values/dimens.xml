@@ -34,4 +34,5 @@
     <dimen name="tile_source_group_item_height">200dp</dimen>
     <dimen name="layer_tile_item_height">100dp</dimen>
     <dimen name="map_layer_height">130dp</dimen>
+    <dimen name="map_source_view_margin_top">70dp</dimen>
 </resources>

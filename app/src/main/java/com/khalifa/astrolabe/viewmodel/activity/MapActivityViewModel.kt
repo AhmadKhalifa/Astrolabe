@@ -22,17 +22,5 @@ class MapActivityViewModel : BaseRxViewModel() {
                         .get(MapActivityViewModel::class.java)
     }
 
-    var baseMapSource = MutableLiveData<ITileSource>()
 
-    var mapLayers = MutableLiveData<ArrayList<TilesOverlayWithOpacity>>().apply {
-        value = ArrayList()
-    }
-
-    var mapWMSLayers = MutableLiveData<ArrayList<WMSLayer>>().apply {
-        value = ArrayList()
-    }
-
-    fun addWMSLayer(wmsLayer: WMSLayer) {
-
-    }
 }

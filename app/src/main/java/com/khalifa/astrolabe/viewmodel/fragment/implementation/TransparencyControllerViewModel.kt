@@ -25,5 +25,7 @@ class TransparencyControllerViewModel : BaseRxViewModel(), ITransparencyControll
 
     var isFinalValue = false
 
+    var isWMS = false
+
     val tileOverlay = MutableLiveData<TilesOverlayWithOpacity>()
 }

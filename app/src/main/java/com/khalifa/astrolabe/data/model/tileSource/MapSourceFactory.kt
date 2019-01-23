@@ -14,8 +14,6 @@ import java.util.*
 
 object MapSourceFactory {
 
-    val DEFAULT_MAP_SOURCE = HereWeGo.NIGHT
-
     val onlineMapSources = ArrayList<MapSource>().apply {
         add(Google)
         add(Bing)

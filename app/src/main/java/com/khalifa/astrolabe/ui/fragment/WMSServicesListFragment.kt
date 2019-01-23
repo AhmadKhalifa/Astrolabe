@@ -1,51 +1,49 @@
 package com.khalifa.astrolabe.ui.fragment
 
 import android.arch.lifecycle.Observer
-import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.ui.activity.MapActivity
+import com.khalifa.astrolabe.exception.FragmentNotAttachedException
 import com.khalifa.astrolabe.ui.adapter.WMSServicesAdapter
-import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragment
+import com.khalifa.astrolabe.ui.base.BaseFragmentWithSharedViewModel
+import com.khalifa.astrolabe.ui.widget.osmdroid.WMSOverlayWithOpacity
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
-import com.khalifa.astrolabe.viewmodel.activity.MapActivityViewModel
+import com.khalifa.astrolabe.viewmodel.fragment.implementation.MapViewModel
 import com.khalifa.astrolabe.viewmodel.fragment.implementation.WMSServicesListViewModel
-import kotlinx.android.synthetic.main.fragment_recycler_view.*
+import kotlinx.android.synthetic.main.fragment_recycler_view_with_fab.*
 import org.osmdroid.wms.WMSEndpoint
 import org.osmdroid.wms.WMSLayer
-import java.lang.IllegalStateException
 
 /**
  * @author Ahmad Khalifa
  */
 
 class WMSServicesListFragment :
-        BaseFullScreenDialogFragment<WMSServicesListViewModel>(),
+        BaseFragmentWithSharedViewModel<WMSServicesListViewModel, MapViewModel>(),
         WMSServicesAdapter.OnItemInteractionListener {
 
     companion object {
-        private val TAG: String = MapSourcesListFragment::class.java.simpleName
+        val TAG: String = MapSourcesListFragment::class.java.simpleName
 
-        fun newInstance() = WMSServicesListFragment()
+        fun newInstance(fragmentInteractionListener: OnFragmentInteractionListener) =
+                WMSServicesListFragment().also { fragment ->
+                    fragment.fragmentInteractionListener = fragmentInteractionListener
+                }
     }
 
     interface OnFragmentInteractionListener {
 
-        fun onDeleteWMSServiceClicked(wmsEndpoint: WMSEndpoint)
-
-        fun onAddWMSLayerClicked(wmsLayer: WMSLayer)
+        fun onWMSOverlayAdded(wmsOverlay: WMSOverlayWithOpacity)
     }
 
-    private lateinit var activityViewModel: MapActivityViewModel
-    private val mapSourceAdapter = WMSServicesAdapter(this)
     private var fragmentInteractionListener: OnFragmentInteractionListener? = null
+    private val mapSourceAdapter = WMSServicesAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -61,32 +59,23 @@ class WMSServicesListFragment :
             adapter = mapSourceAdapter
         }
         viewModel.loadWMSEndpoints()
-        mapSourceAdapter.mapWMSLayers = activityViewModel.mapWMSLayers.value
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) fragmentInteractionListener = context
-        else throw IllegalStateException(
-                "$context must implement WMSServicesListFragment.OnFragmentInteractionListener"
-        )
-    }
-
-    override fun onDetach() {
-        fragmentInteractionListener = null
-        super.onDetach()
+        mapSourceAdapter.mapWMSLayers = sharedViewModel.mapWMSLayers.value
     }
 
     private fun updateEndpoints(wmsEndpoints: ArrayList<WMSEndpoint>?) {
         mapSourceAdapter.wmsEndpoints = wmsEndpoints
     }
 
-    private fun onLayersUpdated(wmsLayers: ArrayList<WMSLayer>?) {
+    private fun onLayersUpdated(wmsLayers: ArrayList<WMSOverlayWithOpacity>?) {
         mapSourceAdapter.mapWMSLayers = wmsLayers
     }
 
     override fun getViewModelInstance() =
             WMSServicesListViewModel.getInstance(this)
+
+    override fun getSharedViewModelInstance() = activity?.run {
+        MapViewModel.getInstance(this)
+    } ?: throw FragmentNotAttachedException()
 
     override fun onEvent(event: Event) {}
 
@@ -94,12 +83,18 @@ class WMSServicesListFragment :
 
     override fun registerLiveDataObservers() {
         viewModel.wmsEndpoints.observe(this, Observer(this::updateEndpoints))
-        activityViewModel = MapActivityViewModel.getInstance(context as MapActivity)
-        activityViewModel.mapWMSLayers.observe(this, Observer(this::onLayersUpdated))
+        sharedViewModel.mapWMSLayers.observe(this, Observer(this::onLayersUpdated))
     }
 
     override fun onDeleteWMSServiceClicked(wmsEndpoint: WMSEndpoint) =
             viewModel.deleteWMSService(wmsEndpoint)
 
-    override fun onAddWMSLayerClicked(wmsLayer: WMSLayer) = activityViewModel.addWMSLayer(wmsLayer)
+    override fun onAddWMSLayerClicked(wmsEndpoint: WMSEndpoint, layerIndex: Int) {
+        val wmsOverlay = sharedViewModel.addWMSLayer(wmsEndpoint, layerIndex)
+        wmsOverlay?.run { fragmentInteractionListener?.onWMSOverlayAdded(this) }
+    }
+
+    override fun onRemoveWMSLayerClicked(wmsLayer: WMSLayer) {
+        sharedViewModel.removeWMSLayer(wmsLayer)
+    }
 }

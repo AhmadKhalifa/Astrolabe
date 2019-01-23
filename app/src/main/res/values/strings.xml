@@ -65,4 +65,6 @@
     <string name="map_layers">Map layers</string>
     <string name="error_loading_wms_capabilities">Error loading WMS capabilities</string>
     <string name="delete">Delete</string>
+    <string name="maps">Maps</string>
+    <string name="wms_layers">WMS layers</string>
 </resources>

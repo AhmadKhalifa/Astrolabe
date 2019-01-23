@@ -10,15 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.ui.activity.MapActivity
+import com.khalifa.astrolabe.exception.FragmentNotAttachedException
 import com.khalifa.astrolabe.ui.adapter.MapLayersAdapter
-import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragment
+import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragmentWithSharedViewModel
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.util.MapSourceUtil
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
-import com.khalifa.astrolabe.viewmodel.activity.MapActivityViewModel
 import com.khalifa.astrolabe.viewmodel.fragment.implementation.LayerManagerViewModel
+import com.khalifa.astrolabe.viewmodel.fragment.implementation.MapViewModel
 import kotlinx.android.synthetic.main.content_layers_managers.*
 import kotlinx.android.synthetic.main.fragment_layers_manager.view.*
 import org.osmdroid.tileprovider.tilesource.ITileSource
@@ -28,7 +28,7 @@ import org.osmdroid.tileprovider.tilesource.ITileSource
  */
 
 class LayersManagerFragment :
-        BaseFullScreenDialogFragment<LayerManagerViewModel>(),
+        BaseFullScreenDialogFragmentWithSharedViewModel<LayerManagerViewModel, MapViewModel>(),
         MapLayersAdapter.OnItemInteractionListener {
 
     companion object {
@@ -46,15 +46,11 @@ class LayersManagerFragment :
 
     interface OnFragmentInteractionListener {
 
-        fun deleteLayer(layer: TilesOverlayWithOpacity)
+        fun openLayerOpacityAdjustmentScreen(overlay: TilesOverlayWithOpacity)
 
-        fun openLayerOpacityAdjustmentScreen(layer: TilesOverlayWithOpacity)
-
-        fun openMapSourcesScreen()
+        fun openAllSourcesScreen()
     }
 
-
-    private lateinit var activityViewModel: MapActivityViewModel
     private var fragmentInteractionListener: OnFragmentInteractionListener? = null
     private val mapLayersAdapter = MapLayersAdapter(this)
 
@@ -80,13 +76,13 @@ class LayersManagerFragment :
             adapter = mapLayersAdapter
         }
         val openMapSourcesClickListener = View.OnClickListener{
-            fragmentInteractionListener?.openMapSourcesScreen()
+            fragmentInteractionListener?.openAllSourcesScreen()
             Handler().postDelayed(::dismiss, 1000)
         }
         changeBaseMapButton.setOnClickListener(openMapSourcesClickListener)
         addLayerButton.setOnClickListener(openMapSourcesClickListener)
-        setBaseMapLayout(activityViewModel.baseMapSource.value)
-        setMapLayers(activityViewModel.mapLayers.value)
+        setBaseMapLayout(sharedViewModel.baseMapSource.value)
+        setMapLayers(sharedViewModel.mapLayers.value)
     }
 
     override fun getViewModelInstance() = LayerManagerViewModel.getInstance(this)
@@ -96,20 +92,19 @@ class LayersManagerFragment :
     override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {
-        activityViewModel = MapActivityViewModel.getInstance(context as MapActivity)
-        activityViewModel.baseMapSource.observe(this, Observer(this::setBaseMapLayout))
-        activityViewModel.mapLayers.observe(this, Observer(this::setMapLayers))
+        sharedViewModel.baseMapSource.observe(this, Observer(this::setBaseMapLayout))
+        sharedViewModel.mapLayers.observe(this, Observer(this::setMapLayers))
     }
 
-    override fun onDeleteLayerClicked(mapLayer: TilesOverlayWithOpacity) {
-        fragmentInteractionListener?.deleteLayer(mapLayer)
-        val layers = activityViewModel.mapLayers.value
-        layers?.remove(mapLayer)
-        activityViewModel.mapLayers.value = layers
-    }
+    override fun getSharedViewModelInstance() = activity?.run {
+        MapViewModel.getInstance(this)
+    } ?: throw FragmentNotAttachedException()
+
+    override fun onRemoveMapLayerClicked(mapLayer: TilesOverlayWithOpacity) =
+        sharedViewModel.removeMapLayer(mapLayer)
 
     override fun onShowOrHideLayerClicked(mapLayer: TilesOverlayWithOpacity, itemIndex: Int) {
-        activityViewModel.mapLayers.value?.get(itemIndex)?.reverseVisibility()
+        sharedViewModel.mapLayers.value?.get(itemIndex)?.reverseVisibility()
         mapLayersAdapter.notifyItemChanged(itemIndex)
     }
 

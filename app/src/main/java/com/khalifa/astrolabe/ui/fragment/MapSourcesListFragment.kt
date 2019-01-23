@@ -2,7 +2,6 @@ package com.khalifa.astrolabe.ui.fragment
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -10,15 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.R
 import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
-import com.khalifa.astrolabe.ui.activity.MapActivity
+import com.khalifa.astrolabe.exception.FragmentNotAttachedException
 import com.khalifa.astrolabe.ui.adapter.AllMapSourcesAdapter
-import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragment
+import com.khalifa.astrolabe.ui.base.BaseFragmentWithSharedViewModel
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
-import com.khalifa.astrolabe.viewmodel.activity.MapActivityViewModel
 import com.khalifa.astrolabe.viewmodel.fragment.implementation.MapSourcesListViewModel
-import kotlinx.android.synthetic.main.fragment_map_sources_list.view.*
+import com.khalifa.astrolabe.viewmodel.fragment.implementation.MapViewModel
 import kotlinx.android.synthetic.main.fragment_recycler_view.*
 import org.osmdroid.tileprovider.tilesource.ITileSource
 
@@ -27,44 +25,32 @@ import org.osmdroid.tileprovider.tilesource.ITileSource
  */
 
 class MapSourcesListFragment :
-        BaseFullScreenDialogFragment<MapSourcesListViewModel>(),
+        BaseFragmentWithSharedViewModel<MapSourcesListViewModel, MapViewModel>(),
         AllMapSourcesAdapter.OnItemInteractionListener {
 
     companion object {
-        private val TAG: String = MapSourcesListFragment::class.java.simpleName
+        val TAG: String = MapSourcesListFragment::class.java.simpleName
 
-        fun showFragment(fragmentManager: FragmentManager?,
-                         onFragmentInteractionListener: OnFragmentInteractionListener) =
-                fragmentManager?.let { manager ->
-                    MapSourcesListFragment().also {
-                        it.fragmentInteractionListener = onFragmentInteractionListener
-                        it.show(manager, TAG)
-                    }
+        fun newInstance(fragmentInteractionListener: OnFragmentInteractionListener) =
+                MapSourcesListFragment().also { fragment ->
+                    fragment.fragmentInteractionListener = fragmentInteractionListener
                 }
     }
 
     interface OnFragmentInteractionListener {
 
-        fun onTileSourceSelectedAsBaseMap(tileSource: ITileSource)
+        fun onBaseMapSelected(tileSource: ITileSource)
 
-        fun onTileSourceSelectedAsLayer(tileSource: ITileSource)
+        fun onMapOverlayAdded(mapOverlay: TilesOverlayWithOpacity)
     }
 
-    private lateinit var activityViewModel: MapActivityViewModel
     private var fragmentInteractionListener: OnFragmentInteractionListener? = null
     private val mapSourceAdapter = AllMapSourcesAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_map_sources_list, container, false)
-                    .also {
-                        with(it.toolbar) {
-                            setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-                            setNavigationOnClickListener { dismiss() }
-                            setTitle(R.string.map_sources)
-                        }
-                    }
+            inflater.inflate(R.layout.fragment_recycler_view, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,8 +61,8 @@ class MapSourcesListFragment :
             adapter = mapSourceAdapter
         }
         viewModel.loadMapSources()
-        mapSourceAdapter.baseMapSource = activityViewModel.baseMapSource.value
-        mapSourceAdapter.mapLayers = activityViewModel.mapLayers.value
+        mapSourceAdapter.baseMapSource = sharedViewModel.baseMapSource.value
+        mapSourceAdapter.mapLayers = sharedViewModel.mapLayers.value
     }
 
     private fun updateMapSources(mapSources: ArrayList<MapSourceFactory.MapSource>?) {
@@ -93,24 +79,27 @@ class MapSourcesListFragment :
 
     override fun getViewModelInstance() = MapSourcesListViewModel.getInstance(this)
 
+    override fun getSharedViewModelInstance() = activity?.run {
+        MapViewModel.getInstance(this)
+    } ?: throw FragmentNotAttachedException()
+
     override fun onEvent(event: Event) {}
 
     override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {
         viewModel.mapSources.observe(this, Observer(this::updateMapSources))
-        activityViewModel = MapActivityViewModel.getInstance(context as MapActivity)
-        activityViewModel.baseMapSource.observe(this, Observer(this::onBaseMapSourceChanged))
-        activityViewModel.mapLayers.observe(this, Observer(this::onMapLayersChanged))
+        sharedViewModel.baseMapSource.observe(this, Observer(this::onBaseMapSourceChanged))
+        sharedViewModel.mapLayers.observe(this, Observer(this::onMapLayersChanged))
     }
 
     override fun onUseAsBaseMapClicked(tileSource: ITileSource) {
-        dismiss()
-        fragmentInteractionListener?.onTileSourceSelectedAsBaseMap(tileSource)
+        sharedViewModel.setBaseMap(tileSource)
+        fragmentInteractionListener?.onBaseMapSelected(tileSource)
     }
 
     override fun onAddAsMapLayerClicked(tileSource: ITileSource) {
-        dismiss()
-        fragmentInteractionListener?.onTileSourceSelectedAsLayer(tileSource)
+        val mapOverlay = sharedViewModel.addMapLayer(tileSource)
+        fragmentInteractionListener?.onMapOverlayAdded(mapOverlay)
     }
 }

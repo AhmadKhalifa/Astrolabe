@@ -4,12 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import com.khalifa.astrolabe.AstrolabeApplication
 import com.khalifa.astrolabe.R
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.util.MapSourceUtil
-import com.khalifa.astrolabe.util.toast
 import kotlinx.android.synthetic.main.list_item_map_layer.view.*
 
 /**
@@ -66,7 +64,7 @@ class MapLayersAdapter(private val itemInteractionListener: OnItemInteractionLis
                         listener.onAdjustOpacityClicked(layer)
                     }
                     removeButton.setOnClickListener {
-                        listener.onDeleteLayerClicked(layer)
+                        listener.onRemoveMapLayerClicked(layer)
                     }
                 }
                 Unit
@@ -77,7 +75,7 @@ class MapLayersAdapter(private val itemInteractionListener: OnItemInteractionLis
 
     interface OnItemInteractionListener {
 
-        fun onDeleteLayerClicked(mapLayer: TilesOverlayWithOpacity)
+        fun onRemoveMapLayerClicked(mapLayer: TilesOverlayWithOpacity)
 
         fun onShowOrHideLayerClicked(mapLayer: TilesOverlayWithOpacity, itemIndex: Int)
 

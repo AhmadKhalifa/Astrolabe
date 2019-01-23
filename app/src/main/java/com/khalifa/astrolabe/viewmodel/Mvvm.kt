@@ -55,8 +55,12 @@ open class BaseRxViewModel : ViewModel() {
     }
 }
 
+open class BaseSharedViewModel : BaseRxViewModel()
+
 enum class Event(@StringRes val stringResId: Int) {
-    INITIALIZATION_DONE(0)
+    INITIALIZATION_DONE(0),
+    STARTED_DRAWING(0),
+    FINISHED_DRAWING(0)
 }
 
 enum class Error (@StringRes val stringResId: Int) {
@@ -87,4 +91,25 @@ interface BaseViewModelOwner<out VM : BaseRxViewModel> {
     fun onError(error: Error): Unit?
 
     fun registerLiveDataObservers()
+}
+
+interface BaseSharedViewModelOwner<out SVM : BaseSharedViewModel> {
+
+    fun registerSharedVMEventHandlerSubscribers(lifecycleOwner: LifecycleOwner,
+                                        sharedViewModel: BaseSharedViewModel) {
+        sharedViewModel.event.observe(
+                lifecycleOwner,
+                Observer { event -> event?.let(this::onEvent) }
+        )
+        sharedViewModel.error.observe(
+                lifecycleOwner,
+                Observer { error -> error?.let(this::onError) }
+        )
+    }
+
+    fun getSharedViewModelInstance(): SVM
+
+    fun onEvent(event: Event): Unit?
+
+    fun onError(error: Error): Unit?
 }

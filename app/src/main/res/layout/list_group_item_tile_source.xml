@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="@dimen/spc1"
     android:orientation="horizontal"
-    android:layout_marginEnd="@dimen/spc5"
+    android:layout_marginStart="@dimen/spc5"
     android:layout_marginTop="@dimen/spc3"
     android:layout_marginBottom="@dimen/spc3"
     android:layout_width="@dimen/tile_source_group_item_width"

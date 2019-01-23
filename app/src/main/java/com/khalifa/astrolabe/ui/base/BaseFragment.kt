@@ -13,10 +13,9 @@ import com.khalifa.astrolabe.viewmodel.BaseViewModelOwner
 
 abstract class BaseFragment<out VM : BaseRxViewModel> : Fragment(), BaseViewModelOwner<VM> {
 
-    private var _viewModel: VM? = null
-    private var _rootView: View? = null
     private var snackBar: Snackbar? = null
 
+    protected var _rootView: View? = null
     protected val rootView: View
         get() {
             return if (_rootView != null) _rootView as View
@@ -26,6 +25,7 @@ abstract class BaseFragment<out VM : BaseRxViewModel> : Fragment(), BaseViewMode
             )
         }
 
+    private var _viewModel: VM? = null
     protected val viewModel: VM
         get() {
             _viewModel = _viewModel ?: getViewModelInstance()

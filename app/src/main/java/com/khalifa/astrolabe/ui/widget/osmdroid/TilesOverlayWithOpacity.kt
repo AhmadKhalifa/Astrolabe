@@ -14,7 +14,7 @@ import java.io.Serializable
  * @author Ahmad Khalifa
  */
 
-class TilesOverlayWithOpacity(tileProvider: MapTileProviderBase?,
+open class TilesOverlayWithOpacity(tileProvider: MapTileProviderBase?,
                               aContext: Context?,
                               @IntRange(from = 10, to = 100) var transparencyPercentage: Int = 50) :
         TilesOverlay(tileProvider, aContext, true, true),

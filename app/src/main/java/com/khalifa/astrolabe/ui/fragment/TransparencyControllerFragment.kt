@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.khalifa.astrolabe.R
 import com.khalifa.astrolabe.ui.base.BaseBottomSheetDialogFragment
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
+import com.khalifa.astrolabe.ui.widget.osmdroid.WMSOverlayWithOpacity
 import com.khalifa.astrolabe.util.MapSourceUtil
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
@@ -32,14 +33,19 @@ class TransparencyControllerFragment :
         private const val KEY_TILE_OVERLAY =
                 "com.khalifa.astrolabe.ui.fragment.TransparencyControllerFragment.KEY_TILE_OVERLAY"
 
+        private const val KEY_IS_WMS =
+                "com.khalifa.astrolabe.ui.fragment.TransparencyControllerFragment.KEY_IS_WMS"
+
         fun showFragment(fragmentManager: FragmentManager?,
                          tilesOverlay: TilesOverlayWithOpacity,
+                         isWMS: Boolean,
                          onFragmentInteractionListener: OnFragmentInteractionListener) =
                 fragmentManager?.let { manager ->
                     TransparencyControllerFragment().also {
                         it.fragmentInteractionListener = onFragmentInteractionListener
                         it.arguments = Bundle().apply {
                             putSerializable(KEY_TILE_OVERLAY, tilesOverlay)
+                            putBoolean(KEY_IS_WMS, isWMS)
                         }
                         it.show(manager, TAG)
                     }
@@ -61,6 +67,7 @@ class TransparencyControllerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.isWMS = arguments?.getBoolean(KEY_IS_WMS) ?: false
         val tilesOverlay = arguments?.getSerializable(KEY_TILE_OVERLAY)?.let {
             it as TilesOverlayWithOpacity
         } ?: throw IllegalStateException("Unable to extract tile overlay from fragment arguments.")
@@ -94,10 +101,18 @@ class TransparencyControllerFragment :
 
     private fun setTileOverlay(tilesOverlay: TilesOverlayWithOpacity?) {
         tilesOverlay?.run {
-            iconImageView.setImageResource(MapSourceUtil.getIcon(tileProvider().tileSource))
-            nameTextView.text = MapSourceUtil.getName(tileProvider().tileSource)
-            typeTextView.text = MapSourceUtil.getType(tileProvider().tileSource)
-            transparencySeekBar.setProgress(transparencyPercentage.toFloat())
+            if (viewModel.isWMS) {
+                val wmsOverlay = this as WMSOverlayWithOpacity
+                iconImageView.setImageResource(R.drawable.defaultmap)
+                nameTextView.text = wmsOverlay.wmsLayer.name
+                typeTextView.text = wmsOverlay.wmsLayer.title
+                transparencySeekBar.setProgress(transparencyPercentage.toFloat())
+            } else {
+                iconImageView.setImageResource(MapSourceUtil.getIcon(tileProvider().tileSource))
+                nameTextView.text = MapSourceUtil.getName(tileProvider().tileSource)
+                typeTextView.text = MapSourceUtil.getType(tileProvider().tileSource)
+                transparencySeekBar.setProgress(transparencyPercentage.toFloat())
+            }
         }
     }
 

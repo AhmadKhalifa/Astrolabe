@@ -49,6 +49,7 @@ class SplashActivity :
             MapActivity.startActivity(this)
             finish()
         }
+        else -> {}
     }
 
     override fun onError(error: Error) {}

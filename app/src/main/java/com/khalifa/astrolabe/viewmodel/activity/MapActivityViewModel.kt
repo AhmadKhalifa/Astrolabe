@@ -1,26 +1,19 @@
 package com.khalifa.astrolabe.viewmodel.activity
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import com.khalifa.astrolabe.ui.activity.MapActivity
-import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.viewmodel.BaseRxViewModel
-import org.osmdroid.tileprovider.tilesource.ITileSource
-import org.osmdroid.wms.WMSLayer
+import com.khalifa.astrolabe.viewmodel.activity.implementation.IMapActivityViewModel
 
 /**
  * @author Ahmad Khalifa
  */
 
-class MapActivityViewModel : BaseRxViewModel() {
+class MapActivityViewModel : BaseRxViewModel(), IMapActivityViewModel {
 
     companion object {
-        @JvmStatic
-        fun getInstance(mapActivity: MapActivity): MapActivityViewModel =
-                ViewModelProviders
-                        .of(mapActivity)
-                        .get(MapActivityViewModel::class.java)
+
+        fun getInstance(mapActivity: MapActivity) =
+                ViewModelProviders.of(mapActivity).get(MapActivityViewModel::class.java)
     }
-
-
 }

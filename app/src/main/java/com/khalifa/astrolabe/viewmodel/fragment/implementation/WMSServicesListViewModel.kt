@@ -8,7 +8,6 @@ import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.fragment.IWMSServicesListViewModel
 import org.osmdroid.wms.WMSEndpoint
 import org.osmdroid.wms.WMSParser
-import org.osmdroid.wms.WMSTileSource
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -23,16 +22,15 @@ import java.net.URL
 class WMSServicesListViewModel : BaseRxViewModel(), IWMSServicesListViewModel {
 
     companion object {
-        @JvmStatic
-        fun getInstance(wmsServicesListFragment: WMSServicesListFragment): WMSServicesListViewModel =
-                ViewModelProviders
-                        .of(wmsServicesListFragment)
+
+        fun getInstance(wmsServicesListFragment: WMSServicesListFragment) =
+                ViewModelProviders.of(wmsServicesListFragment)
                         .get(WMSServicesListViewModel::class.java)
     }
 
     override val wmsEndpoints = MutableLiveData<ArrayList<WMSEndpoint>>()
 
-    fun loadWMSEndpoints() {
+    override fun loadWMSEndpoints() {
         val endPoints = ArrayList<WMSEndpoint>()
         val capabilitiesUrl = "http://ows.terrestris.de/osm/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities"
         performAsync(
@@ -69,7 +67,7 @@ class WMSServicesListViewModel : BaseRxViewModel(), IWMSServicesListViewModel {
         )
     }
 
-    fun deleteWMSService(wmsEndpoint: WMSEndpoint) {
+    override fun deleteWMSService(wmsEndpoint: WMSEndpoint) {
         wmsEndpoints.value?.run {
             remove(wmsEndpoint)
             wmsEndpoints.value = this

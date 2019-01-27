@@ -28,9 +28,4 @@ abstract class BaseActivity<out VM : BaseRxViewModel> :
         registerEventHandlerSubscribers(this, viewModel)
         registerLiveDataObservers()
     }
-
-    override fun onDestroy() {
-        viewModel.clearDisposables()
-        super.onDestroy()
-    }
 }

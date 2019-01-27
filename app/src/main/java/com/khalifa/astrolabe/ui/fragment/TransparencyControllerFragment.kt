@@ -72,7 +72,7 @@ class TransparencyControllerFragment :
             it as TilesOverlayWithOpacity
         } ?: throw IllegalStateException("Unable to extract tile overlay from fragment arguments.")
         viewModel.tileOverlay.value = tilesOverlay
-        viewModel.initialValue = tilesOverlay.transparencyPercentage.toFloat()
+        viewModel.initialValue = tilesOverlay.transparencyPercentage.toDouble()
         doneButton.setOnClickListener {
             viewModel.isFinalValue = true
             dismiss()

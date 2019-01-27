@@ -56,9 +56,4 @@ abstract class BaseFragment<out VM : BaseRxViewModel> : Fragment(), BaseViewMode
     }
 
     protected fun dismissMessagesIfAny() = snackBar?.dismiss()
-
-    override fun onDestroy() {
-        viewModel.clearDisposables()
-        super.onDestroy()
-    }
 }

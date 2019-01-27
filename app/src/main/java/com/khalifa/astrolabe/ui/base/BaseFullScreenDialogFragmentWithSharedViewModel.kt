@@ -26,9 +26,4 @@ BaseFullScreenDialogFragmentWithSharedViewModel<out VM : BaseRxViewModel, out SV
         registerSharedVMEventHandlerSubscribers(this, sharedViewModel)
         super.onViewCreated(view, savedInstanceState)
     }
-
-    override fun onDestroy() {
-        sharedViewModel.clearDisposables()
-        super.onDestroy()
-    }
 }

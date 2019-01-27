@@ -12,10 +12,8 @@ import com.khalifa.astrolabe.viewmodel.fragment.ILayersManagerViewModel
 class LayerManagerViewModel : BaseRxViewModel(), ILayersManagerViewModel {
 
     companion object {
-        @JvmStatic
-        fun getInstance(layersManagerFragment: LayersManagerFragment): LayerManagerViewModel =
-                ViewModelProviders
-                        .of(layersManagerFragment)
-                        .get(LayerManagerViewModel::class.java)
+
+        fun getInstance(layersManagerFragment: LayersManagerFragment) =
+                ViewModelProviders.of(layersManagerFragment).get(LayerManagerViewModel::class.java)
     }
 }

@@ -25,9 +25,4 @@ BaseFragmentWithSharedViewModel<out VM : BaseRxViewModel, out SVM: BaseSharedVie
         registerSharedVMEventHandlerSubscribers(this, sharedViewModel)
         super.onViewCreated(view, savedInstanceState)
     }
-
-    override fun onDestroy() {
-        sharedViewModel.clearDisposables()
-        super.onDestroy()
-    }
 }

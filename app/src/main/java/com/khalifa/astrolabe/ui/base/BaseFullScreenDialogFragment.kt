@@ -5,14 +5,14 @@ import android.support.v4.app.DialogFragment
 import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.viewmodel.BaseRxViewModel
+import com.khalifa.astrolabe.viewmodel.BaseViewModel
 import com.khalifa.astrolabe.viewmodel.BaseViewModelOwner
 
 /**
  * @author Ahmad Khalifa
  */
 
-abstract class BaseFullScreenDialogFragment<out VM : BaseRxViewModel> :
+abstract class BaseFullScreenDialogFragment<out VM : BaseViewModel> :
         DialogFragment(),
         BaseViewModelOwner<VM> {
 
@@ -42,10 +42,5 @@ abstract class BaseFullScreenDialogFragment<out VM : BaseRxViewModel> :
         registerEventHandlerSubscribers(this, viewModel)
         registerLiveDataObservers()
         super.onViewCreated(view, savedInstanceState)
-    }
-
-    override fun onDestroy() {
-        viewModel.clearDisposables()
-        super.onDestroy()
     }
 }

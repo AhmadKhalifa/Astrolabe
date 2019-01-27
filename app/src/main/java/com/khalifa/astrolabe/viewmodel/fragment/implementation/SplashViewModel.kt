@@ -12,10 +12,8 @@ import com.khalifa.astrolabe.viewmodel.fragment.ISplashViewModel
 class SplashViewModel : BaseRxViewModel(), ISplashViewModel {
 
     companion object {
-        @JvmStatic
-        fun getInstance(splashFragment: SplashFragment): SplashViewModel =
-                ViewModelProviders
-                        .of(splashFragment)
-                        .get(SplashViewModel::class.java)
+
+        fun getInstance(splashFragment: SplashFragment) =
+                ViewModelProviders.of(splashFragment).get(SplashViewModel::class.java)
     }
 }

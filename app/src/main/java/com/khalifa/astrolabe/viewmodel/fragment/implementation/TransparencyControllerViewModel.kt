@@ -14,18 +14,16 @@ import com.khalifa.astrolabe.viewmodel.fragment.ITransparencyControllerViewModel
 class TransparencyControllerViewModel : BaseRxViewModel(), ITransparencyControllerViewModel {
 
     companion object {
-        @JvmStatic
-        fun getInstance(fragment: TransparencyControllerFragment): TransparencyControllerViewModel =
-                ViewModelProviders
-                        .of(fragment)
-                        .get(TransparencyControllerViewModel::class.java)
+
+        fun getInstance(fragment: TransparencyControllerFragment) =
+                ViewModelProviders.of(fragment).get(TransparencyControllerViewModel::class.java)
     }
 
-    var initialValue = 50f
+    override var initialValue: Double = 50.0
 
-    var isFinalValue = false
+    override var isFinalValue = false
 
-    var isWMS = false
+    override var isWMS = false
 
-    val tileOverlay = MutableLiveData<TilesOverlayWithOpacity>()
+    override val tileOverlay = MutableLiveData<TilesOverlayWithOpacity>()
 }

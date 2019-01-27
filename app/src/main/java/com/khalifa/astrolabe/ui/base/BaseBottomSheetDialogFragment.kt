@@ -39,9 +39,4 @@ abstract class BaseBottomSheetDialogFragment<out VM : BaseRxViewModel> :
         registerLiveDataObservers()
         super.onViewCreated(view, savedInstanceState)
     }
-
-    override fun onDestroy() {
-        viewModel.clearDisposables()
-        super.onDestroy()
-    }
 }

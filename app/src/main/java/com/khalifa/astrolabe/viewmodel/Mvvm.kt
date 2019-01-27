@@ -13,10 +13,21 @@ import io.reactivex.schedulers.Schedulers
  * @author Ahmad Khalifa
  */
 
-open class BaseRxViewModel : ViewModel() {
+open class BaseViewModel : ViewModel() {
 
-    val event: MutableLiveData<Event> = MutableLiveData()
-    val error: MutableLiveData<Error> = MutableLiveData()
+    val event = MutableLiveData<Event>()
+    val error = MutableLiveData<Error>()
+
+    protected fun notify(event: Event) {
+        this.event.value = event
+    }
+
+    protected fun notify(error: Error) {
+        this.error.value = error
+    }
+}
+
+open class BaseRxViewModel : BaseViewModel() {
 
     private val compositeDisposable: CompositeDisposable  = CompositeDisposable()
 
@@ -42,18 +53,13 @@ open class BaseRxViewModel : ViewModel() {
         performAsync(action, onSuccess = {}, onFailure = {})
     }
 
-    protected fun notify(event: Event) {
-        this.event.value = event
-    }
-
-    protected fun notify(error: Error) {
-        this.error.value = error
-    }
-
-    fun clearDisposables() {
+    override fun onCleared() {
         compositeDisposable.clear()
+        super.onCleared()
     }
 }
+
+interface IViewModel
 
 open class BaseSharedViewModel : BaseRxViewModel()
 
@@ -70,10 +76,10 @@ enum class Error (@StringRes val stringResId: Int) {
     ERROR_LOADING_WMS_CAPABILITIES(R.string.error_loading_wms_capabilities)
 }
 
-interface BaseViewModelOwner<out VM : BaseRxViewModel> {
+interface BaseViewModelOwner<out VM : BaseViewModel> {
 
     fun registerEventHandlerSubscribers(lifecycleOwner: LifecycleOwner,
-                                        viewModel: BaseRxViewModel) {
+                                        viewModel: BaseViewModel) {
         viewModel.event.observe(
                 lifecycleOwner,
                 Observer { event -> event?.let(this::onEvent) }
@@ -96,7 +102,7 @@ interface BaseViewModelOwner<out VM : BaseRxViewModel> {
 interface BaseSharedViewModelOwner<out SVM : BaseSharedViewModel> {
 
     fun registerSharedVMEventHandlerSubscribers(lifecycleOwner: LifecycleOwner,
-                                        sharedViewModel: BaseSharedViewModel) {
+                                                sharedViewModel: BaseSharedViewModel) {
         sharedViewModel.event.observe(
                 lifecycleOwner,
                 Observer { event -> event?.let(this::onEvent) }

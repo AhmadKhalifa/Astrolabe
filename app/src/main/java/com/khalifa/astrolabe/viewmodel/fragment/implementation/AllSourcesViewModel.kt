@@ -12,10 +12,8 @@ import com.khalifa.astrolabe.viewmodel.fragment.IAllSourcesViewModel
 class AllSourcesViewModel : BaseRxViewModel(), IAllSourcesViewModel {
 
     companion object {
-        @JvmStatic
-        fun getInstance(allSourcesFragment: AllSourcesFragment): AllSourcesViewModel =
-                ViewModelProviders
-                        .of(allSourcesFragment)
-                        .get(AllSourcesViewModel::class.java)
+
+        fun getInstance(allSourcesFragment: AllSourcesFragment) =
+                ViewModelProviders.of(allSourcesFragment).get(AllSourcesViewModel::class.java)
     }
 }

@@ -15,15 +15,14 @@ class MapSourcesListViewModel : BaseRxViewModel(), IMapSourcesListViewModel {
 
     companion object {
         @JvmStatic
-        fun getInstance(mapSourcesListFragment: MapSourcesListFragment): MapSourcesListViewModel =
-                ViewModelProviders
-                        .of(mapSourcesListFragment)
+        fun getInstance(mapSourcesListFragment: MapSourcesListFragment) =
+                ViewModelProviders.of(mapSourcesListFragment)
                         .get(MapSourcesListViewModel::class.java)
     }
 
-    val mapSources = MutableLiveData<ArrayList<MapSourceFactory.MapSource>>()
+    override val mapSources = MutableLiveData<ArrayList<MapSourceFactory.MapSource>>()
 
-    fun loadMapSources() {
+    override fun loadMapSources() {
         mapSources.value = MapSourceFactory.onlineMapSources
     }
 }

@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.support.annotation.DrawableRes
 import com.khalifa.astrolabe.AstrolabeApplication
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
+import com.khalifa.astrolabe.data.factory.MapSourceFactory
 import com.khalifa.astrolabe.ui.widget.osmdroid.MapView
 import com.khalifa.astrolabe.ui.widget.osmdroid.MiniMapOverlay
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity

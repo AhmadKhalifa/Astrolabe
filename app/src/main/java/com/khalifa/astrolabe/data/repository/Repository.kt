@@ -1,6 +1,6 @@
 package com.khalifa.astrolabe.data.repository
 
-import com.khalifa.astrolabe.exception.NoInternetConnectionException
+import com.khalifa.astrolabe.util.NoInternetConnectionException
 import com.khalifa.astrolabe.util.BaseConnectionChecker
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit
 
 interface Repository
 
-open class BaseLocalRepository : Repository
+open class BaseLocalRepository
 
 open class BaseRemoteRepository(
         private val connectionChecker: BaseConnectionChecker?,
         private val baseUrl: String?
-) : Repository {
+) {
 
     private val serviceMap: MutableMap<Class<*>, Any> = HashMap()
 
@@ -49,7 +49,6 @@ open class BaseRemoteRepository(
         return response.body()!!
     }
 
-
     private fun retrofit(): Retrofit = Retrofit.Builder()
             .baseUrl(baseUrl!!)
             .addConverterFactory(GsonConverterFactory.create())
@@ -60,5 +59,11 @@ open class BaseRemoteRepository(
                             .build()
             ).build()
 
-    fun isNetworkAvailable() = connectionChecker?.isNetworkAvailable() ?: false
+    protected fun <R>requireInternet(action: () -> R): R {
+        if (isNetworkAvailable()) {
+            return action()
+        } else throw NoInternetConnectionException()
+    }
+
+    protected fun isNetworkAvailable() = connectionChecker?.isNetworkAvailable() ?: false
 }

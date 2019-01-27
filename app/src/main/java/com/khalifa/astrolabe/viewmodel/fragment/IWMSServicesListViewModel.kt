@@ -1,3 +1,9 @@
 package com.khalifa.astrolabe.viewmodel.fragment
 
-interface IWMSServicesListViewModel
+import android.arch.lifecycle.MutableLiveData
+import org.osmdroid.wms.WMSEndpoint
+
+interface IWMSServicesListViewModel {
+
+    val wmsEndpoints: MutableLiveData<ArrayList<WMSEndpoint>>
+}

@@ -5,7 +5,6 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
-import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
 
 class AstrolabeApplication : Application() {
 

@@ -1,4 +1,4 @@
-package com.khalifa.astrolabe.data.model.tileSource
+package com.khalifa.astrolabe.data.storage.room.entity
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey

@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
-import com.khalifa.astrolabe.exception.FragmentNotAttachedException
+import com.khalifa.astrolabe.data.factory.MapSourceFactory
+import com.khalifa.astrolabe.util.FragmentNotAttachedException
 import com.khalifa.astrolabe.ui.adapter.AllMapSourcesAdapter
 import com.khalifa.astrolabe.ui.base.BaseFragmentWithSharedViewModel
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity

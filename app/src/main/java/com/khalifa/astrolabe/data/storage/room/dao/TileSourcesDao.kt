@@ -1,8 +1,8 @@
-package com.khalifa.astrolabe.data.storage.room
+package com.khalifa.astrolabe.data.storage.room.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import com.khalifa.astrolabe.data.model.tileSource.TileSource
+import com.khalifa.astrolabe.data.storage.room.entity.TileSource
 
 /**
  * @author Ahmad Khalifa

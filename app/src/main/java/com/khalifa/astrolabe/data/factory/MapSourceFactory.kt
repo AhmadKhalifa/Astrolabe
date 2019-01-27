@@ -1,4 +1,4 @@
-package com.khalifa.astrolabe.data.model.tileSource
+package com.khalifa.astrolabe.data.factory
 
 import com.khalifa.astrolabe.AstrolabeApplication.Companion.getString
 import com.khalifa.astrolabe.R

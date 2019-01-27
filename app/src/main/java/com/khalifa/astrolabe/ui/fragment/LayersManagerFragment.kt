@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.exception.FragmentNotAttachedException
+import com.khalifa.astrolabe.util.FragmentNotAttachedException
 import com.khalifa.astrolabe.ui.adapter.MapLayersAdapter
 import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragmentWithSharedViewModel
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity

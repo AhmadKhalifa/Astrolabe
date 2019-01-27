@@ -1,7 +1,7 @@
 package com.khalifa.astrolabe.util
 
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
+import com.khalifa.astrolabe.data.factory.MapSourceFactory
 import org.osmdroid.tileprovider.tilesource.ITileSource
 import java.util.HashMap
 

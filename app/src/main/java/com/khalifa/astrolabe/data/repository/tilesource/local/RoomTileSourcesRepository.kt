@@ -1,24 +1,23 @@
-package com.khalifa.astrolabe.data.repository.local.tileSource
+package com.khalifa.astrolabe.data.repository.tilesource.local
 
-import com.khalifa.astrolabe.data.model.tileSource.TileSource
-import com.khalifa.astrolabe.data.repository.local.BaseLocalTileSourcesRepository
-import com.khalifa.astrolabe.data.storage.room.TileSourcesDao
-import com.khalifa.astrolabe.data.storage.room.TileSourcesDatabase
+import com.khalifa.astrolabe.data.storage.room.entity.TileSource
+import com.khalifa.astrolabe.data.storage.room.dao.TileSourcesDao
+import com.khalifa.astrolabe.data.storage.room.AstrolabeDatabase
 
 /**
  * @author Ahmad Khalifa
  */
 
-class RoomTileSourcesRepository : BaseLocalTileSourcesRepository() {
+class RoomTileSourcesRepository : LocalTileSourcesRepository() {
 
     private var _tileSourcesDao: TileSourcesDao? = null
 
     private val tileSourcesDao: TileSourcesDao
         get() {
-            _tileSourcesDao = _tileSourcesDao ?: TileSourcesDatabase.getInstance().tileSourcesDao()
+            _tileSourcesDao = _tileSourcesDao ?: AstrolabeDatabase.instance.tileSourcesDao()
             return if (_tileSourcesDao != null) _tileSourcesDao as TileSourcesDao
             else throw IllegalStateException(
-                    "TileSourcesDatabase.getInstance().getInstance() " +
+                    "AstrolabeDatabase.instance.tileSourcesDao() " +
                             "implementation returns null!"
             )
         }

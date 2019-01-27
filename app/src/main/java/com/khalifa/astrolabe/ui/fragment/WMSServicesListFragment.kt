@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.exception.FragmentNotAttachedException
+import com.khalifa.astrolabe.util.FragmentNotAttachedException
 import com.khalifa.astrolabe.ui.adapter.WMSServicesAdapter
 import com.khalifa.astrolabe.ui.base.BaseFragmentWithSharedViewModel
 import com.khalifa.astrolabe.ui.widget.osmdroid.WMSOverlayWithOpacity

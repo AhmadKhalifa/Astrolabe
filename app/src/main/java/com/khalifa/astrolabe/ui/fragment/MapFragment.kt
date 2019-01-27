@@ -22,7 +22,7 @@ import android.widget.ImageView
 import com.khalifa.astrolabe.AstrolabeApplication
 import com.khalifa.astrolabe.R
 import com.khalifa.astrolabe.business.MapViewWrapper
-import com.khalifa.astrolabe.exception.FragmentNotAttachedException
+import com.khalifa.astrolabe.util.FragmentNotAttachedException
 import com.khalifa.astrolabe.ui.base.BaseFragment
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.ui.widget.osmdroid.WMSOverlayWithOpacity

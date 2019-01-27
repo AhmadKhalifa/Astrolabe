@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.khalifa.astrolabe.AstrolabeApplication
 import com.khalifa.astrolabe.R
-import com.khalifa.astrolabe.data.model.tileSource.MapSourceFactory
+import com.khalifa.astrolabe.data.factory.MapSourceFactory
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.util.MapSourceUtil
 import kotlinx.android.synthetic.main.list_group_item_tile_source.view.*

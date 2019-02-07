@@ -61,6 +61,8 @@ open class BaseRxViewModel : BaseViewModel() {
 
 interface IViewModel
 
+interface ISharedViewModel
+
 open class BaseSharedViewModel : BaseRxViewModel()
 
 enum class Event(@StringRes val stringResId: Int) {
@@ -82,11 +84,11 @@ interface BaseViewModelOwner<out VM : BaseViewModel> {
                                         viewModel: BaseViewModel) {
         viewModel.event.observe(
                 lifecycleOwner,
-                Observer { event -> event?.let(this::onEvent) }
+                Observer { event -> event?.let(::onEvent) }
         )
         viewModel.error.observe(
                 lifecycleOwner,
-                Observer { error -> error?.let(this::onError) }
+                Observer { error -> error?.let(::onError) }
         )
     }
 
@@ -105,11 +107,11 @@ interface BaseSharedViewModelOwner<out SVM : BaseSharedViewModel> {
                                                 sharedViewModel: BaseSharedViewModel) {
         sharedViewModel.event.observe(
                 lifecycleOwner,
-                Observer { event -> event?.let(this::onEvent) }
+                Observer { event -> event?.let(::onEvent) }
         )
         sharedViewModel.error.observe(
                 lifecycleOwner,
-                Observer { error -> error?.let(this::onError) }
+                Observer { error -> error?.let(::onError) }
         )
     }
 

@@ -51,7 +51,7 @@ class WMSServicesAdapter(private val itemInteractionListener: OnItemInteractionL
                 serviceTitleTextView.text = endpoint.title
                 serviceAbstractTextView.text = endpoint.description
                 deleteButton.setOnClickListener {
-                    adapter.itemInteractionListener?.onDeleteWMSServiceClicked(endpoint)
+                    adapter.itemInteractionListener?.onDeleteWMSServiceClicked(adapterPosition)
                 }
                 with(layersRecyclerView) {
                     itemAnimator = DefaultItemAnimator()
@@ -72,7 +72,7 @@ class WMSServicesAdapter(private val itemInteractionListener: OnItemInteractionL
 
     interface OnItemInteractionListener {
 
-        fun onDeleteWMSServiceClicked(wmsEndpoint: WMSEndpoint)
+        fun onDeleteWMSServiceClicked(position: Int)
 
         fun onAddWMSLayerClicked(wmsEndpoint: WMSEndpoint, layerIndex: Int)
 

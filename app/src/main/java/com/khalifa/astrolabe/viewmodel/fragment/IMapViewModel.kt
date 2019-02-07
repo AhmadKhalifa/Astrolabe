@@ -5,7 +5,7 @@ import android.support.annotation.DrawableRes
 import com.khalifa.astrolabe.business.MapViewWrapper
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
 import com.khalifa.astrolabe.ui.widget.osmdroid.WMSOverlayWithOpacity
-import com.khalifa.astrolabe.viewmodel.IViewModel
+import com.khalifa.astrolabe.viewmodel.ISharedViewModel
 import org.osmdroid.tileprovider.tilesource.ITileSource
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
@@ -16,7 +16,7 @@ import org.osmdroid.wms.WMSLayer
  * @author Ahmad Khalifa
  */
 
-interface IMapViewModel : IViewModel {
+interface IMapViewModel : ISharedViewModel {
 
     val mapViewWrapper: MapViewWrapper
     val baseMapSource: MutableLiveData<ITileSource>

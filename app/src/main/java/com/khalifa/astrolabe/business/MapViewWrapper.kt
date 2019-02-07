@@ -225,7 +225,7 @@ class MapViewWrapper(private var mapView: MapView?) : MapEventsReceiver {
     private fun handleSingleTap(geoPoint: GeoPoint?): Boolean {
         uiCallback?.onMapClick(geoPoint)
         if (isInDrawingMode) {
-            geoPoint?.let(this::addNumericMarker)
+            geoPoint?.let(::addNumericMarker)
         } else infoWindow.close()
         return true
     }

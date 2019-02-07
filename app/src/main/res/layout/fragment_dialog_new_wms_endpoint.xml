@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="@dimen/spc6"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="@dimen/spc5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/serviceTitleTextView"
+                android:text="@string/new_wms_layer"
+                android:textSize="@dimen/txt6"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginEnd="@dimen/spc12"
+                android:maxLines="1" />
+
+            <ImageButton
+                android:id="@+id/closeButton"
+                android:background="@null"
+                android:tint="@color/colorAccent"
+                android:src="@drawable/ic_close_white_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/endpointEditText"
+            android:drawableStart="@drawable/ic_link_black_24dp"
+            android:drawablePadding="@dimen/spc3"
+            android:hint="@string/get_capabilities_url"
+            android:layout_marginTop="@dimen/spc7"
+            android:layout_marginBottom="@dimen/spc7"
+            android:layout_marginStart="@dimen/spc5"
+            android:layout_marginEnd="@dimen/spc5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <com.khalifa.astrolabe.ui.widget.loadingbutton.LoadingButton
+            android:id="@+id/addButton"
+            app:buttonColor="@color/colorAccent"
+            app:textColor="@color/white"
+            app:buttonText="@string/add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

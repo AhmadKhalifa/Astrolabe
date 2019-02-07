@@ -1,5 +1,6 @@
 package com.khalifa.astrolabe.data.repository.wmsservice.local
 
+import android.arch.lifecycle.LiveData
 import com.khalifa.astrolabe.data.repository.BaseLocalRepository
 import com.khalifa.astrolabe.data.storage.room.entity.WMSService
 
@@ -16,7 +17,7 @@ abstract class LocalWMSServicesRepository : BaseLocalRepository() {
 
     abstract fun addWMSService(vararg wmsService: WMSService)
 
-    abstract fun getWMSServices(): List<WMSService>
+    abstract fun getWMSServices(): LiveData<List<WMSService>>
 
     abstract fun getWMSServices(capabilitiesUrl: String): WMSService
 

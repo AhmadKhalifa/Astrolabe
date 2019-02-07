@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,13 +13,13 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:padding="@dimen/spc5"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spc2">
 
         <LinearLayout
+            android:layout_margin="@dimen/spc5"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -41,7 +42,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/red"
                 android:drawablePadding="@dimen/spc1"
-                android:layout_marginBottom="@dimen/spc2"
                 android:drawableStart="@drawable/ic_delete_white_18dp"
                 android:minHeight="0dp"
                 android:minWidth="0dp"
@@ -54,6 +54,8 @@
         </LinearLayout>
 
         <TextView
+            android:layout_marginStart="@dimen/spc5"
+            android:layout_marginEnd="@dimen/spc5"
             android:id="@+id/serviceAbstractTextView"
             tools:text="OpenStreetMap WMS, bereitgestellt durch terrestris GmbH und Co. KG. Beschleunigt mit MapProxy (http://mapproxy.org/)"
             android:textSize="@dimen/txt3"
@@ -62,13 +64,13 @@
             android:ellipsize="end"
             android:textColor="@color/grey" />
 
-
-
         <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="@dimen/spc5"
+            android:layout_marginRight="@dimen/spc5"
+            android:layout_marginLeft="@dimen/spc5"
             android:id="@+id/layersRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/tile_source_group_item_height"
-            android:layout_marginTop="@dimen/spc5"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

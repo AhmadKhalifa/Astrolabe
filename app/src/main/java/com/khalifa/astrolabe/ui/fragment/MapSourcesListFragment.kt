@@ -66,6 +66,13 @@ class MapSourcesListFragment :
     }
 
     private fun updateMapSources(mapSources: ArrayList<MapSourceFactory.MapSource>?) {
+        if (mapSources?.isEmpty() != false) {
+            noItemsLayout.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            noItemsLayout.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
         mapSourceAdapter.mapSources = mapSources
     }
 
@@ -88,9 +95,9 @@ class MapSourcesListFragment :
     override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {
-        viewModel.mapSources.observe(this, Observer(this::updateMapSources))
-        sharedViewModel.baseMapSource.observe(this, Observer(this::onBaseMapSourceChanged))
-        sharedViewModel.mapLayers.observe(this, Observer(this::onMapLayersChanged))
+        viewModel.mapSources.observe(this, Observer(::updateMapSources))
+        sharedViewModel.baseMapSource.observe(this, Observer(::onBaseMapSourceChanged))
+        sharedViewModel.mapLayers.observe(this, Observer(::onMapLayersChanged))
     }
 
     override fun onUseAsBaseMapClicked(tileSource: ITileSource) {

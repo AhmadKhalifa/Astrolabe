@@ -11,7 +11,6 @@ class InternetConnectionChecker(private val applicationContext: Context?) : Base
 
     override fun isNetworkAvailable() = applicationContext?.let {
         (it.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-                .activeNetworkInfo
-                .isConnected
+                .activeNetworkInfo?.isConnected
     } ?: false
 }

@@ -130,6 +130,6 @@ class TransparencyControllerFragment :
     override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {
-        viewModel.tileOverlay.observe(this, Observer(this::setTileOverlay))
+        viewModel.tileOverlay.observe(this, Observer(::setTileOverlay))
     }
 }

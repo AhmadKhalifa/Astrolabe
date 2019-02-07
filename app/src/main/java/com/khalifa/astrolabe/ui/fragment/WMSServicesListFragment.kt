@@ -16,7 +16,7 @@ import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
 import com.khalifa.astrolabe.viewmodel.fragment.implementation.MapViewModel
 import com.khalifa.astrolabe.viewmodel.fragment.implementation.WMSServicesListViewModel
-import kotlinx.android.synthetic.main.fragment_recycler_view_with_fab.*
+import kotlinx.android.synthetic.main.fragment_recycler_view.*
 import org.osmdroid.wms.WMSEndpoint
 import org.osmdroid.wms.WMSLayer
 
@@ -58,11 +58,18 @@ class WMSServicesListFragment :
             isNestedScrollingEnabled = false
             adapter = mapSourceAdapter
         }
-        viewModel.loadWMSEndpoints()
+        mapSourceAdapter.wmsEndpoints = viewModel.wmsEndpoints.value
         mapSourceAdapter.mapWMSLayers = sharedViewModel.mapWMSLayers.value
     }
 
     private fun updateEndpoints(wmsEndpoints: ArrayList<WMSEndpoint>?) {
+        if (wmsEndpoints?.isEmpty() != false) {
+            noItemsLayout.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            noItemsLayout.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
         mapSourceAdapter.wmsEndpoints = wmsEndpoints
     }
 
@@ -82,12 +89,12 @@ class WMSServicesListFragment :
     override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {
-        viewModel.wmsEndpoints.observe(this, Observer(this::updateEndpoints))
-        sharedViewModel.mapWMSLayers.observe(this, Observer(this::onLayersUpdated))
+        viewModel.wmsEndpoints.observe(this, Observer(::updateEndpoints))
+        sharedViewModel.mapWMSLayers.observe(this, Observer(::onLayersUpdated))
     }
 
-    override fun onDeleteWMSServiceClicked(wmsEndpoint: WMSEndpoint) =
-            viewModel.deleteWMSService(wmsEndpoint)
+    override fun onDeleteWMSServiceClicked(position: Int) =
+            viewModel.deleteWMSService(position)
 
     override fun onAddWMSLayerClicked(wmsEndpoint: WMSEndpoint, layerIndex: Int) {
         val wmsOverlay = sharedViewModel.addWMSLayer(wmsEndpoint, layerIndex)

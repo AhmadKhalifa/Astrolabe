@@ -18,7 +18,7 @@ interface WMSServicesDao {
     fun getWMSService(capabilitiesUrl: String): WMSService
 
     @Query("SELECT * FROM WMSService")
-    fun getWMSServices(): List<WMSService>
+    fun getWMSServices(): LiveData<List<WMSService>>
 
     @Delete
     fun deleteWMSService(wmsService: WMSService)

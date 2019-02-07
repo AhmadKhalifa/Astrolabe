@@ -1,6 +1,5 @@
 package com.khalifa.astrolabe.data.repository.wmsservice
 
-import android.arch.lifecycle.MutableLiveData
 import com.khalifa.astrolabe.data.repository.wmsservice.local.LocalWMSServicesRepository
 import com.khalifa.astrolabe.data.repository.wmsservice.remote.RemoteWMSServicesRepository
 import com.khalifa.astrolabe.data.storage.room.converter.InputStreamConverter
@@ -16,7 +15,7 @@ import org.osmdroid.wms.WMSParser
 class WMSServicesRepository private constructor(
         localRepository: LocalWMSServicesRepository,
         remoteRepository: RemoteWMSServicesRepository) :
-        BaseWMSServiceRepository(localRepository, remoteRepository) {
+        BaseWMSServicesRepository(localRepository, remoteRepository) {
 
     companion object {
 
@@ -35,17 +34,7 @@ class WMSServicesRepository private constructor(
             }
     }
 
-    override fun getAllWMSEndPoints(): MutableLiveData<ArrayList<WMSEndpoint>> {
-        if (wmsEndpoints.value == null) {
-            wmsEndpoints.postValue(
-                    ArrayList<WMSEndpoint>().apply {
-                        localRepository.getWMSServices()
-                                .forEach { add(WMSParser.parse(it.inputStream)) }
-                    }
-            )
-        }
-        return wmsEndpoints
-    }
+    override fun getAllWMSEndServices() = localRepository.getWMSServices()
 
     override fun addWMSService(capabilitiesUrl: String) {
         val (wmsEndpoint, inputStreamString) = remoteRepository.getWMSService(capabilitiesUrl)

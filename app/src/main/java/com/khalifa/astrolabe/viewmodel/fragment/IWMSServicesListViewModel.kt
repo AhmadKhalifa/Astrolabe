@@ -1,14 +1,18 @@
 package com.khalifa.astrolabe.viewmodel.fragment
 
-import android.arch.lifecycle.MutableLiveData
-import com.khalifa.astrolabe.viewmodel.IViewModel
+import android.arch.lifecycle.LiveData
+import com.khalifa.astrolabe.data.repository.wmsservice.BaseWMSServicesRepository
+import com.khalifa.astrolabe.data.storage.room.entity.WMSService
+import com.khalifa.astrolabe.viewmodel.ISharedViewModel
 import org.osmdroid.wms.WMSEndpoint
 
-interface IWMSServicesListViewModel : IViewModel {
+interface IWMSServicesListViewModel : ISharedViewModel {
 
-    val wmsEndpoints: MutableLiveData<ArrayList<WMSEndpoint>>
+    val repository: BaseWMSServicesRepository
 
-    fun loadWMSEndpoints()
+    val wmsServices: LiveData<List<WMSService>>
 
-    fun deleteWMSService(wmsEndpoint: WMSEndpoint)
+    val wmsEndpoints: LiveData<ArrayList<WMSEndpoint>>
+
+    fun deleteWMSService(position: Int)
 }

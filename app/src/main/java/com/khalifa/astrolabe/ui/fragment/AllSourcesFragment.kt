@@ -2,6 +2,7 @@ package com.khalifa.astrolabe.ui.fragment
 
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.khalifa.astrolabe.ui.widget.osmdroid.WMSOverlayWithOpacity
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
 import com.khalifa.astrolabe.viewmodel.fragment.implementation.AllSourcesViewModel
+import com.leinardi.android.speeddial.SpeedDialView
 import kotlinx.android.synthetic.main.fragment_all_sources.*
 import kotlinx.android.synthetic.main.fragment_all_sources.view.*
 import org.osmdroid.tileprovider.tilesource.ITileSource
@@ -24,10 +26,13 @@ import org.osmdroid.tileprovider.tilesource.ITileSource
 class AllSourcesFragment :
         BaseFullScreenDialogFragment<AllSourcesViewModel>(),
         MapSourcesListFragment.OnFragmentInteractionListener,
-        WMSServicesListFragment.OnFragmentInteractionListener {
+        WMSServicesListFragment.OnFragmentInteractionListener,
+        ViewPager.OnPageChangeListener {
 
     companion object {
         val TAG: String = MapSourcesListFragment::class.java.simpleName
+
+        private const val TRANSLATION_Y_VALUE = 100f
 
         fun showFragment(fragmentManager: FragmentManager?,
                          fragmentInteractionListener: OnFragmentInteractionListener) =
@@ -57,8 +62,7 @@ class AllSourcesFragment :
                     _mapSourcesFragment = existingFragment as MapSourcesListFragment
                 }
             }
-            _mapSourcesFragment = _mapSourcesFragment ?:
-                    MapSourcesListFragment.newInstance(this)
+            _mapSourcesFragment = _mapSourcesFragment ?: MapSourcesListFragment.newInstance(this)
             return _mapSourcesFragment as MapSourcesListFragment
         }
 
@@ -72,8 +76,7 @@ class AllSourcesFragment :
                     _wmsSourcesFragment = existingFragment as WMSServicesListFragment
                 }
             }
-            _wmsSourcesFragment = _wmsSourcesFragment ?:
-                    WMSServicesListFragment.newInstance(this)
+            _wmsSourcesFragment = _wmsSourcesFragment ?: WMSServicesListFragment.newInstance(this)
             return _wmsSourcesFragment as WMSServicesListFragment
         }
 
@@ -91,20 +94,65 @@ class AllSourcesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewpager.adapter = ViewPagerAdapter(childFragmentManager).apply {
-            addFragment(
-                    mapSourcesFragment,
-                    R.string.maps,
-                    R.drawable.ic_map_white_24dp
-            )
-            addFragment(
-                    wmsSourcesFragment,
-                    R.string.wms_layers,
-                    R.drawable.ic_layers_white_24dp
-            )
+        with(viewPager) viewPager@ {
+            adapter = ViewPagerAdapter(childFragmentManager).apply {
+                addFragment(
+                        mapSourcesFragment,
+                        tabLayout,
+                        R.string.maps,
+                        R.drawable.ic_map_white_24dp
+                )
+                addFragment(
+                        wmsSourcesFragment,
+                        tabLayout,
+                        R.string.wms_layers,
+                        R.drawable.ic_layers_white_24dp
+                )
+            }
+            addOnPageChangeListener(this@AllSourcesFragment)
         }
-        tabLayout.setupWithViewPager(viewpager)
+        setFloatingActionButtonVisibile(false)
+        floatingActionButton.setOnChangeListener(object : SpeedDialView.OnChangeListener {
+            override fun onMainActionSelected(): Boolean {
+                when (viewModel.currentFragmentIndex) {
+                    AllSourcesViewModel.MAP_SOURCES_FRAGMENT_INDEX -> {}
+                    AllSourcesViewModel.WMS_SOURCES_FRAGMENT_INDEX ->
+                        showNewWMSServicesDialogFragment()
+                    else -> {}
+                }
+                floatingActionButton.close()
+                return false
+            }
+
+            override fun onToggleChanged(isOpen: Boolean) {}
+        })
+        tabLayout.setupWithViewPager(viewPager)
     }
+
+    private fun setFloatingActionButtonVisibile(visible: Boolean) =
+            floatingActionButton.animate().translationY(if (visible) 0f else TRANSLATION_Y_VALUE)
+
+    private fun showNewWMSServicesDialogFragment() =
+            NewWMSServiceDialogFragment.showFragment(fragmentManager)
+
+    override fun onPageScrollStateChanged(position: Int) {}
+
+    override fun onPageScrolled(position: Int,
+                                positionOffset: Float,
+                                positionOffsetPixels: Int) {}
+
+    override fun onPageSelected(position: Int) {
+        viewModel.currentFragmentIndex = position
+        when (position) {
+            AllSourcesViewModel.MAP_SOURCES_FRAGMENT_INDEX -> onMapSourcesFragmentSelected()
+            AllSourcesViewModel.WMS_SOURCES_FRAGMENT_INDEX -> onWMSSourcesFragmentSelected()
+            else -> {}
+        }
+    }
+
+    private fun onMapSourcesFragmentSelected() = setFloatingActionButtonVisibile(false)
+
+    private fun onWMSSourcesFragmentSelected() = setFloatingActionButtonVisibile(true)
 
     override fun getViewModelInstance() = AllSourcesViewModel.getInstance(this)
 

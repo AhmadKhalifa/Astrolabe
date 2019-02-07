@@ -1,25 +1,22 @@
 package com.khalifa.astrolabe.viewmodel.fragment.implementation
 
-import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModelProviders
+import com.khalifa.astrolabe.data.repository.wmsservice.BaseWMSServicesRepository
+import com.khalifa.astrolabe.data.storage.room.entity.WMSService
 import com.khalifa.astrolabe.ui.fragment.WMSServicesListFragment
-import com.khalifa.astrolabe.viewmodel.BaseRxViewModel
-import com.khalifa.astrolabe.viewmodel.Error
+import com.khalifa.astrolabe.viewmodel.BaseSharedViewModel
 import com.khalifa.astrolabe.viewmodel.fragment.IWMSServicesListViewModel
 import org.osmdroid.wms.WMSEndpoint
 import org.osmdroid.wms.WMSParser
-import java.io.BufferedInputStream
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
+import java.lang.IllegalStateException
 
 /**
  * @author Ahmad Khalifa
  */
 
-class WMSServicesListViewModel : BaseRxViewModel(), IWMSServicesListViewModel {
+class WMSServicesListViewModel : BaseSharedViewModel(), IWMSServicesListViewModel {
 
     companion object {
 
@@ -28,49 +25,19 @@ class WMSServicesListViewModel : BaseRxViewModel(), IWMSServicesListViewModel {
                         .get(WMSServicesListViewModel::class.java)
     }
 
-    override val wmsEndpoints = MutableLiveData<ArrayList<WMSEndpoint>>()
+    override val repository = BaseWMSServicesRepository.getDefault()
 
-    override fun loadWMSEndpoints() {
-        val endPoints = ArrayList<WMSEndpoint>()
-        val capabilitiesUrl = "http://ows.terrestris.de/osm/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities"
-        performAsync(
-                action = {
+    override val wmsServices: LiveData<List<WMSService>> = repository.getAllWMSEndServices()
 
-                    fun toString(inputStream: InputStream?): String {
-                        val bis = BufferedInputStream(inputStream)
-                        val buf = ByteArrayOutputStream()
-                        var result = bis.read()
-                        while (result != -1) {
-                            buf.write(result.toByte().toInt())
-                            result = bis.read()
-                        }
-                        return buf.toString("UTF-8")
-                    }
+    override val wmsEndpoints = Transformations.map(wmsServices, this::extractWMSEndpoint)!!
 
-                    fun toInputStream(string: String?): InputStream =
-                            ByteArrayInputStream(string?.toByteArray(Charsets.UTF_8))
-
-                    val connection = URL(capabilitiesUrl).openConnection() as HttpURLConnection?
-                    val inputStream = connection?.inputStream
-                    val _inputStream = toInputStream(toString(connection?.inputStream))
-                    val wmsEndpoint = WMSParser.parse(_inputStream)
-                    inputStream?.close()
-                    connection?.disconnect()
-                    wmsEndpoint as WMSEndpoint
-                },
-                onSuccess = { wmsEndPoint ->
-                    if (wmsEndPoint == null) return@performAsync
-                    endPoints.add(wmsEndPoint)
-                    wmsEndpoints.value = endPoints
-                },
-                onFailure = { notify(Error.ERROR_LOADING_WMS_CAPABILITIES) }
-        )
-    }
-
-    override fun deleteWMSService(wmsEndpoint: WMSEndpoint) {
-        wmsEndpoints.value?.run {
-            remove(wmsEndpoint)
-            wmsEndpoints.value = this
+    private fun extractWMSEndpoint(wmsServices: List<WMSService>?) = wmsServices?.run {
+        ArrayList<WMSEndpoint>().apply {
+            this@run.forEach { add(WMSParser.parse(it.inputStream)) }
         }
-    }
+    } ?: ArrayList()
+
+    override fun deleteWMSService(position: Int) = wmsServices.value?.run {
+        if (position in 0 until size) repository.deleteWMSService(get(position))
+    } ?: throw IllegalStateException("Couldn't get repository WMS services")
 }

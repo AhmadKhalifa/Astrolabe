@@ -67,4 +67,11 @@
     <string name="delete">Delete</string>
     <string name="maps">Maps</string>
     <string name="wms_layers">WMS layers</string>
+    <string name="new_wms_layer">New WMS layer</string>
+    <string name="check">Check</string>
+    <string name="invalid_getcapabilities_endpoint">Invalid GetCapabilities endpoint</string>
+    <string name="wms_service_saved_successfully">WMS service saved successfully</string>
+    <string name="no_wms_services">No WMS Services</string>
+    <string name="no_items">No Items</string>
+    <string name="get_capabilities_url">GetCapabilities endpoint URL…</string>
 </resources>

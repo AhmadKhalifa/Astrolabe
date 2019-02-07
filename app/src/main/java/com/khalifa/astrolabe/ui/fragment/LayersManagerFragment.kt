@@ -92,8 +92,8 @@ class LayersManagerFragment :
     override fun onError(error: Error) {}
 
     override fun registerLiveDataObservers() {
-        sharedViewModel.baseMapSource.observe(this, Observer(this::setBaseMapLayout))
-        sharedViewModel.mapLayers.observe(this, Observer(this::setMapLayers))
+        sharedViewModel.baseMapSource.observe(this, Observer(::setBaseMapLayout))
+        sharedViewModel.mapLayers.observe(this, Observer(::setMapLayers))
     }
 
     override fun getSharedViewModelInstance() = activity?.run {

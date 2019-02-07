@@ -1,5 +1,6 @@
 package com.khalifa.astrolabe.data.repository.wmsservice
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.khalifa.astrolabe.data.repository.Repository
 import com.khalifa.astrolabe.data.repository.wmsservice.local.LocalWMSServicesRepository
@@ -11,7 +12,7 @@ import org.osmdroid.wms.WMSEndpoint
  * @author Ahmad Khalifa
  */
 
-abstract class BaseWMSServiceRepository protected constructor(
+abstract class BaseWMSServicesRepository protected constructor(
         protected val localRepository: LocalWMSServicesRepository,
         protected val remoteRepository: RemoteWMSServicesRepository
 ) : Repository {
@@ -23,7 +24,7 @@ abstract class BaseWMSServiceRepository protected constructor(
 
     protected val wmsEndpoints = MutableLiveData<ArrayList<WMSEndpoint>>().apply { value = null }
 
-    abstract fun getAllWMSEndPoints(): MutableLiveData<ArrayList<WMSEndpoint>>
+    abstract fun getAllWMSEndServices(): LiveData<List<WMSService>>
 
     abstract fun addWMSService(capabilitiesUrl: String)
 

@@ -107,7 +107,7 @@ class WMSServicesAdapter(private val itemInteractionListener: OnItemInteractionL
             private fun isLayerAlreadyUsed(adapter: WMSLayersAdapter, wmsLayer: WMSLayer) =
                     adapter.mapWMSLayers?.let { layers ->
                         for (layer in layers)
-                            if (layer.wmsLayer == wmsLayer) return true
+                            if (layer.wmsLayer.name == wmsLayer.name) return true
                         false
                     } ?: false
 

@@ -58,7 +58,7 @@ class NewWMSServiceDialogFragment :
     override fun onEvent(event: Event) {}
 
     override fun onError(error: Error) {
-        toast(error.stringResId)
+        toast(error.messageRes)
         addButton.isLoading = false
     }
 

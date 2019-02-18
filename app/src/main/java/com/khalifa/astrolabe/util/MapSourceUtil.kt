@@ -34,7 +34,7 @@ class MapSourceUtil private constructor() {
                 tileSourceIconMap[tileSource?.toString()] ?: R.drawable.defaultmap
 
         fun getThumbnail(tileSource: ITileSource?) =
-                tileSourceThumbnailMap[tileSource?.toString()] ?: R.drawable.defaultmap
+                tileSourceThumbnailMap[tileSource?.toString()] ?: R.drawable.thumbnail_google_hybrid
 
         fun getName(tileSource: ITileSource?) = tileSource?.let {
             val tileSourceStr = tileSource.toString()

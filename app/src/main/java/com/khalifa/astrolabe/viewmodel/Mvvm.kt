@@ -65,13 +65,14 @@ interface ISharedViewModel
 
 open class BaseSharedViewModel : BaseRxViewModel()
 
-enum class Event(@StringRes val stringResId: Int) {
+enum class Event(@StringRes val messageRes: Int) {
     INITIALIZATION_DONE(0),
     STARTED_DRAWING(0),
-    FINISHED_DRAWING(0)
+    FINISHED_DRAWING(0),
+    DELETED_SUCCESSFULLY(R.string.deleted_successfully)
 }
 
-enum class Error (@StringRes val stringResId: Int) {
+enum class Error (@StringRes val messageRes: Int) {
     GENERAL_ERROR(R.string.general_error),
     NO_INTERNET_CONNECTION(R.string.no_internet_connection),
     NON_STABLE_CONNECTION(R.string.non_stable_connection),

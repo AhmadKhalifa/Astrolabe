@@ -22,13 +22,16 @@ class InputStreamConverter {
         @JvmStatic
         @TypeConverter
         fun toString(inputStream: InputStream?): String = inputStream?.let {
+
             val bis = BufferedInputStream(inputStream)
+            bis.mark(1_000_000_000)
             val buf = ByteArrayOutputStream()
             var result = bis.read()
             while (result != -1) {
                 buf.write(result.toByte().toInt())
                 result = bis.read()
             }
+            bis.reset()
             buf.toString("UTF-8")
         } ?: ""
     }

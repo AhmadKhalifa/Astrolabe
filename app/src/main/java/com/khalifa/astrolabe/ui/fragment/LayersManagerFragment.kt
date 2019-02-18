@@ -12,8 +12,10 @@ import android.view.ViewGroup
 import com.khalifa.astrolabe.R
 import com.khalifa.astrolabe.util.FragmentNotAttachedException
 import com.khalifa.astrolabe.ui.adapter.MapLayersAdapter
+import com.khalifa.astrolabe.ui.adapter.WMSLayerAdapter
 import com.khalifa.astrolabe.ui.base.BaseFullScreenDialogFragmentWithSharedViewModel
 import com.khalifa.astrolabe.ui.widget.osmdroid.TilesOverlayWithOpacity
+import com.khalifa.astrolabe.ui.widget.osmdroid.WMSOverlayWithOpacity
 import com.khalifa.astrolabe.util.MapSourceUtil
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
@@ -29,10 +31,13 @@ import org.osmdroid.tileprovider.tilesource.ITileSource
 
 class LayersManagerFragment :
         BaseFullScreenDialogFragmentWithSharedViewModel<LayerManagerViewModel, MapViewModel>(),
-        MapLayersAdapter.OnItemInteractionListener {
+        MapLayersAdapter.OnItemInteractionListener,
+        WMSLayerAdapter.OnItemInteractionListener {
 
     companion object {
         private val TAG: String = LayersManagerFragment::class.java.simpleName
+
+        private const val DIALOG_CLOSE_DELAY_MS = 1000L
 
         fun showFragment(fragmentManager: FragmentManager?,
                          onFragmentInteractionListener: OnFragmentInteractionListener) =
@@ -48,11 +53,15 @@ class LayersManagerFragment :
 
         fun openLayerOpacityAdjustmentScreen(overlay: TilesOverlayWithOpacity)
 
-        fun openAllSourcesScreen()
+        fun openMapLayersScreen()
+
+        fun openWMSLayersScreen()
     }
 
     private var fragmentInteractionListener: OnFragmentInteractionListener? = null
+
     private val mapLayersAdapter = MapLayersAdapter(this)
+    private val wmsLayersAdapter = WMSLayerAdapter(this)
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -69,20 +78,33 @@ class LayersManagerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(recyclerView) {
+        with(mapLayersRecyclerView) {
             itemAnimator = DefaultItemAnimator()
             layoutManager = LinearLayoutManager(context)
             isNestedScrollingEnabled = false
             adapter = mapLayersAdapter
         }
-        val openMapSourcesClickListener = View.OnClickListener{
-            fragmentInteractionListener?.openAllSourcesScreen()
-            Handler().postDelayed(::dismiss, 1000)
+        with(wmsLayersRecyclerView) {
+            itemAnimator = DefaultItemAnimator()
+            layoutManager = LinearLayoutManager(context)
+            isNestedScrollingEnabled = false
+            adapter = wmsLayersAdapter
+        }
+        val openMapSourcesClickListener = View.OnClickListener { button ->
+            when(button.id) {
+                R.id.changeBaseMapButton, R.id.addMapLayerButton ->
+                    fragmentInteractionListener?.openMapLayersScreen()
+                R.id.addWMSLayerButton ->
+                    fragmentInteractionListener?.openWMSLayersScreen()
+            }
+            Handler().postDelayed(::dismiss, DIALOG_CLOSE_DELAY_MS)
         }
         changeBaseMapButton.setOnClickListener(openMapSourcesClickListener)
-        addLayerButton.setOnClickListener(openMapSourcesClickListener)
+        addMapLayerButton.setOnClickListener(openMapSourcesClickListener)
+        addWMSLayerButton.setOnClickListener(openMapSourcesClickListener)
         setBaseMapLayout(sharedViewModel.baseMapSource.value)
         setMapLayers(sharedViewModel.mapLayers.value)
+        setWMSLayers(sharedViewModel.mapWMSLayers.value)
     }
 
     override fun getViewModelInstance() = LayerManagerViewModel.getInstance(this)
@@ -94,6 +116,7 @@ class LayersManagerFragment :
     override fun registerLiveDataObservers() {
         sharedViewModel.baseMapSource.observe(this, Observer(::setBaseMapLayout))
         sharedViewModel.mapLayers.observe(this, Observer(::setMapLayers))
+        sharedViewModel.mapWMSLayers.observe(this, Observer(::setWMSLayers))
     }
 
     override fun getSharedViewModelInstance() = activity?.run {
@@ -119,6 +142,23 @@ class LayersManagerFragment :
 
     }
 
+    override fun onRemoveMapLayerClicked(wmsLayer: WMSOverlayWithOpacity) =
+            sharedViewModel.removeWMSLayer(wmsLayer)
+
+    override fun onShowOrHideLayerClicked(wmsLayer: WMSOverlayWithOpacity, itemIndex: Int) {
+        sharedViewModel.mapWMSLayers.value?.get(itemIndex)?.reverseVisibility()
+        wmsLayersAdapter.notifyItemChanged(itemIndex)
+    }
+
+    override fun onAdjustOpacityClicked(wmsLayer: WMSOverlayWithOpacity) =
+            onAdjustOpacityClicked(wmsLayer as TilesOverlayWithOpacity)
+
+    override fun onLayerOrderChanged(wmsLayer: WMSOverlayWithOpacity,
+                                     fromIndex: Int,
+                                     toIndex: Int) {
+
+    }
+
     private fun setBaseMapLayout(baseTileSource: ITileSource?) {
         baseTileSource?.run {
             thumbnailImageView.setImageResource(MapSourceUtil.getThumbnail(this))
@@ -131,13 +171,26 @@ class LayersManagerFragment :
     private fun setMapLayers(mapLayers: ArrayList<TilesOverlayWithOpacity>?) {
         if (mapLayers != null) {
             if (mapLayers.isEmpty()) {
-                recyclerView.visibility = View.GONE
-                noLayersLayout.visibility = View.VISIBLE
+                mapLayersRecyclerView.visibility = View.GONE
+                noMapLayersLayout.visibility = View.VISIBLE
             } else {
-                recyclerView.visibility = View.VISIBLE
-                noLayersLayout.visibility = View.GONE
+                mapLayersRecyclerView.visibility = View.VISIBLE
+                noMapLayersLayout.visibility = View.GONE
             }
             mapLayersAdapter.mapLayers = mapLayers
         } else setMapLayers(ArrayList())
+    }
+
+    private fun setWMSLayers(wmsLayers: ArrayList<WMSOverlayWithOpacity>?) {
+        if (wmsLayers != null) {
+            if (wmsLayers.isEmpty()) {
+                wmsLayersRecyclerView.visibility = View.GONE
+                noWMSLayersLayout.visibility = View.VISIBLE
+            } else {
+                wmsLayersRecyclerView.visibility = View.VISIBLE
+                noWMSLayersLayout.visibility = View.GONE
+            }
+            wmsLayersAdapter.wmsLayers = wmsLayers
+        } else setWMSLayers(ArrayList())
     }
 }

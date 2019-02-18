@@ -33,7 +33,7 @@ class MapViewWrapper(private var mapView: MapView?) : MapEventsReceiver {
 
     companion object {
 
-        val DEFAULT_MAP_SOURCE = MapSourceFactory.HereWeGo.NIGHT
+        val DEFAULT_MAP_SOURCE = MapSourceFactory.HereWeGo.DAY
         val DEFAULT_MINI_MAP_SOURCE = MapSourceFactory.Google.SATELLITE
         val DEFAULT_START_POSITION = GeoPoint(30.0592319, 31.2322223)
         const val DEFAULT_OPACITY = 50
@@ -231,8 +231,8 @@ class MapViewWrapper(private var mapView: MapView?) : MapEventsReceiver {
     }
 
     private fun updateMapLocation(latitude: Double,
-                          longitude: Double,
-                          zoomLevel: Double) {
+                                  longitude: Double,
+                                  zoomLevel: Double) {
         val mapController = mapView?.controller
         mapController?.setCenter(GeoPoint(latitude, longitude))
         mapController?.setZoom(zoomLevel)
@@ -270,9 +270,10 @@ class MapViewWrapper(private var mapView: MapView?) : MapEventsReceiver {
 
     fun removeWMSLayer(wmsLayer: WMSLayer): WMSOverlayWithOpacity {
         val wmsOverlay =  mapView?.overlays?.first { overlay ->
-            overlay is WMSOverlayWithOpacity && overlay.wmsLayer == wmsLayer
+            overlay is WMSOverlayWithOpacity && overlay.wmsLayer.name == wmsLayer.name
         }
         mapView?.overlays?.remove(wmsOverlay)
+        mapView?.invalidate()
         return wmsOverlay as WMSOverlayWithOpacity
     }
 

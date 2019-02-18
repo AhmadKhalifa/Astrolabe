@@ -12,6 +12,7 @@ import com.khalifa.astrolabe.util.FragmentNotAttachedException
 import com.khalifa.astrolabe.ui.adapter.WMSServicesAdapter
 import com.khalifa.astrolabe.ui.base.BaseFragmentWithSharedViewModel
 import com.khalifa.astrolabe.ui.widget.osmdroid.WMSOverlayWithOpacity
+import com.khalifa.astrolabe.util.toast
 import com.khalifa.astrolabe.viewmodel.Error
 import com.khalifa.astrolabe.viewmodel.Event
 import com.khalifa.astrolabe.viewmodel.fragment.implementation.MapViewModel
@@ -64,10 +65,10 @@ class WMSServicesListFragment :
 
     private fun updateEndpoints(wmsEndpoints: ArrayList<WMSEndpoint>?) {
         if (wmsEndpoints?.isEmpty() != false) {
-            noItemsLayout.visibility = View.VISIBLE
+            noItemsTextView.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
         } else {
-            noItemsLayout.visibility = View.GONE
+            noItemsTextView.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
         }
         mapSourceAdapter.wmsEndpoints = wmsEndpoints
@@ -84,9 +85,9 @@ class WMSServicesListFragment :
         MapViewModel.getInstance(this)
     } ?: throw FragmentNotAttachedException()
 
-    override fun onEvent(event: Event) {}
+    override fun onEvent(event: Event) = toast(event.messageRes)
 
-    override fun onError(error: Error) {}
+    override fun onError(error: Error) = toast(error.messageRes)
 
     override fun registerLiveDataObservers() {
         viewModel.wmsEndpoints.observe(this, Observer(::updateEndpoints))

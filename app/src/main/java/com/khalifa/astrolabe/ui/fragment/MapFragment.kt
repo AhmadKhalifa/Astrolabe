@@ -217,8 +217,10 @@ class MapFragment :
                     }
             )
 
-    private fun openAllSourcesFragment() =
-            AllSourcesFragment.showFragment(fragmentManager, this)
+    private fun openAllSourcesFragment(
+            childFragment: AllSourcesFragment.Companion.ChildFragment =
+                    AllSourcesFragment.Companion.ChildFragment.MAP_SOURCES_FRAGMENT
+    ) = AllSourcesFragment.showFragment(fragmentManager, this, childFragment)
 
     private fun showLayersManagerFragment() =
             LayersManagerFragment.showFragment(fragmentManager, this@MapFragment)
@@ -322,8 +324,7 @@ class MapFragment :
             floatingActionButton.visibility = View.INVISIBLE
             mapView.invalidate()
         }
-        else -> {
-        }
+        else -> {}
     }
 
     override fun onError(error: Error) {}
@@ -331,7 +332,7 @@ class MapFragment :
     override fun registerLiveDataObservers() {}
 
     override fun onLocationChanged(location: Location) {
-        Log.d(TAG, "onLocationChanged: " + location.toString())
+        Log.d(TAG, "onLocationChanged: $location")
 //        updateMapLocation(location.latitude, location.longitude)
     }
 
@@ -351,7 +352,11 @@ class MapFragment :
         showOpacityControllerFragment(overlay)
     }
 
-    override fun openAllSourcesScreen() {
-        openAllSourcesFragment()
+    override fun openMapLayersScreen() {
+        openAllSourcesFragment(AllSourcesFragment.Companion.ChildFragment.MAP_SOURCES_FRAGMENT)
+    }
+
+    override fun openWMSLayersScreen() {
+        openAllSourcesFragment(AllSourcesFragment.Companion.ChildFragment.WMS_SERVICES_FRAGMENT)
     }
 }

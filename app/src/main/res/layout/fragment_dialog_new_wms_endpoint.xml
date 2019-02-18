@@ -20,7 +20,7 @@
             <TextView
                 android:layout_gravity="center_vertical"
                 android:id="@+id/serviceTitleTextView"
-                android:text="@string/new_wms_layer"
+                android:text="@string/new_wms_service"
                 android:textSize="@dimen/txt6"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -42,6 +42,7 @@
 
         <EditText
             android:id="@+id/endpointEditText"
+            android:text="@string/url"
             android:drawableStart="@drawable/ic_link_black_24dp"
             android:drawablePadding="@dimen/spc3"
             android:hint="@string/get_capabilities_url"
@@ -49,9 +50,10 @@
             android:layout_marginBottom="@dimen/spc7"
             android:layout_marginStart="@dimen/spc5"
             android:layout_marginEnd="@dimen/spc5"
+            android:lines="5"
+            android:maxLines="7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
 
         <com.khalifa.astrolabe.ui.widget.loadingbutton.LoadingButton
             android:id="@+id/addButton"

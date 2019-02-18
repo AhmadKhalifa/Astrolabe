@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<LinearLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@color/default_background_color"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/spc5"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/noItemsLayout"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/spc10"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spc5"/>
+
+        <TextView
+            android:id="@+id/noItemsTextView"
+            android:visibility="gone"
             android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/no_items"
-                android:textColor="@color/grey"
-                android:textSize="@dimen/txt3" />
-
-        </LinearLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/no_items"
+            android:background="@color/default_background_color"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/txt3" />
 
         <android.support.v7.widget.RecyclerView
             android:focusableInTouchMode="false"
-            android:visibility="gone"
+            android:background="@color/default_background_color"
+            android:visibility="visible"
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
-</android.support.v4.widget.NestedScrollView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spc10"/>
+
+</LinearLayout>

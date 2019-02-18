@@ -34,10 +34,22 @@ class AllSourcesFragment :
 
         private const val TRANSLATION_Y_VALUE = 100f
 
+        private const val KEY_CHILD_FRAGMENT =
+                "com.khalifa.astrolabe.ui.fragment.MapSourcesListFragment.KEY_CHILD_FRAGMENT"
+
+        private const val MAP_SOURCES_FRAGMENT_INDEX = 0
+        private const val WMS_SERVICES_FRAGMENT_INDEX = 1
+
+        enum class ChildFragment { MAP_SOURCES_FRAGMENT, WMS_SERVICES_FRAGMENT }
+
         fun showFragment(fragmentManager: FragmentManager?,
-                         fragmentInteractionListener: OnFragmentInteractionListener) =
+                         fragmentInteractionListener: OnFragmentInteractionListener,
+                         childFragment: ChildFragment = ChildFragment.MAP_SOURCES_FRAGMENT) =
                 fragmentManager?.let { manager ->
                     AllSourcesFragment().also { fragment ->
+                        fragment.arguments = Bundle().apply {
+                            putSerializable(KEY_CHILD_FRAGMENT, childFragment)
+                        }
                         fragment.fragmentInteractionListener = fragmentInteractionListener
                         fragment.show(manager, TAG)
                     }
@@ -111,7 +123,7 @@ class AllSourcesFragment :
             }
             addOnPageChangeListener(this@AllSourcesFragment)
         }
-        setFloatingActionButtonVisibile(false)
+        setFloatingActionButtonVisible(false)
         floatingActionButton.setOnChangeListener(object : SpeedDialView.OnChangeListener {
             override fun onMainActionSelected(): Boolean {
                 when (viewModel.currentFragmentIndex) {
@@ -127,9 +139,27 @@ class AllSourcesFragment :
             override fun onToggleChanged(isOpen: Boolean) {}
         })
         tabLayout.setupWithViewPager(viewPager)
+        val childFragment =
+                arguments?.getSerializable(KEY_CHILD_FRAGMENT) ?: ChildFragment.MAP_SOURCES_FRAGMENT
+        if (childFragment != ChildFragment.MAP_SOURCES_FRAGMENT) {
+            viewPager.setCurrentItem(
+                    when (arguments?.getSerializable(KEY_CHILD_FRAGMENT)
+                            ?: ChildFragment.MAP_SOURCES_FRAGMENT) {
+                        ChildFragment.WMS_SERVICES_FRAGMENT -> {
+                            setFloatingActionButtonVisible(true)
+                            WMS_SERVICES_FRAGMENT_INDEX
+                        }
+                        else -> {
+                            setFloatingActionButtonVisible(false)
+                            MAP_SOURCES_FRAGMENT_INDEX
+                        }
+                    },
+                    true
+            )
+        }
     }
 
-    private fun setFloatingActionButtonVisibile(visible: Boolean) =
+    private fun setFloatingActionButtonVisible(visible: Boolean) =
             floatingActionButton.animate().translationY(if (visible) 0f else TRANSLATION_Y_VALUE)
 
     private fun showNewWMSServicesDialogFragment() =
@@ -150,9 +180,9 @@ class AllSourcesFragment :
         }
     }
 
-    private fun onMapSourcesFragmentSelected() = setFloatingActionButtonVisibile(false)
+    private fun onMapSourcesFragmentSelected() = setFloatingActionButtonVisible(false)
 
-    private fun onWMSSourcesFragmentSelected() = setFloatingActionButtonVisibile(true)
+    private fun onWMSSourcesFragmentSelected() = setFloatingActionButtonVisible(true)
 
     override fun getViewModelInstance() = AllSourcesViewModel.getInstance(this)
 
@@ -166,9 +196,11 @@ class AllSourcesFragment :
 
     override fun onMapOverlayAdded(mapOverlay: TilesOverlayWithOpacity) {
         fragmentInteractionListener?.onMapOverlayAdded(mapOverlay)
+        dismiss()
     }
 
     override fun onWMSOverlayAdded(wmsOverlay: WMSOverlayWithOpacity) {
         fragmentInteractionListener?.onWMSOverlayAdded(wmsOverlay)
+        dismiss()
     }
 }

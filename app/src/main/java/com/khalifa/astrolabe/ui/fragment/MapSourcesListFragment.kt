@@ -67,10 +67,10 @@ class MapSourcesListFragment :
 
     private fun updateMapSources(mapSources: ArrayList<MapSourceFactory.MapSource>?) {
         if (mapSources?.isEmpty() != false) {
-            noItemsLayout.visibility = View.VISIBLE
+            noItemsTextView.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
         } else {
-            noItemsLayout.visibility = View.GONE
+            noItemsTextView.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
         }
         mapSourceAdapter.mapSources = mapSources

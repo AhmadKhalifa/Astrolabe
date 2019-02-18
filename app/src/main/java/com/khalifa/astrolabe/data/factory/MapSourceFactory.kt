@@ -295,9 +295,9 @@ object MapSourceFactory {
         private const val MAP_KEY_SATELLITE = "satellite.day"
         private const val MAP_KEY_HYBRID = "hybrid.day"
 
-        private val DAY = getMapSource(MAP_KEY_DAY)
+        val DAY = getMapSource(MAP_KEY_DAY)
 
-        val NIGHT = getMapSource(MAP_KEY_NIGHT)
+        private val NIGHT = getMapSource(MAP_KEY_NIGHT)
 
         private val TRAFFIC_DAY = getMapSource(MAP_KEY_TRAFFIC_DAY)
 

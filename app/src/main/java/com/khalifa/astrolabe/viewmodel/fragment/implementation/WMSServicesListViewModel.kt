@@ -7,6 +7,8 @@ import com.khalifa.astrolabe.data.repository.wmsservice.BaseWMSServicesRepositor
 import com.khalifa.astrolabe.data.storage.room.entity.WMSService
 import com.khalifa.astrolabe.ui.fragment.WMSServicesListFragment
 import com.khalifa.astrolabe.viewmodel.BaseSharedViewModel
+import com.khalifa.astrolabe.viewmodel.Error
+import com.khalifa.astrolabe.viewmodel.Event
 import com.khalifa.astrolabe.viewmodel.fragment.IWMSServicesListViewModel
 import org.osmdroid.wms.WMSEndpoint
 import org.osmdroid.wms.WMSParser
@@ -37,7 +39,17 @@ class WMSServicesListViewModel : BaseSharedViewModel(), IWMSServicesListViewMode
         }
     } ?: ArrayList()
 
-    override fun deleteWMSService(position: Int) = wmsServices.value?.run {
-        if (position in 0 until size) repository.deleteWMSService(get(position))
-    } ?: throw IllegalStateException("Couldn't get repository WMS services")
+    override fun deleteWMSService(position: Int) = performAsync(
+            action = {
+                wmsServices.value?.run {
+                    if (position in 0 until size) repository.deleteWMSService(get(position))
+                } ?: throw IllegalStateException("Couldn't get repository WMS services")
+            },
+            onSuccess = {
+                notify(Event.DELETED_SUCCESSFULLY)
+            },
+            onFailure = {
+                notify(Error.GENERAL_ERROR)
+            }
+    )
 }

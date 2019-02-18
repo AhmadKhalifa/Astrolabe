@@ -91,36 +91,13 @@ class MapViewModel(override val mapViewWrapper: MapViewWrapper) :
 
     override fun removeWMSLayer(wmsLayer: WMSLayer) {
         val wmsOverlay = mapViewWrapper.removeWMSLayer(wmsLayer)
-        mapLayers.apply { value = value?.apply { remove(wmsOverlay) } }
+        mapWMSLayers.apply { value = value?.apply { remove(wmsOverlay) } }
     }
 
     override fun removeWMSLayer(wmsOverlay: WMSOverlayWithOpacity) {
         mapViewWrapper.removeWMSLayer(wmsOverlay)
-        mapLayers.apply { value = value?.apply { remove(wmsOverlay) } }
+        mapWMSLayers.apply { value = value?.apply { remove(wmsOverlay) } }
     }
-
-//    fun loadWMSTiles(context: Context?, mapView: MapView, capabilitiesUrl: String) {
-//        performAsync(
-//                action = {
-//                    val connection = URL(capabilitiesUrl).openConnection() as HttpURLConnection?
-//                    val inputStream = connection?.inputStream
-//                    val wmsEndpoint = WMSParser.parse(inputStream)
-//                    inputStream?.close()
-//                    connection?.disconnect()
-//                    wmsEndpoint as WMSEndpoint
-//                },
-//                onSuccess = { wmsEndPoint ->
-//                    if (wmsEndPoint == null) return@performAsync
-//                    val source = WMSTileSource.createFrom(wmsEndPoint, wmsEndPoint.layers[0])
-//                    val layer = wmsEndPoint.layers?.get(0)
-//                    if (layer?.bbox != null) {
-//                        mapView.zoomToBoundingBox(layer.bbox, true)
-//                    }
-////                    addTileSourceLayer(context, mapView, source)
-//                },
-//                onFailure = { notify(Error.ERROR_LOADING_WMS_CAPABILITIES) }
-//        )
-//    }
 
     override fun onCleared() {
         mapViewWrapper.onCleared()
